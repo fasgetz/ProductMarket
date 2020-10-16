@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductMarketModels", "ProductMarketModels\ProductMarketModels.csproj", "{70D733EF-3E84-4CCF-BDA9-ACC4DA444B0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductMarketModels", "ProductMarketModels\ProductMarketModels.csproj", "{70D733EF-3E84-4CCF-BDA9-ACC4DA444B0A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductMarketServices", "ProductMarketServices\ProductMarketServices.csproj", "{03362837-FE16-4316-BC24-A281C790A9AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductMarketApi", "ProductMarketApi\ProductMarketApi.csproj", "{FD87B033-7EA1-499E-8A61-B1DD45D4A0C5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceProductMarket", "ServiceProductMarket\ServiceProductMarket.csproj", "{B51F5AB4-A2C6-4EE5-A4B5-B2D69C8CBF64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductMarketWebSite", "ProductMarketWebSite\ProductMarketWebSite.csproj", "{CFA5F248-5582-4966-8241-DF7B72A6FE21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +23,22 @@ Global
 		{70D733EF-3E84-4CCF-BDA9-ACC4DA444B0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70D733EF-3E84-4CCF-BDA9-ACC4DA444B0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70D733EF-3E84-4CCF-BDA9-ACC4DA444B0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03362837-FE16-4316-BC24-A281C790A9AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03362837-FE16-4316-BC24-A281C790A9AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03362837-FE16-4316-BC24-A281C790A9AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03362837-FE16-4316-BC24-A281C790A9AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD87B033-7EA1-499E-8A61-B1DD45D4A0C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD87B033-7EA1-499E-8A61-B1DD45D4A0C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD87B033-7EA1-499E-8A61-B1DD45D4A0C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD87B033-7EA1-499E-8A61-B1DD45D4A0C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B51F5AB4-A2C6-4EE5-A4B5-B2D69C8CBF64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B51F5AB4-A2C6-4EE5-A4B5-B2D69C8CBF64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B51F5AB4-A2C6-4EE5-A4B5-B2D69C8CBF64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B51F5AB4-A2C6-4EE5-A4B5-B2D69C8CBF64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFA5F248-5582-4966-8241-DF7B72A6FE21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFA5F248-5582-4966-8241-DF7B72A6FE21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFA5F248-5582-4966-8241-DF7B72A6FE21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFA5F248-5582-4966-8241-DF7B72A6FE21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
