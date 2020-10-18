@@ -1,6 +1,8 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using ProductMarketModels;
+using ProductMarketModels.MassTransit.Requests.Categories;
+using ProductMarketModels.MassTransit.Requests.Categories.Models;
 using ProductMarketModels.MassTransit.Requests.Products;
 using System;
 using System.Collections.Generic;
@@ -12,37 +14,31 @@ namespace ProductMarketApi.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class CategoryController : ControllerBase
     {
         private readonly IBusControl mPublishEndpoint;
 
-        public ProductController(IBusControl publishEndpoint)
+
+        public CategoryController(IBusControl publishEndpoint)
         {
             mPublishEndpoint = publishEndpoint;
         }
 
 
-        [HttpPost("AddProduct")]
-        public async Task<IActionResult> AddProduct(Product product)
-        {
-            await mPublishEndpoint.Publish(product);
-            return Ok("Success");
-        }
-
-
         [HttpGet("get")]
-        public async Task<List<Product>> GetProducts(short CategoryProduct)
+        public async Task<List<Category>> GetProducts()
         {
             //var response = await mPublishEndpoint.Request<GetProductsRequest, GetProductsRespond>(new GetProductsRequest { IdCategoryProduct = CategoryProduct });
 
-            
-            var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
+
+            var serviceAddress = new Uri("rabbitmq://localhost/CategoriesQueue");
             var client = mPublishEndpoint.CreateRequestClient<GetProductsRequest>(serviceAddress);
 
 
-            var response = await client.GetResponse<GetProductsRespond>(new GetProductsRequest() { IdCategoryProduct = CategoryProduct });
+            var response = await client.GetResponse<GetCategoriesRespond>(new GetProductsRequest());
+            
 
-            return response.Message.Products;
+            return response.Message.Categories;
         }
     }
 }

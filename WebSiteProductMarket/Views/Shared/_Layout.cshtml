@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WebSiteProductMarket</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/css/Accordion.css" rel="stylesheet" />
+    <link href="~/css/index.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Окно входа в аккаунт -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Войти в аккаунт</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="px-4 py-3">
+                        <div class="form-group">
+                            <label for="exampleDropdownFormEmail1">Email address</label>
+                            <input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleDropdownFormPassword1">Password</label>
+                            <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="dropdownCheck">
+                            <label class="form-check-label" for="dropdownCheck">
+                                Remember me
+                            </label>
+                        </div>
+                        <div class="container text-center">
+                            <button type="submit" class="btn btn-primary">Войти</button>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer text-center">
+                    <div class="container">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Регистрация</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section>
+        <div class="header">
+            <div class="container-fluid">
+                <nav class="navbar fixed-top navbar-expand-lg navbar-light ">
+                    <div class="container auth">
+                        <a class="navbar-brand" href="#">ProductMarket</a>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalCenter">
+                            Войти
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-2 p-0 menu">
+                        <ul id="accordion" class="accordion p-0">
+                            <li v-for="category in data">
+                                <div class="link"><i class="fa fa-book"></i>{{ category.name }}<i class="fa fa-chevron-down"></i></div>
+                                <ul class="submenu">
+                                    <li v-for="(item, index) in category.subCategoryProduct">
+                                        <a>
+                                            <div class="row">
+                                                <div class="col-9">
+                                                    {{ item.name }}
+                                                </div>
+                                                <div class="col-3">
+                                                    <span class="submenu__countBooks">{{ item.countProducts }}</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://use.fontawesome.com/056ddd099c.js"></script>
+
+    @* Vue JS and AXIOS to ajax query *@
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="~/js/script.js"></script>
+
+    <script>
+        var app = new Vue({
+            el: '#accordion',
+            data() {
+                return {
+                    data: null
+                };
+            },
+            mounted() {
+                axios
+                    .get('https://localhost:44310/api/category/get')
+                    .then(
+                        response => {
+                            (this.data = response.data);
+                            let script = document.createElement('script');
+                            script.setAttribute('src', '/js/Accordion.js');
+                            document.head.appendChild(script);
+                        });
+            }
+        });
+
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

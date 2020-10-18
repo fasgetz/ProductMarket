@@ -13,7 +13,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ProductMarketModels;
+using ProductMarketModels.MassTransit.Requests.Products;
+using ProductMarketServices.Categories;
 using ProductMarketServices.Products;
+using ServiceProductMarket.Consumers.Category;
 using ServiceProductMarket.Consumers.Products;
 
 namespace ServiceProductMarket
@@ -38,12 +41,15 @@ namespace ServiceProductMarket
 
 
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<ICategoriesService, CategoriesService>();
 
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<GetProductsConsumer>();
                 x.AddConsumer<AddProductConsumer>();
-                //x.AddConsumer<GetCarsConsumer>();
+
+                // Categories
+                x.AddConsumer<GetProductsOnSubcategoryInCategoryConsumer>();
 
 
 
@@ -64,6 +70,15 @@ namespace ServiceProductMarket
                         e.UseMessageRetry(r => r.Interval(2, 100));
                         e.Consumer<GetProductsConsumer>(context);
                         e.Consumer<AddProductConsumer>(context);
+
+                    });
+
+                    cfg.ReceiveEndpoint("CategoriesQueue", e =>
+                    {
+                        e.PrefetchCount = 16;
+                        e.UseMessageRetry(r => r.Interval(2, 100));
+                        e.Consumer<GetProductsOnSubcategoryInCategoryConsumer>(context);
+                        //e.Consumer<AddProductConsumer>(context);
 
                     });
 

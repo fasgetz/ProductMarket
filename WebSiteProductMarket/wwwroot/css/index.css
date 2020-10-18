@@ -1,0 +1,265 @@
+.accordion-item{
+    position: relative;
+}
+
+.accordion-item-head{
+    background-color: #dfdfdf;
+    border-top-left-radius: 5px ;
+    border-top-right-radius: 5px;
+    cursor: pointer;
+    padding:10px;
+}
+
+
+.accordion-item-head:after{
+    content: ' > ';
+    display: block;
+    height: 29px;
+    position: absolute;
+    right: 25px;
+    transform: rotate(90deg) scaleY(2);
+    top: 8px;
+}
+
+.accordion-item-head.active:after{
+    content: ' < ';
+}
+
+
+.accordion-item-body{
+    display: none;
+}
+.accordion-item-head.active + .accordion-item-body{
+    display: block !important;
+}
+
+/* Header */
+
+.header nav {
+  border-bottom: 1px solid #ededed;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+/* End Header */
+
+.carousel-inner img {
+  width: 300px;
+  height: 300px;
+}
+
+.body {
+  margin-top: 70px;
+}
+
+/* Меню */
+
+.menu {
+  width: 15.67%;
+}
+
+.body .menu .accordion {
+  position: fixed;
+	width: inherit; /*change here*/
+  height: 100%;
+  overflow: auto; // или scroll
+}
+
+.menu .navbar-toggler {
+  float: right;
+}
+
+.navbar {
+  background: #ffffff;
+}
+
+nav .auth .btn {
+  background: #ffffff;
+  border: 1px solid #d0d2d4;
+  height: 48px;
+  width: 100px;
+}
+
+nav .auth .btn:hover {
+  background: #f3f4f7;
+}
+
+/* Скролл бар */
+
+::-webkit-scrollbar-button {
+background-image:url('');
+background-repeat:no-repeat;
+width:5px;
+height:0px
+}
+
+::-webkit-scrollbar-track {
+background-color:#ecedee
+}
+
+::-webkit-scrollbar-thumb {
+-webkit-border-radius: 0px;
+border-radius: 0px;
+background-color:#6dc0c8;
+}
+
+::-webkit-scrollbar-thumb:hover{
+background-color:#56999f;
+}
+
+::-webkit-resizer{
+background-image:url('');
+background-repeat:no-repeat;
+width:4px;
+height:0px
+}
+
+::-webkit-scrollbar{
+width: 4px;
+}
+
+/* Медиа запросы к мобильным устройствам */
+
+@media screen and (max-width: 767.98px) {
+
+
+
+  .menu {
+    width: 100%;
+  }
+
+  .body .menu .accordion {
+    position: relative;
+    width: inherit; /*change here*/
+    height: auto;
+    overflow: auto;
+  }
+
+  .body .menu .submenu .row {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+@media screen and (max-width: 429.98px) {
+
+  .body {
+    margin-top: 96px;
+  }
+}
+
+
+
+/* Аккордион меню */
+
+/* Аккордион меню */
+
+.submenu a {
+    cursor: pointer
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+a {
+    color: #b63b4d;
+    text-decoration: none
+}
+
+.accordion {
+    width: 100%;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background: #FFF;
+}
+
+    .accordion .link:hover {
+        -moz-box-shadow: 3px 1px 10px #777;
+        -webkit-box-shadow: 3px 1px 10px #777;
+        box-shadow: 3px 1px 10px #777;
+    }
+
+.submenu__countBooks {
+    border: 1px solid grey;
+    padding: 3px;
+    border-radius: 5px;
+}
+
+.accordion .link {
+    cursor: pointer;
+    display: block;
+    padding: 15px 15px 15px 42px;
+    color: #4D4D4D;
+    font-size: 14px;
+    font-weight: 700;
+    border-bottom: 1px solid #CCC;
+    position: relative;
+}
+
+
+
+.accordion li:last-child .link {
+
+}
+
+.accordion li i {
+    position: absolute;
+    top: 16px;
+    left: 12px;
+    font-size: 18px;
+    color: #595959;
+}
+
+    .accordion li i.fa-chevron-down {
+        right: 12px;
+        left: auto;
+        font-size: 16px
+    }
+
+.accordion li.open .link {
+    color: #AA00FF
+}
+
+.accordion .selectedGenre {
+    background-color: cornflowerblue
+}
+
+.accordion li.open i {
+    color: #AA00FF
+}
+
+    .accordion li.open i.fa-chevron-down {
+        -webkit-transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        -o-transform: rotate(180deg);
+        transform: rotate(180deg)
+    }
+
+
+    .submenu {
+        display: none;
+        background: aliceblue;
+        font-size: 14px
+    }
+
+        .submenu li {
+            border-bottom: 1px solid #4b4a5e
+        }
+
+
+
+        .submenu a {
+            display: block;
+            text-decoration: none;
+            color: #d9d9d9;
+            padding: 12px;
+            -webkit-transition: all 0.25s ease;
+            -o-transition: all 0.25s ease;
+            transition: all 0.25s ease
+        }
+
+            .submenu a:hover {
+                background: cornflowerblue;
+                color: #FFF
+            }
