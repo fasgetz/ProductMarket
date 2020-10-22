@@ -1,0 +1,11 @@
+﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
+
+    <h2>Добавление роли</h2>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <form asp-controller="Roles" asp-action="AddRole" method="post">
+        <div class="form-group">
+            <label for="name">Имя роли</label>
+            <input name="name" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить</button>
+    </form>

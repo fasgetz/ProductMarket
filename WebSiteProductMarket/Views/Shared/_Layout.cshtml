@@ -7,59 +7,63 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/css/Accordion.css" rel="stylesheet" />
-    <link href="~/css/index.css" rel="stylesheet" />
+    <link href="~/css/main.css" rel="stylesheet" />
+    @RenderSection("Css", required: false)
 </head>
 <body>
-    <!-- Окно входа в аккаунт -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Войти в аккаунт</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form class="px-4 py-3">
-                        <div class="form-group">
-                            <label for="exampleDropdownFormEmail1">Email address</label>
-                            <input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleDropdownFormPassword1">Password</label>
-                            <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">
-                        </div>
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                            <label class="form-check-label" for="dropdownCheck">
-                                Remember me
-                            </label>
-                        </div>
-                        <div class="container text-center">
-                            <button type="submit" class="btn btn-primary">Войти</button>
-                        </div>
+    
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <!-- Окно входа в аккаунт -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                
 
-                    </form>
-                </div>
-                <div class="modal-footer text-center">
-                    <div class="container">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Регистрация</button>
+                <div id="tabs" class="modal-content">
+                    <div class="modal-close">
+                        <button type="button" class="close text-right" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-header">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col p-0"><input v-on:click="activetab=1" v-bind:class="[ activetab === 1 ? 'btn-success' : '' ]" class="btn w-100" type="button" value="Войти"></div>
+                                <div class="col p-0"><input v-on:click="activetab=2" v-bind:class="[ activetab === 2 ? 'btn-success' : '' ]" class="btn w-100" type="button" value="Регистрация"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="activetab === 1" class="modal-body" id="loginTab">
+                        @await Component.InvokeAsync("LoginAccountComponent")
+                    </div>
+                    <div v-if="activetab === 2" class="modal-body">
+                        @await Component.InvokeAsync("RegisterAccountComponent")
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
+
     <section>
         <div class="header">
             <div class="container-fluid">
                 <nav class="navbar fixed-top navbar-expand-lg navbar-light ">
                     <div class="container auth">
-                        <a class="navbar-brand" href="#">ProductMarket</a>
+                        <a class="navbar-brand" asp-action="Index" asp-controller="Home">ProductMarket</a>
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalCenter">
-                            Войти
-                        </button>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @User.Identity.Name
+                            <form method="post" asp-controller="Account" asp-action="Logout">
+                                <input type="submit" value="Выход" />
+                            </form>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalCenter">
+                                Войти
+                            </button>
+                        }
                     </div>
                 </nav>
             </div>
@@ -92,6 +96,8 @@
                     </div>
                     <div class="col-md">
                         @RenderBody()
+
+
                     </div>
                 </div>
             </div>
@@ -101,7 +107,9 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     <script src="https://use.fontawesome.com/056ddd099c.js"></script>
 
     @* Vue JS and AXIOS to ajax query *@
@@ -130,7 +138,72 @@
             }
         });
 
+        var app = new Vue({
+            el: '#test',
+            data() {
+                return {
+                    data: null
+                };
+            },
+            methods: {
+                auth() {
+                    axios
+                        .get('https://localhost:44310/api/product/get?CategoryProduct=1')
+                        .then(
+                            response => {
+                                this.data = response.data;
+                                alert('loaded');
+                            });
+                }
+
+            }
+        });
+
+
     </script>
+    <script>
+        function AuthUser() {
+            $.ajax({
+                type: "GET",
+                url: 'https://localhost:44310/api/product/get?CategoryProduct=1',
+                //beforeSend: function (xhr) {   //Include the bearer token in header
+                //    xhr.setRequestHeader("Authorization", 'Bearer ' + getCookieValue('token'));
+                //},
+                success: function (data) {
+                    alert('tet');
+                    alert(data);
+                    $("#test").html(data);
+                }
+            });
+        }
+
+        // Устанавливаем заголовок, чтобы при каждом запросе отправлять токен
+        $.ajaxSetup({
+            headers: { "Authorization": "Bearer " + getCookieValue('token') }
+        });
+
+        // Устанавливаем заголовок, чтобы при каждом запросе отправлять токен
+        axios.defaults.headers.get['Authorization'] = "Bearer " + getCookieValue('token') // for POST requests
+
+        function getCookieValue(cname) { // cname is nothing but the cookie value which 
+            //contains the value
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+    </script>
+
 
     @RenderSection("Scripts", required: false)
 </body>

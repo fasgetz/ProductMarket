@@ -3,5 +3,15 @@ Vue.component('task', {
 });
 
 new Vue ({
-  el: '#test'
-})
+    el: '#tabs',
+    data: {
+        activetab: 1            
+        }
+    })
+
+
+
+
+
+
+

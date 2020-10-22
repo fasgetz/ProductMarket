@@ -1,0 +1,16 @@
+﻿@model WebSiteProductMarket.Models.ViewModels.Account.LoginUserViewModel
+@*asp-action="Login" asp-controller="Account" method="post" asp-route-returnUrl="@Model?.ReturnUrl"*@
+
+<h2>Авторизация пользователя</h2>
+
+
+<form asp-action="Login" asp-controller="Account" asp-route-returnUrl="@Model?.ReturnUrl" data-ajax="true"
+      data-ajax-method="POST"
+      data-ajax-mode="replace" data-ajax-update="#mainForm"
+      data-ajax-success="success">
+    <div id="mainForm">
+        @await Html.PartialAsync("Controllers/Account/Login")
+    </div>
+
+</form>
+

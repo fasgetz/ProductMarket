@@ -1,0 +1,24 @@
+﻿@model WebSiteProductMarket.Models.ViewModels.Account.LoginUserViewModel
+@*asp-action="Login" asp-controller="Account" method="post" asp-route-returnUrl="@Model?.ReturnUrl"*@
+
+
+<div asp-validation-summary="ModelOnly"></div>
+<div class="form-group">
+    <label asp-for="Email" class="control-label"></label>
+    <input asp-for="Email" class="form-control" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Password" class="control-label"></label>
+    <input asp-for="Password" class="form-control" />
+    <span asp-validation-for="Password" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="RememberMe" lass="form-check-label"></label>
+    <input asp-for="RememberMe" lass="form-check-input" />
+</div>
+<div class="form-group text-center">
+    <input class="btn btn-primary" type="submit" value="Войти" />
+</div>
+
+
