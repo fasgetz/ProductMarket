@@ -112,7 +112,6 @@ namespace WebSiteProductMarket.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         // Метод контроллера для авторизацияя
         public async Task<IActionResult> Login(LoginUserViewModel vm)
         {

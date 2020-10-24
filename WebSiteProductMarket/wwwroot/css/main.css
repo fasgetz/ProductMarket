@@ -1,6 +1,25 @@
 
 
+/* Секция авторизации */
+.auth__div {
+    height: 44px;
+}
 
+#dropdownMenuButton {
+    outline: none; /* Для синий ободки */
+    border: 0;
+    background: transparent;
+}
+
+
+
+.auth__div_img {
+    border-radius: 50px;
+    width: 42px;
+    height: 42px;
+}
+
+/* */
 
 
 /* Модальное окно входа / регистрации */

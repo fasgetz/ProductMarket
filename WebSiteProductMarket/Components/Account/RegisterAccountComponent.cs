@@ -15,10 +15,10 @@ namespace WebSiteProductMarket.Components.Account
     [ViewComponent]
     public class RegisterAccountComponent : ViewComponent
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<WebSiteProductMarket.Identity.User> _userManager;
+        private readonly SignInManager<WebSiteProductMarket.Identity.User> _signInManager;
 
-        public RegisterAccountComponent(UserManager<User> userManager, SignInManager<User> signInManager)
+        public RegisterAccountComponent(UserManager<WebSiteProductMarket.Identity.User> userManager, SignInManager<WebSiteProductMarket.Identity.User> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

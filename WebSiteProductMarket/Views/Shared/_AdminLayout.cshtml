@@ -53,10 +53,9 @@
                         <!-- Button trigger modal -->
                         @if (User.Identity.IsAuthenticated)
                         {
-                            @User.Identity.Name
-                            <form method="post" asp-controller="Account" asp-action="Logout">
-                                <input type="submit" value="Выход" />
-                            </form>
+                            <div class="auth__div">
+                                @await Component.InvokeAsync("User")
+                            </div>
                         }
                         else
                         {
