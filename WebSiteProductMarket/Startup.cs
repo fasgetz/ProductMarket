@@ -93,7 +93,7 @@ namespace WebSiteProductMarket
                 app.UseHsts();
             }
 
-            // подключаем CORS для кросс платформенных запросов
+            //// подключаем CORS для кросс платформенных запросов
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseHttpsRedirection();
@@ -109,8 +109,19 @@ namespace WebSiteProductMarket
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "admin",
+                    pattern: "admin/products/{action}",
+                    defaults: new { controller = "AdminProducts", action = "Index" }
+                );
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "admin",
+                    pattern: "admin/",
+                    defaults: new { controller = "Admin", action = "Index" });
             });
         }
     }

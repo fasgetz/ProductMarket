@@ -29,7 +29,13 @@ namespace ProductMarketApi
         {
 
             services.AddSingleton(Configuration);
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", p =>
+                {
+                    p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
+            });
             services.AddHttpContextAccessor();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -96,8 +102,7 @@ namespace ProductMarketApi
             {
                 app.UseDeveloperExceptionPage();
             }
-            // подключаем CORS для кросс платформенных запросов
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            app.UseCors("AllowAll");
 
             app.UseHttpsRedirection();
 

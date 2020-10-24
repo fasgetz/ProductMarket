@@ -24,15 +24,7 @@ namespace ProductMarketApi.Controllers
         }
 
 
-        [HttpPost("AddProduct")]
-        [Authorize(Policy = Policies.Admin)]
-        public async Task<IActionResult> AddProduct(Product product)
-        {
-            await mPublishEndpoint.Publish(product);
-            return Ok("Success");
-        }
-
-        [Authorize(Policy = Policies.Admin)]
+        
         [HttpGet("get")]
         public async Task<List<Product>> GetProducts(short CategoryProduct)
         {

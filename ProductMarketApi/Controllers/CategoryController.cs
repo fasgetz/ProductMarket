@@ -31,12 +31,6 @@ namespace ProductMarketApi.Controllers
         [HttpGet("get")]
         public async Task<List<Category>> GetCategories()
         {
-            //var response = await mPublishEndpoint.Request<GetProductsRequest, GetProductsRespond>(new GetProductsRequest { IdCategoryProduct = CategoryProduct });
-            //var tokens = Request.Cookies;
-            //var token = Request.Cookies[".AspNetCore.Application.Id"];
-
-            //var headers = Request.Headers["token"];
-            
 
             var serviceAddress = new Uri("rabbitmq://localhost/CategoriesQueue");
             var client = mPublishEndpoint.CreateRequestClient<GetProductsRequest>(serviceAddress);
@@ -53,9 +47,7 @@ namespace ProductMarketApi.Controllers
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] // <-- That's all, folks! :)*
         public async Task<List<Category>> GetCategories2()
         {
-            //var response = await mPublishEndpoint.Request<GetProductsRequest, GetProductsRespond>(new GetProductsRequest { IdCategoryProduct = CategoryProduct });
-
-
+            
             var serviceAddress = new Uri("rabbitmq://localhost/CategoriesQueue");
             var client = mPublishEndpoint.CreateRequestClient<GetProductsRequest>(serviceAddress);
 

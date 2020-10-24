@@ -9,6 +9,12 @@ namespace ProductMarketServices.Products
 {
     public interface IProductService
     {
+        /// <summary>
+        /// Добавить продукт
+        /// </summary>
+        /// <param name="product">Продукт</param>
+        public Task AddProduct(Product product);
+
 
         /// <summary>
         /// Выборка ВСЕХ продуктов по категории

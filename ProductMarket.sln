@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductMarketApi", "Product
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceProductMarket", "ServiceProductMarket\ServiceProductMarket.csproj", "{B51F5AB4-A2C6-4EE5-A4B5-B2D69C8CBF64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSiteProductMarket", "WebSiteProductMarket\WebSiteProductMarket.csproj", "{5353D3E0-AC82-4CBF-9D4F-39F846AA0758}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSiteProductMarket", "WebSiteProductMarket\WebSiteProductMarket.csproj", "{5353D3E0-AC82-4CBF-9D4F-39F846AA0758}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

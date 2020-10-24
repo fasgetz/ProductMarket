@@ -11,13 +11,13 @@
     @RenderSection("Css", required: false)
 </head>
 <body>
-    
+
     @if (!User.Identity.IsAuthenticated)
     {
         <!-- Окно входа в аккаунт -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                
+
 
                 <div id="tabs" class="modal-content">
                     <div class="modal-close">
@@ -76,17 +76,25 @@
                     <div class="col-md-2 p-0 menu">
                         <ul id="accordion" class="accordion p-0">
                             <li v-for="category in data">
-                                <div class="link"><i class="fa fa-book"></i>{{ category.name }}<i class="fa fa-chevron-down"></i></div>
+                                <div class="link"><i class="fa fa-book"></i>Продукты<i class="fa fa-chevron-down"></i></div>
                                 <ul class="submenu">
-                                    <li v-for="(item, index) in category.subCategoryProduct">
-                                        <a>
+                                    <li>
+                                        <a asp-controller="AdminProducts" asp-action="Index">
                                             <div class="row">
-                                                <div class="col-9">
-                                                    {{ item.name }}
-                                                </div>
-                                                <div class="col-3">
-                                                    <span class="submenu__countBooks">{{ item.countProducts }}</span>
-                                                </div>
+                                                <h5>Список продуктов</h5>
+                                                @*<div class="col-9">
+                                                        {{ item.name }}
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <span class="submenu__countBooks">{{ item.countProducts }}</span>
+                                                    </div>*@
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="AdminProducts" asp-action="AddProduct">
+                                            <div class="row">
+                                                <h5>Добавить продукт</h5>
                                             </div>
                                         </a>
                                     </li>
@@ -109,40 +117,73 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
+    <script src="~/js/Accordion.js"></script>
     <script src="https://use.fontawesome.com/056ddd099c.js"></script>
 
     @* Vue JS and AXIOS to ajax query *@
     <script src="https://unpkg.com/vue"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="~/js/script.js"></script>
 
+    @*<script>
+            var app = new Vue({
+                el: '#accordion',
+                data() {
+                    return {
+                        data: null
+                    };
+                },
+                mounted() {
+                    axios
+                        .get('https://localhost:44310/api/category/get')
+                        .then(
+                            response => {
+                                (this.data = response.data);
+                                let script = document.createElement('script');
+                                script.setAttribute('src', '/js/Accordion.js');
+                                document.head.appendChild(script);
+                            });
+                }
+            });
+
+            var app = new Vue({
+                el: '#test',
+                data() {
+                    return {
+                        data: null
+                    };
+                },
+                methods: {
+                    auth() {
+                        axios
+                            .get('https://localhost:44310/api/product/get?CategoryProduct=1')
+                            .then(
+                                response => {
+                                    this.data = response.data;
+                                    alert('loaded');
+                                });
+                    }
+
+                }
+            });
+
+
+        </script>*@
     <script>
-        var app = new Vue({
-            el: '#accordion',
-            data() {
-                return {
-                    data: null
-                };
-            },
-            mounted() {
-                axios
-                    .get('https://localhost:44310/api/category/get')
-                    .then(
-                        response => {
-                            (this.data = response.data);
-                            let script = document.createElement('script');
-                            script.setAttribute('src', '/js/Accordion.js');
-                            document.head.appendChild(script);
-                        });
-            }
-        });
-
-
-
-    </script>
-    <script>
-
+        function AuthUser() {
+            $.ajax({
+                type: "GET",
+                url: 'https://localhost:44310/api/product/get?CategoryProduct=1',
+                //beforeSend: function (xhr) {   //Include the bearer token in header
+                //    xhr.setRequestHeader("Authorization", 'Bearer ' + getCookieValue('token'));
+                //},
+                success: function (data) {
+                    alert('tet');
+                    alert(data);
+                    $("#test").html(data);
+                }
+            });
+        }
 
         // Устанавливаем заголовок, чтобы при каждом запросе отправлять токен
         $.ajaxSetup({
@@ -154,9 +195,9 @@
 
         // Устанавливаем заголовок, чтобы при каждом запросе отправлять токен
         axios.defaults.headers.get['Authorization'] = "Bearer " + getCookieValue('token') // for GET requests
-        axios.defaults.headers.post['Authorization'] = "Bearer " + getCookieValue('token') // for POST requests        
+        axios.defaults.headers.post['Authorization'] = "Bearer " + getCookieValue('token') // for POST requests
 
-        function getCookieValue(cname) { // cname is nothing but the cookie value which 
+        function getCookieValue(cname) { // cname is nothing but the cookie value which
             //contains the value
             var name = cname + "=";
             var decodedCookie = decodeURIComponent(document.cookie);

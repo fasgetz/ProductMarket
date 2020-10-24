@@ -10,11 +10,25 @@ namespace ProductMarketServices.Products
 {
     public class ProductService : IProductService
     {
-        private readonly ProductMarketContext db;
+        private readonly ProductMarketContext context;
 
         public ProductService(ProductMarketContext context)
         {
-            this.db = context;
+            this.context = context;
+        }
+
+
+        /// <summary>
+        /// Добавить продукт
+        /// </summary>
+        /// <param name="product">Продукт</param>
+        public async Task AddProduct(Product product)
+        {
+
+            context.Product.Add(product);
+            context.SaveChanges();
+
+
         }
 
 
@@ -26,7 +40,7 @@ namespace ProductMarketServices.Products
         public async Task<List<Product>> GetProducts(short IdCategory)
         {
             // Выборка
-            var products = await db.Product.Where(i => i.IdSubCategory == IdCategory).ToListAsync();
+            var products = await context.Product.Where(i => i.IdSubCategory == IdCategory).ToListAsync();
 
 
             return products;
@@ -42,7 +56,7 @@ namespace ProductMarketServices.Products
         public async Task<List<Product>> GetProducts(short IdCategory, int TakeCount = 0, int SkipCount = 0)
         {
             // Выборка
-            var products = await db.Product.Where(i => i.IdSubCategory == IdCategory).Skip(SkipCount).Take(TakeCount).ToListAsync();
+            var products = await context.Product.Where(i => i.IdSubCategory == IdCategory).Skip(SkipCount).Take(TakeCount).ToListAsync();
 
 
             return products;

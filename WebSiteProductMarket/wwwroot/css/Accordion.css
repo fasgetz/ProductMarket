@@ -6,6 +6,12 @@
     cursor: pointer
 }
 
+.submenu h5 {
+    margin-left: 10px;
+    font-size: 14px;
+    color: black;
+}
+
 ul {
     list-style-type: none;
     padding: 0;

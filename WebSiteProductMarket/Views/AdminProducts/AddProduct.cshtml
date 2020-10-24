@@ -1,0 +1,376 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_AdminLayout";
+}
+@*<div id="addProduct">
+        <h2>Добавить продукт</h2>
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <select v-model="user">
+                        <option v-bind:value="item" v-for="item in data">{{ item.name }}</option>
+                    </select>
+
+
+                </div>
+                <div v-if="user != null" class="col-12">
+                    <select>
+                        <option v-bind:value="item.id" v-for="item in user.subCategoryProduct"> {{item.name}} </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>*@
+
+
+
+<form id="form">
+    <div>
+        <div class="form-group">
+            <label class="control-label">Название</label>
+            <input name="Name" v-model="postBody.Name" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Категория продукта</label>
+            <select v-model="category" class="form-control">
+                <option v-bind:value="item" v-for="item in data">{{ item.name }}</option>
+            </select>
+        </div>
+        <div v-if="category != null" class="form-group">
+            <label class="control-label">Подкатегория продукта</label>
+            <select name="idSubCategoryProduct" v-model="postBody.idSubCategoryProduct" class="form-control">
+                <option v-bind:value="item.id" v-for="item in category.subCategoryProduct"> {{item.name}} </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="control-label">Выберите постер продукта</label>
+            <div class="custom-file">
+                <input accept="image/x-png,image/gif,image/jpeg" v-on:change="ImageLoad" type="file" class="custom-file-input" id="myInput" aria-describedby="myInput">
+                <label class="custom-file-label" for="myInput">{{ FileName }}</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Стоимость продукта ₽</label>
+            <input v-model.number:value="postBody.Price" type="number" name="price" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Количество товаров</label>
+            <input v-model.number:value="postBody.Amount" type="number" name="Amount" class="form-control" />
+        </div>
+        <div class="form-group text-center">
+            <input v-on:click="addProduct" class="btn btn-primary" type="submit" />
+        </div>
+    </div>
+
+</form>
+
+
+@section Css {
+    <link href="~/css/Admin/errorForm.css" rel="stylesheet" />
+}
+
+@section Scripts {
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+
+    <script>
+
+        var AddProductApp = new Vue({
+            el: '#form',
+            data: () => ({
+                data: null,
+                category: null,
+                postBody: {
+                    Name: null,
+                    Price: null,
+                    idSubCategoryProduct: null,
+                    Amount: null,
+
+                },
+                FileName: 'Выберите файл',
+                file: null
+            }),
+            methods: {
+                addProduct: function (event) {
+                    event.preventDefault();
+
+                    let formData = new FormData();
+                    formData.append('file', this.file);
+                    formData.append('Name', this.postBody.Name);
+                    formData.append('Price', this.postBody.Price);
+                    formData.append('Amount', this.postBody.Amount);
+                    formData.append('idSubCategoryProduct', this.postBody.idSubCategoryProduct);
+                    //let formData = new FormData();
+                    //formData.append('file', this.file);
+                    //formData.append('Name', this.postBody.Name);
+                    //formData.append('Price', 1231);
+                    //formData.append('Amount', 2314234);
+                    //formData.append('idSubCategoryProduct', 312412);
+                    console.log('>> formData >> ', formData);
+
+
+
+                    axios.post((urlApi + 'api/products/AddFile'),
+                        formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        }
+                    })
+                        .then(function (response) {
+                            window.location.href = urlApp + "admin/"
+                            console.log(response);
+                        })
+                        .catch(function (response) {
+                            $("#form").validate({
+                                rules: {
+                                    Name: {
+                                        required: true,
+                                        minlength: 5
+                                    },
+                                    idSubCategoryProduct: {
+                                        required: true
+                                    },
+                                    Price: {
+                                        required: true,
+                                        range: [1, 1000000]
+                                    },
+                                    Amount: {
+                                        required: true,
+                                        range: [1, 1000000]
+                                    }
+                                },
+                                messages: {
+                                    Name: {
+                                        required: "Поле обязательно для заполнения",
+                                        minlength: jQuery.validator.format("Длина имени должна быть больше 5-ти символов")
+                                    },
+                                    idSubCategoryProduct: {
+                                        required: "Поле обязательно для заполнения"
+                                    },
+                                    Price: {
+                                        required: "Поле обязательно для заполнения",
+                                        range: jQuery.validator.format("Введите стоимость в пределе 1 ... 1000000")
+                                    },
+                                    Amount: {
+                                        required: "Поле обязательно для заполнения",
+                                        range: jQuery.validator.format("Введите количество в пределе 1 ... 1000000")
+                                    }
+                                }
+                            });
+                        });
+                },
+                ImageLoad: function (event) {
+
+                    var file = document.getElementById("myInput").files[0];
+                    this.FileName = file.name;
+                    this.file = file;
+                }
+
+            },
+            mounted() {
+                axios
+                    .get(urlApi + 'api/category/get')
+                    .then(
+                        response => {
+                            this.data = response.data;
+                        });
+            }
+        });
+
+
+    </script>
+
+    @*<script>
+            var uploadForm = new Vue({
+                el: "#uploadForm",
+                data: {
+                    data: null,
+                    category: null,
+                    postBody: {
+                        Name: null,
+                        Price: null,
+                        idSubCategoryProduct: null,
+                        Amount: null,
+
+                    },
+                    FileName: 'Выберите файл',
+                    file: null
+                },
+                methods: {
+                    handleFileUpload() {
+                        this.file = document.getElementById("myInput").files[0];
+                        console.log('>>>> 1st element in files array >>>> ', this.file);
+                        this.FileName = file.name;
+                        this.file = file;
+                    },
+                    submitFile(event) {
+                        event.preventDefault();
+
+                        let formData = new FormData();
+                        formData.append('file', this.file);
+                        formData.append('Name', this.postBody.Name);
+                        formData.append('Price', this.postBody.Price);
+                        formData.append('Amount', this.postBody.Amount);
+                        formData.append('idSubCategoryProduct', this.postBody.idSubCategoryProduct);
+                        console.log('>> formData >> ', formData);
+
+
+
+                        event.preventDefault();
+                        // You should have a server side REST API
+                        axios.post((urlApi + 'api/products/Add'),
+                            formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        })
+                            .then(function () {
+                                console.log('SUCCESS!!');
+                            })
+                            .catch(function () {
+                                console.log('FAILURE!!');
+                            });
+                    }
+                },
+                mounted() {
+                    axios
+                        .get(urlApi + 'api/category/get')
+                        .then(
+                            response => {
+                                this.data = response.data;
+                            })
+                        .catch(function (response) {
+                            $("#form").validate({
+                                rules: {
+                                    Name: {
+                                        required: true,
+                                        minlength: 5
+                                    },
+                                    idSubCategoryProduct: {
+                                        required: true
+                                    },
+                                    Price: {
+                                        required: true,
+                                        range: [1, 1000000]
+                                    },
+                                    Amount: {
+                                        required: true,
+                                        range: [1, 1000000]
+                                    }
+                                },
+                                messages: {
+                                    Name: {
+                                        required: "Поле обязательно для заполнения",
+                                        minlength: jQuery.validator.format("Длина имени должна быть больше 5-ти символов")
+                                    },
+                                    idSubCategoryProduct: {
+                                        required: "Поле обязательно для заполнения"
+                                    },
+                                    Price: {
+                                        required: "Поле обязательно для заполнения",
+                                        range: jQuery.validator.format("Введите стоимость в пределе 1 ... 1000000")
+                                    },
+                                    Amount: {
+                                        required: "Поле обязательно для заполнения",
+                                        range: jQuery.validator.format("Введите количество в пределе 1 ... 1000000")
+                                    }
+
+                                }
+                            });
+
+            });
+        </script>*@
+
+    @*<script>
+            var AddProductApp = new Vue({
+                el: '#form',
+                data: () => ({
+                    data: null,
+                    category: null,
+                    postBody: {
+                        Name: null,
+                        Price: null,
+                        idSubCategoryProduct: null,
+                        Amount: null
+                    },
+                    FileName: 'Выберите файл'
+                }),
+                methods: {
+                    addProduct: function (event) {
+                        event.preventDefault();
+
+                        axios({
+                            method: 'post',
+                            url: urlApi + 'api/products/addproduct',
+                            data: this.postBody,
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                            .then(function (response) {
+
+                                console.log(response);
+                            })
+                            .catch(function (response) {
+                                $("#form").validate({
+                                    rules: {
+                                        Name: {
+                                            required: true,
+                                            minlength: 5
+                                        },
+                                        idSubCategoryProduct: {
+                                            required: true
+                                        },
+                                        Price: {
+                                            required: true,
+                                            range: [1, 1000000]
+                                        },
+                                        Amount: {
+                                            required: true,
+                                            range: [1, 1000000]
+                                        }
+                                    },
+                                    messages: {
+                                        Name: {
+                                            required: "Поле обязательно для заполнения",
+                                            minlength: jQuery.validator.format("Длина имени должна быть больше 5-ти символов")
+                                        },
+                                        idSubCategoryProduct: {
+                                            required: "Поле обязательно для заполнения"
+                                        },
+                                        Price: {
+                                            required: "Поле обязательно для заполнения",
+                                            range: jQuery.validator.format("Введите стоимость в пределе 1 ... 1000000")
+                                        },
+                                        Amount: {
+                                            required: "Поле обязательно для заполнения",
+                                            range: jQuery.validator.format("Введите количество в пределе 1 ... 1000000")
+                                        }
+                                    }
+                                });
+                            });
+                    },
+                    ImageLoad: function (event) {
+                        var file = document.getElementById("myInput").files[0];
+                        this.FileName = file.name;
+                    }
+
+                },
+                mounted() {
+                    axios
+                        .get(urlApi + 'api/category/get')
+                        .then(
+                            response => {
+                                this.data = response.data;
+                            });
+                }
+            });
+        </script>*@
+
+}
