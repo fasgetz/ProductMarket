@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ServiceProductMarket.Consumers.Products
 {
-    public class GetProductsConsumer : IConsumer<GetProductsRequest>
+    public class GetProductsConsumer : IConsumer<GetSubcategoriesRequest>
     {
         public GetProductsConsumer()
         {
@@ -24,7 +24,7 @@ namespace ServiceProductMarket.Consumers.Products
         }
 
 
-        public async Task Consume(ConsumeContext<GetProductsRequest> context)
+        public async Task Consume(ConsumeContext<GetSubcategoriesRequest> context)
         {
             await context.RespondAsync<GetProductsRespond>(new GetProductsRespond(await service.GetProducts(context.Message.IdCategoryProduct)));
 

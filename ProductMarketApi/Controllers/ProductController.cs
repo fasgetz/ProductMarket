@@ -30,10 +30,10 @@ namespace ProductMarketApi.Controllers
         {
             
             var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
-            var client = mPublishEndpoint.CreateRequestClient<GetProductsRequest>(serviceAddress);
+            var client = mPublishEndpoint.CreateRequestClient<GetSubcategoriesRequest>(serviceAddress);
 
 
-            var response = await client.GetResponse<GetProductsRespond>(new GetProductsRequest() { IdCategoryProduct = CategoryProduct });
+            var response = await client.GetResponse<GetProductsRespond>(new GetSubcategoriesRequest() { IdCategoryProduct = CategoryProduct });
 
             return response.Message.Products;
         }

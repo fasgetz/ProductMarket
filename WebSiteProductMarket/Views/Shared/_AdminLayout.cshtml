@@ -74,19 +74,42 @@
                 <div class="row">
                     <div class="col-md-2 p-0 menu">
                         <ul id="accordion" class="accordion p-0">
-                            <li v-for="category in data">
+                            <li>
+                                <a asp-controller="AdminCategories" asp-action="Index">
+                                    <div class="link"><i class="fa fa-book"></i>Категории</div>
+                                </a>
+                                
+                                @*<ul class="submenu">
+                                    <li>
+                                        <a asp-controller="AdminCategories" asp-action="Index">
+                                            <div class="row">
+                                                <h5>Список категорий</h5>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="AdminCategories" asp-action="Index">
+                                            <div class="row">
+                                                <h5>Добавить категорию</h5>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="AdminCategories" asp-action="Index">
+                                            <div class="row">
+                                                <h5>Добавить подкатегорию</h5>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>*@
+                            </li>
+                            <li>
                                 <div class="link"><i class="fa fa-book"></i>Продукты<i class="fa fa-chevron-down"></i></div>
                                 <ul class="submenu">
                                     <li>
                                         <a asp-controller="AdminProducts" asp-action="Index">
                                             <div class="row">
                                                 <h5>Список продуктов</h5>
-                                                @*<div class="col-9">
-                                                        {{ item.name }}
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <span class="submenu__countBooks">{{ item.countProducts }}</span>
-                                                    </div>*@
                                             </div>
                                         </a>
                                     </li>

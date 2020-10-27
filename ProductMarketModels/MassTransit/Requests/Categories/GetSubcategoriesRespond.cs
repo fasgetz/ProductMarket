@@ -5,13 +5,13 @@ using System.Text;
 
 namespace ProductMarketModels.MassTransit.Requests.Categories
 {
-    public class GetCategoriesRespond
+    public class GetSubcategoriesRespond
     {
-        public List<Category> Categories { get; private set; }        
+        public Category Category { get; private set; }        
 
-        public GetCategoriesRespond(List<Category> categories)
+        public GetSubcategoriesRespond(Category Category)
         {
-            this.Categories = categories;
+            this.Category = Category;
         }
     }
 }

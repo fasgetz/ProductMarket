@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ProductMarketModels.MassTransit.Requests.Products
 {
-    public class GetProductsRequest
+    public class GetSubcategoriesRequest
     {
         public short IdCategoryProduct { get; set; }
     }

@@ -9,18 +9,20 @@ using System.Threading.Tasks;
 
 namespace ServiceProductMarket.Consumers.Category
 {
-    public class GetProductsOnSubcategoryInCategoryConsumer : IConsumer<GetProductsRequest>
+    public class GetSubCategoriesOnCategoryConsumer : IConsumer<SubcategoriesRequest>
     {
         private readonly ICategoriesService service;
 
-        public GetProductsOnSubcategoryInCategoryConsumer(ICategoriesService service)
+        public GetSubCategoriesOnCategoryConsumer(ICategoriesService service)
         {
             this.service = service;
         }
 
-        public async Task Consume(ConsumeContext<GetProductsRequest> context)
+        public async Task Consume(ConsumeContext<SubcategoriesRequest> context)
         {
-            await context.RespondAsync<GetCategoriesRespond>(new GetCategoriesRespond(await service.GetCategoriesProducts()));
+            var category = await service.GetCategoriesProducts(context.Message.IdCategory);
+
+            await context.RespondAsync<GetSubcategoriesRespond>(new GetSubcategoriesRespond(category));
 
             
         }

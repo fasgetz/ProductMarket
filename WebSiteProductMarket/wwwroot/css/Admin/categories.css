@@ -1,0 +1,29 @@
+.categories__table {
+    background: #7fc7ff;
+    border-radius: 3px;
+    border: 1px solid black;
+    margin-top: 10px;
+}
+
+
+.category__item__header {
+    background: #3a75c4;
+    font-size: 18px;
+}
+
+.category__item {
+    border: 1px solid black;
+    font-size: 16px;
+}
+
+    .category__item:hover {
+        background-color: rgba(0,0,0,.2);
+    }
+
+    .category__item a {
+        color: black;
+    }
+
+    .category__item a:hover {
+        text-decoration: none;
+    }

@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Категории";
+    Layout = "_AdminLayout";
+}
+
+<div id="Categories">
+    <h1 class="text-center">Список категорий</h1>
+    <div>
+        <div class="AddCategory container-fluid p-0">
+            <div class="row">
+                <div class="col-10">
+                    <select v-model="category" class="form-control">
+                        <option v-bind:value="item" v-for="item in data">{{ item.name }}</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <input v-on:click="AddCategoryPartial" type="button" class="btn btn-primary w-100" value="Добавить" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-if="category != null" class="categories__table container-fluid p-0">
+        <div class="category__item__header container-fluid">
+            <div class="row text-center">
+                <div class="col-2 category__item__id">
+                    Id
+                </div>
+                <div class="col-6 category__item__name">
+                    Название
+                </div>
+                <div class="col-3 category__item__poster">
+                    Постер
+                </div>
+                <div class="col-1 category__item__addButton">
+                    <input v-on:click="AddSubCategoryPartial" type="button" class="btn btn-success w-100" value="Добавить" />
+                </div>
+            </div>
+        </div>
+        <div v-for="item in category.subCategoryProduct" class="category__item container-fluid">
+            <a href="#">
+                <div class="row text-center">
+                    <div class="col-2 category__item__id">
+                        {{item.id}}
+                    </div>
+                    <div class="col-6 category__item__name">
+                        {{item.name}}
+                    </div>
+                    <div class="col-4 category__item__poster">
+                        Постер
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <!--<table v-if="category != null" class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Название</th>
+                <th scope="col">Постер</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="item in category.subCategoryProduct">
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>-->
+                @*<td>{{item.price}}</td>
+                <td>{{item.amount}}</td>*@
+            <!--</tr>
+        </tbody>
+    </table>-->
+</div>
+
+
+@section Css {
+    <link href="~/css/Admin/categories.css" rel="stylesheet" />
+}
+
+@section Scripts {
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+
+    <script>
+
+        var Categories = new Vue({
+            el: '#Categories',
+            data: () => ({
+                data: null,                
+                category: null,
+                body: {
+                    CategoryProduct: null
+                }
+            }),
+            mounted() {
+                axios
+                    .get(urlApi + 'api/category/Get')
+                    .then(
+                        response => {
+                            this.data = response.data;
+                        });
+            },
+            methods: {
+                AddCategoryPartial() {
+
+                    axios.get(('AdminCategories/AddCategory'))
+                        .then(
+                            response => {
+                                $("#Categories").html(response.data);
+                            });
+                },
+                AddSubCategoryPartial() {
+
+                    axios.get(('AdminCategories/AddSubCategory'))
+                        .then(
+                            response => {
+                                $("#Categories").html(response.data);
+                            });
+                }
+            }
+        });
+
+
+    </script>
+
+}

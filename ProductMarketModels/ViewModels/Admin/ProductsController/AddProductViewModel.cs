@@ -14,7 +14,7 @@ namespace ProductMarketModels.ViewModels.Admin.ProductsController
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Пожалуйста, загрузите постер продукта")]
-        [Display(Name = "Постер книги")]
+        [Display(Name = "Постер продукта")]
         public IFormFile file { get; set; }
 
         //public byte[] Poster { get; set; }

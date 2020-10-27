@@ -1,0 +1,121 @@
+﻿<form id="form">
+    <div>
+        <h1 class="text-center">Добавление подкатегории</h1>
+        <p>{{postBody.IdCategory}}</p>
+        <div class="form-group">
+            <label class="control-label">Название</label>
+            <input name="Name" v-model="postBody.Name" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Категория продукта</label>
+            <select v-model="postBody.IdCategory" class="form-control">
+                <option v-bind:value="item.id" v-for="item in data">{{ item.name }}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="control-label">Выберите постер подкатегории</label>
+            <div class="custom-file">
+                <input accept="image/x-png,image/gif,image/jpeg" v-on:change="ImageLoad" type="file" class="custom-file-input" id="myInput" aria-describedby="myInput">
+                <label class="custom-file-label" for="myInput">{{ FileName }}</label>
+            </div>
+        </div>
+        <div class="form-group text-center">
+            <input v-on:click="AddSubCategory" class="btn btn-primary" type="submit" />
+        </div>
+    </div>
+
+</form>
+
+
+<script>
+    var AddCategory = new Vue({
+        el: '#form',
+        data: () => ({
+            postBody: {
+                Name: null,
+                IdCategory: null
+            },
+            FileName: 'Выберите файл',
+            file: null,
+            data: null
+        }),
+        mounted() {
+            axios
+                .get(urlApi + 'api/category/get')
+                .then(
+                    response => {
+                        this.data = response.data;
+                    });
+        },
+        methods: {
+            AddSubCategory: function (event) {
+                event.preventDefault();
+
+                let formData = new FormData();
+                formData.append('file', this.file);
+                formData.append('Name', this.postBody.Name);
+                formData.append('IdCategory', this.postBody.IdCategory);
+
+                console.log('>> formData >> ', formData);
+
+
+
+                axios.post((urlApi + 'api/category/AddSubCategory'),
+                    formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    }
+                })
+                    .then(function (response) {
+                        window.location.href = urlApp + "AdminCategories"
+                        console.log(response);
+                    })
+                    .catch(function (response) {
+                        //$("#form").validate({
+                        //    rules: {
+                        //        Name: {
+                        //            required: true,
+                        //            minlength: 5
+                        //        },
+                        //        idSubCategoryProduct: {
+                        //            required: true
+                        //        },
+                        //        Price: {
+                        //            required: true,
+                        //            range: [1, 1000000]
+                        //        },
+                        //        Amount: {
+                        //            required: true,
+                        //            range: [1, 1000000]
+                        //        }
+                        //    },
+                        //    messages: {
+                        //        Name: {
+                        //            required: "Поле обязательно для заполнения",
+                        //            minlength: jQuery.validator.format("Длина имени должна быть больше 5-ти символов")
+                        //        },
+                        //        idSubCategoryProduct: {
+                        //            required: "Поле обязательно для заполнения"
+                        //        },
+                        //        Price: {
+                        //            required: "Поле обязательно для заполнения",
+                        //            range: jQuery.validator.format("Введите стоимость в пределе 1 ... 1000000")
+                        //        },
+                        //        Amount: {
+                        //            required: "Поле обязательно для заполнения",
+                        //            range: jQuery.validator.format("Введите количество в пределе 1 ... 1000000")
+                        //        }
+                        //    }
+                        //});
+                    });
+            },
+            ImageLoad: function (event) {
+
+                var file = document.getElementById("myInput").files[0];
+                this.FileName = file.name;
+                this.file = file;
+            }
+
+        }
+    });
+</script>

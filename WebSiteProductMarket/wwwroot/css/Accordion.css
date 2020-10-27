@@ -6,6 +6,10 @@
     cursor: pointer
 }
 
+.accordion a:hover {
+    text-decoration: none;
+}
+
 .submenu h5 {
     margin-left: 10px;
     font-size: 14px;
@@ -55,7 +59,7 @@ a {
 
 
 .accordion li:last-child .link {
-    border-bottom: 0
+    
 }
 
 .accordion li i {

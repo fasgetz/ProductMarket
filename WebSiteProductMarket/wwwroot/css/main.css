@@ -1,4 +1,14 @@
 
+#accordion .link img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    margin: 5px;
+}
+
+
+
+
 
 /* Секция авторизации */
 .auth__div {
@@ -137,124 +147,13 @@ width: 4px;
   .body {
     margin-top: 96px;
   }
+
+
 }
 
 
 
-/* Аккордион меню */
 
-/* Аккордион меню */
-
-.submenu a {
-    cursor: pointer
-}
-
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-a {
-    color: #b63b4d;
-    text-decoration: none
-}
-
-.accordion {
-    width: 100%;
-    border: 1px solid #dddddd;
-    border-radius: 5px;
-    background: #FFF;
-}
-
-    .accordion .link:hover {
-        -moz-box-shadow: 3px 1px 10px #777;
-        -webkit-box-shadow: 3px 1px 10px #777;
-        box-shadow: 3px 1px 10px #777;
-    }
-
-.submenu__countBooks {
-    border: 1px solid grey;
-    padding: 3px;
-    border-radius: 5px;
-}
-
-.accordion .link {
-    cursor: pointer;
-    display: block;
-    padding: 15px 15px 15px 42px;
-    color: #4D4D4D;
-    font-size: 14px;
-    font-weight: 700;
-    border-bottom: 1px solid #CCC;
-    position: relative;
-}
-
-
-
-.accordion li:last-child .link {
-
-}
-
-.accordion li i {
-    position: absolute;
-    top: 16px;
-    left: 12px;
-    font-size: 18px;
-    color: #595959;
-}
-
-    .accordion li i.fa-chevron-down {
-        right: 12px;
-        left: auto;
-        font-size: 16px
-    }
-
-.accordion li.open .link {
-    color: #AA00FF
-}
-
-.accordion .selectedGenre {
-    background-color: cornflowerblue
-}
-
-.accordion li.open i {
-    color: #AA00FF
-}
-
-    .accordion li.open i.fa-chevron-down {
-        -webkit-transform: rotate(180deg);
-        -ms-transform: rotate(180deg);
-        -o-transform: rotate(180deg);
-        transform: rotate(180deg)
-    }
-
-
-    .submenu {
-        display: none;
-        background: aliceblue;
-        font-size: 14px
-    }
-
-        .submenu li {
-            border-bottom: 1px solid #4b4a5e
-        }
-
-
-
-        .submenu a {
-            display: block;
-            text-decoration: none;
-            color: #d9d9d9;
-            padding: 12px;
-            -webkit-transition: all 0.25s ease;
-            -o-transition: all 0.25s ease;
-            transition: all 0.25s ease
-        }
-
-            .submenu a:hover {
-                background: cornflowerblue;
-                color: #FFF
-            }
 
 
 .body {

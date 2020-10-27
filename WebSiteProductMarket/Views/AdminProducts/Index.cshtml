@@ -3,8 +3,93 @@
     Layout = "_AdminLayout";
 }
 
+<div id="Products">
+    <h1>Список продуктов</h1>
+    <div>
+        <div class="form-group">
+            <label class="control-label">Категория продукта</label>
+            <select v-model="category" class="form-control">
+                <option v-bind:value="item" v-for="item in data">{{ item.name }}</option>
+            </select>
+        </div>
+        <div v-if="category != null" class="form-group">
+            <label class="control-label">Подкатегория продукта</label>
+            <select v-on:change="loadProducts" name="idSubCategoryProduct" v-model="body.CategoryProduct" class="form-control">
+                <option v-bind:value="item.id" v-for="item in category.subCategoryProduct"> {{item.name}} </option>
+            </select>
+        </div>
+    </div>
+    @*<div class="container">
+        <div class="row">
+            {{ products }}
+        </div>
+    </div>*@
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Название</th>
+                <th scope="col">Цена</th>
+                <th scope="col">Количество</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="item in products">
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.price}}</td>
+                <td>{{item.amount}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 
-<h1>Admin PANEL</h1>
 
-<a asp-controller="AdminProducts" asp-action="AddProduct">Добавить продукт!!!</a>
+@section Scripts {
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+
+    <script>
+
+        var ProductApp = new Vue({
+            el: '#Products',
+            data: () => ({
+                data: null,                
+                category: null,
+                body: {
+                    CategoryProduct: null
+                },
+                
+                products: null
+            }),
+            mounted() {
+                axios
+                    .get(urlApi + 'api/category/get')
+                    .then(
+                        response => {
+                            this.data = response.data;
+                        });
+            },
+            methods: {
+                loadProducts() {
+
+                    axios.get((urlApi + 'api/product/get'), {
+                        params: {
+                            CategoryProduct: this.body.CategoryProduct
+                        }
+                    })
+
+                        .then(
+                            response => {
+                                this.products = response.data;
+                                alert(products);
+                            });
+                }
+            }
+        });
+
+
+    </script>
+
+}
