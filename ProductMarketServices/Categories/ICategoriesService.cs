@@ -32,11 +32,39 @@ namespace ProductMarketServices.Categories
         Task AddCategory(Category category);
 
         /// <summary>
+        /// Редактирование категории
+        /// </summary>
+        /// <param name="category">Категория</param>
+        /// <returns></returns>
+        Task EditCategory(CategoryProduct category);
+
+        /// <summary>
+        /// Удаление категории
+        /// </summary>
+        /// <param name="category">Категория</param>
+        /// <returns></returns>
+        Task DeleteCategory(CategoryProduct category);
+
+        /// <summary>
         /// Добавление ПодКатегории товара
         /// </summary>
         /// <param name="SubCategory">Подкатегория</param>
         /// <returns></returns>
         Task AddSubCategory(SubCategoryProduct SubCategory);
+
+        /// <summary>
+        /// Редактирование подкатегории
+        /// </summary>
+        /// <param name="category">ПодКатегория</param>
+        /// <returns></returns>
+        Task EditSubCategory(SubCategoryProduct category);
+
+        /// <summary>
+        /// Редактирование подкатегории
+        /// </summary>
+        /// <param name="category">ПодКатегория</param>
+        /// <returns></returns>
+        Task DeleteSubCategory(SubCategoryProduct category);
 
     }
 }

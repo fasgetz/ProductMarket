@@ -98,6 +98,37 @@ namespace ProductMarketApi.Controllers.Admin
             await mPublishEndpoint.Publish(subcategory);
             return Ok("Success");
         }
+
+        [HttpPost("EditCategory")]
+        public async Task<IActionResult> EditCategory([FromForm] EditCategoryViewModel categoryVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            byte[] imageData = null;
+
+            // Если загрузили файл
+            if (categoryVM.file != null)
+                //считываем переданный файл в массив байтов
+                using (var binaryReader = new BinaryReader(categoryVM.file.OpenReadStream()))
+                {
+                    imageData = binaryReader.ReadBytes((int)categoryVM.file.Length);
+                }
+
+
+            CategoryProduct category = new CategoryProduct()
+            {
+                Name = categoryVM.Name,
+                Poster = imageData,
+                Id = (short)categoryVM.IdCategory
+            };
+
+
+            await mPublishEndpoint.Publish(category);
+            return Ok("Success");
+        }
     }
 
 

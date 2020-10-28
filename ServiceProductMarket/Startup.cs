@@ -53,6 +53,7 @@ namespace ServiceProductMarket
                 x.AddConsumer<GetSubCategoriesOnCategoryConsumer>();
                 x.AddConsumer<AddCategoryConsumer>();
                 x.AddConsumer<AddSubCategoryConsumer>();
+                x.AddConsumer<EditCategoryConsumer>();
 
 
 
@@ -83,6 +84,7 @@ namespace ServiceProductMarket
                         e.Consumer<GetSubCategoriesOnCategoryConsumer>(context);
                         e.Consumer<AddCategoryConsumer>(context);
                         e.Consumer<AddSubCategoryConsumer>(context);
+                        e.Consumer<EditCategoryConsumer>(context);
                     });
 
 

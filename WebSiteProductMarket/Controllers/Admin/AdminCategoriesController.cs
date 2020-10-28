@@ -24,5 +24,13 @@ namespace WebSiteProductMarket.Controllers.Admin
         {
             return PartialView();
         }
+
+        public IActionResult EditCategory(int id, string name)
+        {
+            ViewBag.name = name;
+            ViewBag.id = id;
+
+            return PartialView();
+        }
     }
 }

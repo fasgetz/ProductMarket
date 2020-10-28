@@ -8,67 +8,57 @@
     <div>
         <div class="AddCategory container-fluid p-0">
             <div class="row">
-                <div class="col-10">
+                <div class="col-1 pr-0" v-if="category != null">
+                    <button v-on:click="EditCategoryPartial" class="btn w-100"><i class="fa fa-info-circle" aria-hidden="true"></i></button>
+                    @*<input class="btn btn-primary w-100" type="button" name="name" value="EDIT" />*@
+                </div>
+                <div v-bind:class="[category != null ? 'col-10 pl-0' : 'col-11']" class="pr-0">
                     <select v-model="category" class="form-control">
                         <option v-bind:value="item" v-for="item in data">{{ item.name }}</option>
                     </select>
                 </div>
-                <div class="col-2">
-                    <input v-on:click="AddCategoryPartial" type="button" class="btn btn-primary w-100" value="Добавить" />
+                <div class="col-1 pl-0">
+                    <input v-on:click="AddCategoryPartial" type="button" class="btn btn-primary w-100" value="+" />
                 </div>
             </div>
         </div>
     </div>
-    <div v-if="category != null" class="categories__table container-fluid p-0">
-        <div class="category__item__header container-fluid">
-            <div class="row text-center">
-                <div class="col-2 category__item__id">
-                    Id
-                </div>
-                <div class="col-6 category__item__name">
-                    Название
-                </div>
-                <div class="col-3 category__item__poster">
-                    Постер
-                </div>
-                <div class="col-1 category__item__addButton">
-                    <input v-on:click="AddSubCategoryPartial" type="button" class="btn btn-success w-100" value="Добавить" />
-                </div>
-            </div>
-        </div>
-        <div v-for="item in category.subCategoryProduct" class="category__item container-fluid">
-            <a href="#">
+    <div v-if="category != null" class="subcategories container-fluid p-0">
+        <h2 class="text-center">Подкатегории товаров</h2>
+        <div class="categories__table">
+            <div class="category__item__header container-fluid">
                 <div class="row text-center">
                     <div class="col-2 category__item__id">
-                        {{item.id}}
+                        Id
                     </div>
                     <div class="col-6 category__item__name">
-                        {{item.name}}
+                        Название
                     </div>
                     <div class="col-4 category__item__poster">
                         Постер
                     </div>
                 </div>
-            </a>
+            </div>
+            <div v-for="item in category.subCategoryProduct" class="category__item container-fluid">
+                <a href="#">
+                    <div class="row text-center">
+                        <div class="col-2 category__item__id align-self-center">
+                            {{item.id}}
+                        </div>
+                        <div class="col-6 category__item__name align-self-center">
+                            {{item.name}}
+                        </div>
+                        <div class="col-4 category__item__poster align-self-center">
+                            <img v-bind:src="getImage(item.poster)" />
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="category__item__addButton text-center">
+            <input v-on:click="AddSubCategoryPartial" type="button" class="btn btn-success" value="Добавить" />
         </div>
     </div>
-    <!--<table v-if="category != null" class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Название</th>
-                <th scope="col">Постер</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="item in category.subCategoryProduct">
-                <td>{{item.id}}</td>
-                <td>{{item.name}}</td>-->
-                @*<td>{{item.price}}</td>
-                <td>{{item.amount}}</td>*@
-            <!--</tr>
-        </tbody>
-    </table>-->
 </div>
 
 
@@ -100,6 +90,9 @@
                         });
             },
             methods: {
+                getImage: function (array) {
+                    return 'data:image/jpg;base64, ' + array
+                },
                 AddCategoryPartial() {
 
                     axios.get(('AdminCategories/AddCategory'))
@@ -114,6 +107,21 @@
                         .then(
                             response => {
                                 $("#Categories").html(response.data);
+                            });
+                },
+                EditCategoryPartial() {
+                    axios.get(('AdminCategories/EditCategory'), {
+                        params: {
+                            id: this.category.id,
+                            name: this.category.name
+                        }
+                    })
+                        .then(
+                            response => {
+                                $("#Categories").html(response.data);
+                                //$("#Categories #nameCategory").attr("value", this.category.name);
+                                //$("#Categories #IdCategory").attr("value", this.category.id);
+                                
                             });
                 }
             }

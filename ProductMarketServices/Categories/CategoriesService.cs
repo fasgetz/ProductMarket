@@ -44,6 +44,46 @@ namespace ProductMarketServices.Categories
             context.SaveChanges();
         }
 
+        public async Task DeleteCategory(CategoryProduct category)
+        {
+            var categoryDb = await context.CategoryProduct.FirstOrDefaultAsync(i => i.Id == category.Id);
+
+            context.CategoryProduct.Remove(categoryDb);
+            context.SaveChanges();
+        }
+
+        public async Task DeleteSubCategory(SubCategoryProduct category)
+        {
+            var categoryDb = await context.SubCategoryProduct.FirstOrDefaultAsync(i => i.Id == category.Id);
+
+            context.SubCategoryProduct.Remove(categoryDb);
+            context.SaveChanges();
+        }
+
+        public async Task EditCategory(CategoryProduct category)
+        {
+            var entity = context.CategoryProduct.FirstOrDefault(i => i.Id == category.Id);
+
+            entity.Name = category.Name;
+
+            if (category.Poster != null)
+                entity.Poster = category.Poster;
+
+            context.SaveChanges();
+
+        }
+
+        public async Task EditSubCategory(SubCategoryProduct category)
+        {
+            var entity = await context.SubCategoryProduct.FirstOrDefaultAsync(i => i.Id == category.Id);
+
+            entity.Name = category.Name;
+            entity.Poster = category.Poster != null ? category.Poster : null;
+            entity.IdCategory = category.IdCategory;
+
+            context.SaveChanges();
+        }
+
 
         /// <summary>
         /// Выборка категорий и субкатегорий с количеством продуктов в них

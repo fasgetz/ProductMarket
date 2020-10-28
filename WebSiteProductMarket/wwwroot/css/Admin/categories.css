@@ -5,10 +5,17 @@
     margin-top: 10px;
 }
 
+.AddCategory i {
+    font-size: 25px;
+}
+
+.subcategories {
+    margin-top: 20px;
+}
 
 .category__item__header {
     background: #3a75c4;
-    font-size: 18px;
+    font-size: 22px;
 }
 
 .category__item {
@@ -27,3 +34,14 @@
     .category__item a:hover {
         text-decoration: none;
     }
+
+.category__item__poster img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50px;
+    margin: 5px;
+}
+
+.category__item__addButton {
+    margin: 5px;
+}
