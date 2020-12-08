@@ -31,6 +31,27 @@ namespace ProductMarketServices.Products
 
         }
 
+        /// <summary>
+        /// Редактирование продукта
+        /// </summary>
+        /// <param name="product">Продукт</param>
+        /// <returns></returns>
+        public async Task EditProduct(Product product)
+        {
+            var p = context.Product.FirstOrDefault(i => i.Id == product.Id);
+            p.Name = product.Name;
+            p.Price = product.Price;
+            p.Amount = product.Amount;
+            p.IdSubCategory = product.IdSubCategory;
+
+            // В случае если постер редактируемого продукта не добавлен, то не обновлять
+
+            if (product.Poster != null)
+                p.Poster = product.Poster;
+
+
+            context.SaveChanges();
+        }
 
         /// <summary>
         /// Выборка ВСЕХ продуктов по категории

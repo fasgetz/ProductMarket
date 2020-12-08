@@ -75,7 +75,7 @@ namespace ProductMarketServices.Categories
 
         public async Task EditSubCategory(SubCategoryProduct category)
         {
-            var entity = await context.SubCategoryProduct.FirstOrDefaultAsync(i => i.Id == category.Id);
+            var entity = context.SubCategoryProduct.FirstOrDefault(i => i.Id == category.Id);
 
             entity.Name = category.Name;
             entity.Poster = category.Poster != null ? category.Poster : null;

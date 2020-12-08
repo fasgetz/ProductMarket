@@ -1,7 +1,14 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Admin Products";
     Layout = "_AdminLayout";
 }
+
+@section Css {
+    <link href="~/css/Admin/errorForm.css" rel="stylesheet" />
+    <link href="~/css/Admin/Products/Products.css" rel="stylesheet" />
+}
+
+
 
 <div id="Products">
     <h1>Список продуктов</h1>
@@ -19,48 +26,62 @@
             </select>
         </div>
     </div>
-    @*<div class="container">
-        <div class="row">
-            {{ products }}
+    <div v-if="products != null" class="products__table container-fluid p-0">
+        <div class="products__table__header">
+            <div class="row text-center">
+                <div class="col-2 align-self-center">
+                    Номер
+                </div>
+                <div class="col-6 align-self-center">
+                    Название
+                </div>
+                <div class="col-2 align-self-center">
+                    Цена
+                </div>
+                <div class="col-2 align-self-center">
+                    Количество
+                </div>
+            </div>
         </div>
-    </div>*@
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Название</th>
-                <th scope="col">Цена</th>
-                <th scope="col">Количество</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="item in products">
-                <td>{{item.id}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.price}}</td>
-                <td>{{item.amount}}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="products__table__items">
+            <div v-for="item in products">
+                <a v-on:click="EditProduct(item)">
+                    <div class="row m-0 text-center">
+                        <div class="col-2 align-self-center">
+                            {{item.id}}
+                        </div>
+                        <div class="col-6 align-self-center">
+                            {{item.name}}
+                            <img v-bind:src="getImage(item.poster)" />
+                        </div>
+                        <div class="col-2 align-self-center">
+                            {{item.price}}
+                        </div>
+                        <div class="col-2 align-self-center">
+                            {{item.amount}}
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 
 @section Scripts {
-
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 
     <script>
-
         var ProductApp = new Vue({
             el: '#Products',
             data: () => ({
-                data: null,                
+                data: null,
                 category: null,
                 body: {
                     CategoryProduct: null
                 },
-                
+
                 products: null
             }),
             mounted() {
@@ -72,6 +93,37 @@
                         });
             },
             methods: {
+                getImage: function (array) {
+                    return 'data:image/jpg;base64, ' + array
+                },
+                // Переход на страницу редактирования продукта
+                EditProduct(item) {
+                    let formData = new FormData();
+                    formData.append('name', item.name);
+                    formData.append('id', item.id);
+                    formData.append('CategoryId', this.category.id)
+                    formData.append('subcategoryId', this.body.CategoryProduct)
+                    formData.append('price', item.price)
+                    formData.append('count', item.amount)
+                    formData.append('image', item.poster)
+
+                    axios.post(('products/EditProduct'),
+                        formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        }
+                    })
+
+                    //axios.get(('products/EditProduct'), {
+                    //    params: {
+                    //        vm: formData
+                    //    }
+                    //})
+                        .then(
+                            response => {
+                                $("#Products").html(response.data);
+                            });
+                },
                 loadProducts() {
 
                     axios.get((urlApi + 'api/product/get'), {

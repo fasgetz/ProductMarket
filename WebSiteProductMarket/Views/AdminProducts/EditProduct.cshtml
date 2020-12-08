@@ -1,0 +1,187 @@
+@model ProductMarketModels.ViewModels.Admin.ProductsController.EditProductViewModel
+
+
+<form id="form">
+    <div>
+        <h1 class="text-center">Редактирование продукта @Model.name</h1>
+        <div class="form-group">
+            <label class="control-label">Название</label>
+            <input id="name" name="Name" placeholder="@Model.name" v-model:value="postBody.Name" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Категория продукта</label>
+            <select id="category" v-on:change="onChange($event, $event.target.selectedIndex)" v-model="category" class="form-control">
+                <option v-bind:value="item.id" v-for="(item, index) in data">{{ item.name }}</option>
+            </select>
+        </div>
+        <div v-if="category != null" class="form-group">
+            <label class="control-label">Подкатегория продукта</label>
+            <select name="idSubCategoryProduct" v-model="postBody.idSubCategoryProduct" class="form-control">
+                <option v-bind:value="item.id" v-for="item in data[index].subCategoryProduct"> {{item.name}} </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="control-label">Выберите постер продукта</label>
+            <div class="custom-file">
+                <input accept="image/x-png,image/gif,image/jpeg" v-on:change="ImageLoad" type="file" class="custom-file-input" id="myInput" aria-describedby="myInput">
+                <label class="custom-file-label" for="myInput">{{ FileName }}</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Стоимость продукта ₽</label>
+            <input v-model.number:value="postBody.Price" type="number" name="price" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Количество товаров</label>
+            <input v-model.number:value="postBody.Amount" type="number" name="Amount" class="form-control" />
+        </div>
+        <div class="form-group__image text-center">
+            <img id="imagePoster" src="data:image/png;base64, @Convert.ToBase64String(Model.image)" alt="Alternate Text" />
+        </div>
+        <div class="form-group form-group_buttons text-center">
+            <input v-on:click="addProduct" class="btn btn-success" type="submit" value="Сохранить" />
+            <input v-on:click="addProduct" class="btn btn-warning" type="submit" value="Удалить" />
+        </div>
+    </div>
+</form>
+
+
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+    function getBase64(file) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            console.log(reader.result);
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
+
+    var AddProductApp = new Vue({
+        el: '#form',
+        data: () => ({
+            data: null,
+            category: null,
+            postBody: {
+                Name: null,
+                Price: null,
+                idSubCategoryProduct: null,
+                Amount: null,
+            },
+            index: null,
+            categoriesProduct: null,
+            FileName: 'Выберите файл',
+            file: null
+        }),
+        methods: {
+            onChange(event, selectedIndex) {
+                this.index = selectedIndex;
+            },
+            addProduct: function (event) {
+                event.preventDefault();
+
+                let formData = new FormData();
+                formData.append('id', @Model.id);
+                formData.append('file', this.file);
+                formData.append('name', this.postBody.Name);
+                formData.append('price', this.postBody.Price);
+                formData.append('count', this.postBody.Amount);
+                formData.append('subcategoryId', this.postBody.idSubCategoryProduct);
+
+                console.log('>> formData >> ', formData);
+
+
+
+                axios.post((urlApi + 'api/products/EditProduct'),
+                    formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    }
+                })
+                    .then(function (response) {
+                        window.location.href = urlApp + "admin/"
+                        console.log(response);
+                    })
+                    .catch(function (response) {
+                        $("#form").validate({
+                            rules: {
+                                Name: {
+                                    required: true,
+                                    minlength: 5
+                                },
+                                idSubCategoryProduct: {
+                                    required: true
+                                },
+                                Price: {
+                                    required: true,
+                                    range: [1, 1000000]
+                                },
+                                Amount: {
+                                    required: true,
+                                    range: [1, 1000000]
+                                }
+                            },
+                            messages: {
+                                Name: {
+                                    required: "Поле обязательно для заполнения",
+                                    minlength: jQuery.validator.format("Длина имени должна быть больше 5-ти символов")
+                                },
+                                idSubCategoryProduct: {
+                                    required: "Поле обязательно для заполнения"
+                                },
+                                Price: {
+                                    required: "Поле обязательно для заполнения",
+                                    range: jQuery.validator.format("Введите стоимость в пределе 1 ... 1000000")
+                                },
+                                Amount: {
+                                    required: "Поле обязательно для заполнения",
+                                    range: jQuery.validator.format("Введите количество в пределе 1 ... 1000000")
+                                }
+                            }
+                        });
+                    });
+            },
+            ImageLoad: function (event) {
+                var file = document.getElementById("myInput").files[0];
+                this.FileName = file.name;
+                this.file = file;
+
+                // Чтение Base64 из Image
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                    var data = reader.result.toString(); //.replace(/^data:(.*,)?/, '');
+
+                    $("#imagePoster").attr("src", data);
+                };
+                reader.onerror = function (error) {
+                    console.log('Error: ', error);
+                };
+
+                
+            }
+        },
+        mounted() {
+            axios
+                .get(urlApi + 'api/category/get')
+                .then(
+                    response => {
+                        this.data = response.data;
+
+                        this.category = @Model.CategoryId;
+                        this.postBody.idSubCategoryProduct = @Model.subcategoryId;
+                        this.postBody.Name = $('#name').attr('placeholder');
+                        this.postBody.Price = @Model.price;
+                        this.postBody.Amount = @Model.count;
+
+                        // Присваиваем Индекс продукта селекту
+                        // Необходимо передать индекс
+                        this.index = this.data.findIndex(i => i.id === @Model.CategoryId);
+                    });
+        }
+    });
+</script>

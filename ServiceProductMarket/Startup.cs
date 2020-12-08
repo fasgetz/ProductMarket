@@ -45,8 +45,10 @@ namespace ServiceProductMarket
 
             services.AddMassTransit(x =>
             {
+                // Products
+                x.AddConsumer<AddProductConsumer>();
+                x.AddConsumer<EditProductConsumer>();
                 x.AddConsumer<GetProductsConsumer>();
-                x.AddConsumer<AddCategoryConsumer>();
 
                 // Categories
                 x.AddConsumer<GetProductsOnSubcategoryInCategoryConsumer>();
@@ -73,6 +75,7 @@ namespace ServiceProductMarket
                         e.UseMessageRetry(r => r.Interval(2, 100));
                         e.Consumer<GetProductsConsumer>(context);
                         e.Consumer<AddProductConsumer>(context);
+                        e.Consumer<EditProductConsumer>(context);
 
                     });
 

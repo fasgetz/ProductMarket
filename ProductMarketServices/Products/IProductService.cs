@@ -15,6 +15,13 @@ namespace ProductMarketServices.Products
         /// <param name="product">Продукт</param>
         public Task AddProduct(Product product);
 
+        /// <summary>
+        /// Редактирование продукта
+        /// </summary>
+        /// <param name="product">Продукт</param>
+        /// <returns></returns>
+        public Task EditProduct(Product product);
+
 
         /// <summary>
         /// Выборка ВСЕХ продуктов по категории

@@ -31,19 +31,6 @@ namespace ProductMarketApi.Controllers.Admin
 
 
 
-        //[HttpPost("Add")]
-        //public async Task<IActionResult> AddCategory([FromForm] AddCategoryViewModel category)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-
-        //    //await mPublishEndpoint.Publish(product);
-        //    return Ok("Success");
-        //}
-
         [HttpPost("AddCategory")]
         public async Task<IActionResult> AddCategory([FromForm] AddCategoryViewModel categoryVM)
         {

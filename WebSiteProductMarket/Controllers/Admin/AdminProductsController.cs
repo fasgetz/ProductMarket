@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ProductMarketModels.ViewModels.Admin.ProductsController;
 
 namespace WebSiteProductMarket.Controllers.Admin
 {
@@ -22,6 +19,12 @@ namespace WebSiteProductMarket.Controllers.Admin
         public IActionResult Index()
         {
             return View();
+        }
+
+
+        public IActionResult EditProduct(EditProductViewModel vm)
+        {
+            return PartialView(vm);
         }
 
         [HttpGet]

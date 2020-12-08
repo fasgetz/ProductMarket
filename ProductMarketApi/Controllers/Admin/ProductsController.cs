@@ -1,12 +1,10 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProductMarket.Identity;
 using ProductMarketModels;
 using ProductMarketModels.ViewModels.Admin.ProductsController;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -28,21 +26,30 @@ namespace ProductMarketApi.Controllers.Admin
 
 
 
-
-        [HttpPost("Add")]
-        public async Task<IActionResult> AddProduct([FromForm] AddProductViewModel product)
+        [HttpPost("EditProduct")]
+        public async Task<IActionResult> Edit([FromForm] EditProductViewModel vm)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            
 
-            //await mPublishEndpoint.Publish(product);
+            // Если загрузили файл
+            if (vm.file != null)
+                //считываем переданный файл в массив байтов
+                using (var binaryReader = new BinaryReader(vm.file.OpenReadStream()))
+                {
+                    vm.image = binaryReader.ReadBytes((int)vm.file.Length);
+                    vm.file = null;
+                }
+
+
+            await mPublishEndpoint.Publish(vm);
             return Ok("Success");
         }
 
-        [HttpPost("AddFile")]
+
+        [HttpPost("AddProduct")]
         public async Task<IActionResult> AddFile([FromForm] AddProductViewModel prod)
         {
             if (!ModelState.IsValid)
