@@ -290,3 +290,208 @@
         </div>
     </div>
 </section>
+<section id="newProducts">
+    <div class="DiscountBlock">
+        <h3>Новые товары</h3>
+        <button-counter></button-counter>
+        <button-counter></button-counter>
+        <button-counter></button-counter>
+
+        
+        <div class="container-fluid">
+            <div class="row">
+                <test v-for="item in data" :data="item"></test>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+
+
+
+    </script>
+    <script>
+        // Определяем новый компонент, названный button-counter
+        Vue.component('test', {
+            props: ['data'],
+            template: `
+                <div class="col-md-6 col-lg-4 col-xl Product"">
+                    <div class="Product__procent">
+                        <span>20%</span>
+                    </div>
+                    <div class="Product__Poster text-center">
+                        <img v-bind:src="getImage(item.poster)" />
+                    </div>
+                    <div class="Product__title text-center">
+                        {{item.name}}
+                    </div>
+                    <div class="Product__count">
+                        <span>{{item.amount}}</span> в наличии!
+                    </div>
+                    <div class="Product__price">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col p-0"><span>{{item.price}}</span> руб/шт</div>
+                                @*<div class="col-7 p-0"><span>120</span> руб/шт</div>
+                                <div class="col p-0 oldPrice">149 руб.</div>*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="Product__economy">
+                        <span class="Product__economy__procent">-20%</span> <span class="Product__economy__info">Экономия 29 руб.</span>
+                    </div>
+                    <div class="Product__basket">
+                        <div class="container-fluid p-0">
+                            <div class="row">
+                                <div class="col p-0 basket__detail">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-4 p-0"><input class="btn btn-primary w-100" v-on:click="decrement" type="button" value="-"></div>
+                                            <div class="col-4 p-0 text-center d-flex align-items-center justify-content-center"><span>{{count}}</span></div>
+                                            <div class="col-4 p-0"><input class="btn btn-primary w-100" v-on:click="count++" type="button" value="+"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col p-0">
+                                    <input class="btn btn-danger w-100" type="button" v-on:click="AddProduct"  value="В КОРЗИНУ">
+                                </div>
+                            </div>
+                            <div class="basket__totalSum">
+                                <p class="text-center">120x1 = 120</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+`,
+            data: function () {
+                return {
+                    count: 1,
+                    item: this.data,
+                    auth: false,
+                    exist_product: false
+                }
+            },
+            mounted() {
+                //this.authorized = @User.Identity.IsAuthenticated.ToString();
+            },
+            methods: {
+                decrement: function () {
+                    if (this.count > 1) {
+                        this.count--;
+
+                        // Если юзер авторизован
+                        @*if (@User.Identity.IsAuthenticated.ToString().ToLower() == true)
+                            alert('test');
+                        else {
+                            alert('user is not auth');
+                        }*@
+
+                        //alert(this.authorized);
+                    }
+
+                },
+                ExistProduct: function() {
+                    return axios.get((urlApi + 'api/product/ExistProduct'), {
+                        params: {
+                            idProduct: this.item.id
+                        }
+                    })
+                        .then(function (response) {
+                            //window.location.href = urlApp + "admin/"
+                            var exist = response.data;
+
+                            return exist;
+                        });
+                },
+                Add: function () {
+                    // Форма
+                    let formData = new FormData();
+                    formData.append('id', this.item.id);
+                    formData.append('count', this.count);
+                    //formData.append('Price', this.postBody.Price);
+                    //formData.append('Amount', this.postBody.Amount);
+                    //formData.append('idSubCategoryProduct', this.postBody.idSubCategoryProduct);
+
+
+                    axios.post(('Basket/Add'),
+                        formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        }
+                    })
+                        .then(function (response) {
+                            //window.location.href = urlApp + "admin/"
+                            console.log(response);
+
+                            //alert(response);
+                        });
+                },
+                AddProduct: function () {
+                    event.preventDefault();
+                        //this.ExistProduct();
+                        //this.Add();
+
+
+
+                    axios.all([
+                        this.ExistProduct()
+                    ])
+                        .then(axios.spread((first_response) => {
+                            if (first_response == true)
+                                this.Add();
+                        }))
+
+
+
+
+                },
+                getImage: function (array) {
+                    return 'data:image/jpg;base64, ' + array
+                }
+            }
+        })
+
+        // Определяем новый компонент, названный button-counter
+        Vue.component('button-counter', {
+            data: function () {
+                return {
+                    count: 0
+                }
+            },
+            template: `
+<div>
+    <input type="button" name="name" v-on:click="count++" value="Клик" />
+    <button v-on:click="count++">Счётчик кликов — {{ count }}</button>
+</div>
+`
+
+        })
+
+
+        var newProducts = new Vue({
+            el: '#newProducts',
+            data: () => ({
+                data: null
+            }),
+            mounted() {
+                axios.get((urlApi + 'api/product/newsProduct'), {
+                    params: {
+                        count: 5
+                    }
+                })
+                    .then(
+                        response => {
+                            this.data = response.data;
+                        });
+            },
+            methods: {
+                getImage: function (array) {
+                    return 'data:image/jpg;base64, ' + array
+                }
+            }
+        });
+    </script>
+
+}

@@ -45,12 +45,23 @@ namespace ProductMarketServices.Products
             p.IdSubCategory = product.IdSubCategory;
 
             // В случае если постер редактируемого продукта не добавлен, то не обновлять
-
             if (product.Poster != null)
                 p.Poster = product.Poster;
 
-
             context.SaveChanges();
+        }
+
+        /// <summary>
+        /// Выборка недавно добавленных продуктов
+        /// </summary>
+        /// <param name="count">Количество</param>
+        /// <returns></returns>
+        public async Task<List<Product>> GetNewsProduct(int count)
+        {
+            // Выборка
+            var newsProducts = await context.Product.Skip(context.Product.Count() - count).Take(count).Include("IdSubCategoryNavigation").OrderByDescending(i => i.Id).ToListAsync();
+
+            return newsProducts;
         }
 
         /// <summary>
@@ -81,6 +92,30 @@ namespace ProductMarketServices.Products
 
 
             return products;
+        }
+
+
+        /// <summary>
+        /// Проверка на существование продукта
+        /// </summary>
+        /// <param name="id">Айди продукта</param>
+        /// <returns>Возвращает true, если продукт есть в базе данных</returns>
+        public async Task<bool> ExistProduct(int id)
+        {
+            var product = await context.Product.FirstOrDefaultAsync(i => i.Id == id);
+
+            return product != null ? true : false;
+        }
+
+
+        /// <summary>
+        /// Поиск продукта по айди
+        /// </summary>
+        /// <param name="id">айди</param>
+        /// <returns>Продукт</returns>
+        public async Task<Product> GetProduct(int id)
+        {
+            return await context.Product.FirstOrDefaultAsync(i => i.Id == id);
         }
     }
 }

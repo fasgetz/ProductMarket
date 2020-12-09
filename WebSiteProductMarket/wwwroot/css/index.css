@@ -38,6 +38,10 @@
     height: 100%;
 }
 
+.Product__Poster {
+    height: 150px;
+}
+
 .Product__title {
     font-weight: bold;
 }

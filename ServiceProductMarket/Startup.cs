@@ -49,6 +49,8 @@ namespace ServiceProductMarket
                 x.AddConsumer<AddProductConsumer>();
                 x.AddConsumer<EditProductConsumer>();
                 x.AddConsumer<GetProductsConsumer>();
+                x.AddConsumer<GetNewsProductsConsumer>();
+                x.AddConsumer<ExistProductConsumer>();
 
                 // Categories
                 x.AddConsumer<GetProductsOnSubcategoryInCategoryConsumer>();
@@ -61,8 +63,6 @@ namespace ServiceProductMarket
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
-
-
                     cfg.Host(new Uri("rabbitmq://localhost:5672/"), configurator =>
                     {
                         configurator.Username("guest");
@@ -76,6 +76,8 @@ namespace ServiceProductMarket
                         e.Consumer<GetProductsConsumer>(context);
                         e.Consumer<AddProductConsumer>(context);
                         e.Consumer<EditProductConsumer>(context);
+                        e.Consumer<GetNewsProductsConsumer>(context);
+                        e.Consumer<ExistProductConsumer>(context);
 
                     });
 
@@ -89,14 +91,6 @@ namespace ServiceProductMarket
                         e.Consumer<AddSubCategoryConsumer>(context);
                         e.Consumer<EditCategoryConsumer>(context);
                     });
-
-
-                    //cfg.ReceiveEndpoint("ManufacturerQueue", e =>
-                    //{
-                    //    e.PrefetchCount = 20;
-                    //    e.UseMessageRetry(r => r.Interval(2, 100));
-                    //    e.Consumer<ManufacturerConsumer>(context);
-                    //});
 
                     cfg.ConfigureJsonSerializer(settings =>
                     {

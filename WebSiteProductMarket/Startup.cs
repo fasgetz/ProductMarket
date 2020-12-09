@@ -77,6 +77,15 @@ namespace WebSiteProductMarket
                 config.AddPolicy(Policies.User, Policies.UserPolicy());
             });
 
+
+            services.AddMemoryCache();
+            services.AddSession(options =>
+            {                
+                options.Cookie.Name = ".AspNetCore.Session";
+                options.IdleTimeout = TimeSpan.FromSeconds(10); // —брасывание сессии, если нет активности 2 часа
+                options.Cookie.IsEssential = true;
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -104,7 +113,7 @@ namespace WebSiteProductMarket
             app.UseAuthentication();
             app.UseAuthorization();
 
-
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

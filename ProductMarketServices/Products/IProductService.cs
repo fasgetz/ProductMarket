@@ -24,6 +24,14 @@ namespace ProductMarketServices.Products
 
 
         /// <summary>
+        /// Выборка недавно добавленных продуктов
+        /// </summary>
+        /// <param name="count">Количество</param>
+        /// <returns></returns>
+        public Task<List<Product>> GetNewsProduct(int count);
+
+
+        /// <summary>
         /// Выборка ВСЕХ продуктов по категории
         /// </summary>
         /// <param name="IdCategory">Категория продуктов</param>
@@ -42,6 +50,21 @@ namespace ProductMarketServices.Products
         /// <returns>Продукты</returns>
         Task<List<Product>> GetProducts(short IdCategory, int TakeCount = 0, int SkipCount = 0);
 
+
+        /// <summary>
+        /// Проверка на существование продукта
+        /// </summary>
+        /// <param name="id">Айди продукта</param>
+        /// <returns>Возвращает true, если продукт есть в базе данных</returns>
+        Task<bool> ExistProduct(int id);
+
+
+        /// <summary>
+        /// Поиск продукта по айди
+        /// </summary>
+        /// <param name="id">айди</param>
+        /// <returns>Продукт</returns>
+        Task<Product> GetProduct(int id);
 
 
     }
