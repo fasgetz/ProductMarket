@@ -59,7 +59,24 @@ namespace ProductMarketServices.Products
         public async Task<List<Product>> GetNewsProduct(int count)
         {
             // Выборка
-            var newsProducts = await context.Product.Skip(context.Product.Count() - count).Take(count).Include("IdSubCategoryNavigation").OrderByDescending(i => i.Id).ToListAsync();
+            var newsProducts = await context.Product.Skip(context.Product.Count() - count).Take(count)                
+                .Include("IdSubCategoryNavigation")
+                .OrderByDescending(i => i.Id)
+                .Select(i => new Product()
+                {
+                    // Скидка продукта
+                    DiscountProduct = i.DiscountProduct.Where(i => i.DateStart < DateTime.Now && i.DateEnd > DateTime.Now).ToList(),
+
+                    Id = i.Id,
+                    Name = i.Name,
+                    Poster = i.Poster,
+                    Price = i.Price,
+                    Amount = i.Amount,
+                    IdSubCategoryNavigation = i.IdSubCategoryNavigation,
+                    
+                                       
+                })
+                .ToListAsync();
 
             return newsProducts;
         }

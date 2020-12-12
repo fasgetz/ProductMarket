@@ -23,6 +23,7 @@
 .Product__procent {
     margin-top: 10px;
     margin-bottom: 10px;
+    height: 30px;
 }
 
     .Product__procent span {
@@ -61,6 +62,7 @@
 
 .Product__economy {
     margin-top: 10px;
+    height: 30px;
 }
 
 .Product__economy__procent {
@@ -86,7 +88,8 @@
 }
 
     .Product__basket .btn {
-        border-radius: 0
+        border-radius: 0;
+        font-size: 15px;
     }
 
 .basket__detail span {

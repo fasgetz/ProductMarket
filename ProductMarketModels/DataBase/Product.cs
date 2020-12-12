@@ -17,11 +17,13 @@ namespace ProductMarketModels
         public int? Amount { get; set; }
         public short IdSubCategory { get; set; }
         public short? IdFabricator { get; set; }
+
+        public virtual ICollection<DiscountProduct> DiscountProduct { get; set; }
         public byte[] Poster { get; set; }
 
         public virtual Fabricator IdFabricatorNavigation { get; set; }
         public virtual SubCategoryProduct IdSubCategoryNavigation { get; set; }
-        public virtual ICollection<DiscountProduct> DiscountProduct { get; set; }
+
         public virtual ICollection<ProductsInOrder> ProductsInOrder { get; set; }
     }
 }

@@ -26,6 +26,8 @@ namespace WebSiteProductMarket.Controllers
     }
 
 
+    #region Сущности корзины
+
     public class Product
     {
         public int id { get; set; }
@@ -33,11 +35,14 @@ namespace WebSiteProductMarket.Controllers
         // Количество
         public int count { get; set; }
     }
+
     public class Basket
     {
         public List<Product> products { get; set; } = new List<Product>();
-        public int count { get; set; }
+        //public int count { get; set; }
     }
+
+    #endregion
 
 
     public class BasketController : Controller
@@ -48,18 +53,31 @@ namespace WebSiteProductMarket.Controllers
         }
 
 
+
+        #region Вспомогательные методы работы с корзиной
+
         public IActionResult Add(Product product)
         {
             var bas = GetCart();
-            bas.count++;
+            
 
-            bas.products.Add(product);
-            SetCart(bas);
+            if (product.id != 0)
+            {
+                bas.products.Add(product);
+                SetCart(bas);
+            }
+
 
             return Json(bas);
 
         }
 
+
+        /// <summary>
+        /// Удаление из корзины
+        /// </summary>
+        /// <param name="idProduct"></param>
+        /// <returns></returns>
         public bool Remove(int idProduct)
         {
             var bas = GetCart();
@@ -69,7 +87,6 @@ namespace WebSiteProductMarket.Controllers
             if (product != null)
             {
                 bas.products.Remove(product);
-                bas.count--;
                 SetCart(bas);
 
                 return true;
@@ -105,6 +122,9 @@ namespace WebSiteProductMarket.Controllers
         {
             HttpContext.Session.SetObject<Basket>("basket", basket);
         }
+
+
+        #endregion
     }
 
 

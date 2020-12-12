@@ -319,7 +319,7 @@
             template: `
                 <div class="col-md-6 col-lg-4 col-xl Product"">
                     <div class="Product__procent">
-                        <span>20%</span>
+                        <span v-if="item.discountProduct[0] != null">{{item.discountProduct[0].procentDiscount}}%</span>
                     </div>
                     <div class="Product__Poster text-center">
                         <img v-bind:src="getImage(item.poster)" />
@@ -332,15 +332,17 @@
                     </div>
                     <div class="Product__price">
                         <div class="container-fluid">
-                            <div class="row">
+                            <div v-if="item.discountProduct[0] == null" class="row">
                                 <div class="col p-0"><span>{{item.price}}</span> руб/шт</div>
-                                @*<div class="col-7 p-0"><span>120</span> руб/шт</div>
-                                <div class="col p-0 oldPrice">149 руб.</div>*@
+                            </div>
+                            <div v-else class="row">
+                                <div class="col-7 p-0"><span>{{item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)}}</span> руб/шт</div>
+                                <div class="col p-0 oldPrice">{{item.price}} руб.</div>
                             </div>
                         </div>
                     </div>
                     <div class="Product__economy">
-                        <span class="Product__economy__procent">-20%</span> <span class="Product__economy__info">Экономия 29 руб.</span>
+                        <p v-if="item.discountProduct[0] != null"><span class="Product__economy__procent">-{{item.discountProduct[0].procentDiscount}}%</span> <span class="Product__economy__info">Экономия {{item.price / 100 * item.discountProduct[0].procentDiscount}} руб.</span></p>
                     </div>
                     <div class="Product__basket">
                         <div class="container-fluid p-0">
@@ -360,11 +362,19 @@
                                     </div>
                                 </div>
                                 <div class="basket__totalSum">
-                                    <p class="text-center">{{count}}x{{item.price}} = {{item.price * count}} <span>руб.</span></p>
+                                    <p class="text-center">
+                                        <span v-if="item.discountProduct[0] == null">{{count}}x{{item.price}} = {{item.price * count}} </span>
+                                        <span v-else>{{count}}x{{item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)}} = {{(item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)) * count}} </span>
+                                        <span>руб.</span>
+                                    </p>                                    
                                 </div>
                             </div>
-                            <div v-else>
-                                    <button class="btn btn-success w-100">ОПЛАТИТЬ {{count}}x{{item.price}} = {{item.price * count}} <span>руб.</span></button>
+                            <div class="Product__basket__buttons" v-else>
+                                    <button class="btn btn-success w-100">ОПЛАТИТЬ 
+                                        <span v-if="item.discountProduct[0] == null">{{count}}x{{item.price}} = {{item.price * count}} </span>
+                                        <span v-else>{{count}}x{{item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)}} = {{(item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)) * count}} </span>
+                                        <span>руб.</span>
+                                    </button>
                                     <button class="btn btn-danger w-100" v-on:click="cancel">ОТМЕНИТЬ</button>
                             </div>
                         </div>
@@ -474,6 +484,7 @@
                             //alert(response);
                         });
                 },
+                // Добавление продукта в корзину
                 AddProduct: function () {
                     event.preventDefault();
 
@@ -481,6 +492,7 @@
                         this.ExistProduct()
                     ])
                         .then(axios.spread((first_response) => {
+                            // Если продукт есть в базе данных, то добавить в корзину
                             if (first_response == true) {
                                 this.Add();
                                 this.addToBasket = true;

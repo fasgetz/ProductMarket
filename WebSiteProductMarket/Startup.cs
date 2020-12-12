@@ -84,7 +84,7 @@ namespace WebSiteProductMarket
             services.AddSession(options =>
             {                
                 options.Cookie.Name = ".AspNetCore.Session";
-                options.IdleTimeout = TimeSpan.FromSeconds(30); // —брасывание сессии, если нет активности 2 часа
+                options.IdleTimeout = TimeSpan.FromDays(1); // —брасывание сессии, если нет активности в течении суток
                 options.Cookie.IsEssential = true;
             });
 
