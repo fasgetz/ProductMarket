@@ -41,6 +41,19 @@ namespace ProductMarketApi.Controllers.Admin
         }
 
 
+        [HttpPost("EditDiscount")]
+        public async Task<IActionResult> disEdit([FromForm] EditDiscountViewModel discount)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+
+            await mPublishEndpoint.Publish(discount);
+            return Ok("Success");
+        }
+
         /// <summary>
         /// Метод получения акций продукта
         /// </summary>

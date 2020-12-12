@@ -43,5 +43,29 @@ namespace ProductMarketServices.ProductsDiscount
                 await context.SaveChangesAsync();
             }
         }
+
+        /// <summary>
+        /// Редактирование продукта
+        /// </summary>
+        /// <param name="discount">Редактируемая Акция</param>
+        public async void EditDiscountProduct(DiscountProduct discount)
+        {
+            using (context = new ProductMarketContext())
+            {
+                var dis = await context.DiscountProduct.FirstOrDefaultAsync(i => i.Id == discount.Id);
+
+                if (dis != null)
+                {
+                    dis.DateEnd = discount.DateEnd;
+                    dis.DateStart = discount.DateStart;
+                    dis.ProcentDiscount = discount.ProcentDiscount;
+
+                    await context.SaveChangesAsync();
+                }
+
+
+
+            }
+        }
     }
 }

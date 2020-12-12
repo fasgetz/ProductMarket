@@ -10,20 +10,20 @@
             <button v-on:click="removeItem()" class="btn btn-warning">Удалить</button>
         </div>
         <div v-if="editableItem != null" class="discount-product__edit-item-block">
-            <form>
+            <form id="edit-discount-form">
                 <div>
                     <h5 class="text-center">Изменение скидки №{{editableItem.id}} </h5>
                     <div class="form-group">
                         <label class="control-label">Дата начала</label>
-                        <input v-on:input="updateDateStart($event.target.value)" type="datetime-local" :value="editableItem.dateStart" min="2020-01-01" class="form-control" />
+                        <input name="dateStart" v-on:input="updateDateStart($event.target.value)" type="datetime-local" :value="editableItem.dateStart" min="2020-01-01" class="form-control" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Дата окончания</label>
-                        <input v-on:input="updateDateEnd($event.target.value)" type="datetime-local" :value="editableItem.dateEnd" min="2020-01-01" class="form-control" />
+                        <input name="dateEnd" v-on:input="updateDateEnd($event.target.value)" type="datetime-local" :value="editableItem.dateEnd" min="2020-01-01" class="form-control" />
                     </div>
                     <div class="form-group">
                         <label class="control-label">Скидка</label>
-                        <input type="number" v-model.number:value="editableItem.procent" class="form-control" />
+                        <input name="ProcentDiscount" type="number" v-model.number:value="editableItem.procentDiscount" class="form-control" />
                     </div>
                     <div class="form-group form-group_buttons text-center">
                         <input class="btn btn-success" v-on:click="saveEdit" type="submit" value="Сохранить" />
@@ -32,7 +32,7 @@
                 </div>
             </form>
         </div>
-        <div v-if="addedItem != null" class="discount-product__edit-item-block">
+        <div v-if="addedItem != null" class="discount-product__add-item-block">
             <form id="add-discount-form">
                 <div>
                     <h5 class="text-center">Добавление скидки</h5>
@@ -104,13 +104,7 @@
                 price: @Model.price,
                 editableItem: null, // Редактируемый итем
                 addedItem: null, // Добавляемый элемент
-                data: [
-                    { id: 1, procent: 20.5, dateStart: '2017-09-18T08:30', dateEnd: '2019-09-18T08:30' },
-                    { id: 2, procent: 17.2, dateStart: '2017-09-18T08:30', dateEnd: '2019-09-18T08:30' },
-                    { id: 3, procent: 35.8, dateStart: '2017-09-18T08:30', dateEnd: '2019-09-18T08:30' },
-                    { id: 4, procent: 7.8, dateStart: '2017-09-18T08:30', dateEnd: '2019-09-18T08:30' },
-                    { id: 5, procent: 39.2, dateStart: '2017-09-18T08:30', dateEnd: '2019-09-18T08:30' },
-                    { id: 6, procent: 25.7, dateStart: '2017-09-18T08:30', dateEnd: '2019-09-18T08:30' }]
+                data: null
             }),
                 methods: {
                     LoadData: function () {
@@ -137,8 +131,60 @@
                     this.editableItem = this.selectedItem;
                     this.addedItem = null;
                 },
-                saveEdit: function () {
+                    saveEdit: function () {
+                        event.preventDefault();
+
+                        let formData = new FormData();
+                        formData.append('id', this.editableItem.id);
+                        formData.append('DateStart', this.editableItem.dateStart);
+                        formData.append('DateEnd', this.editableItem.dateEnd);
+                        formData.append('ProcentDiscount', this.editableItem.procentDiscount);
+                        console.log('>> formData >> ', formData);
+
                     // Отправляем данные с сохранением
+                    axios.post((urlApi + 'api/discount/EditDiscount'),
+                        formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        }
+                    })
+                        .then(
+                            response => {
+                                this.editableItem = null;
+                            })
+                        .catch(function (response) {
+                            $("#edit-discount-form").validate({
+                                rules: {
+                                    ProcentDiscount: {
+                                        required: true,
+                                        range: [1, 100]
+                                    },
+                                    dateStart: {
+                                        required: true
+                                    },
+                                    dateEnd: {
+                                        required: true
+                                    },
+                                    id: {
+                                        required: true
+                                    }
+                                },
+                                messages: {
+                                    ProcentDiscount: {
+                                        required: "Поле обязательно для заполнения",
+                                        range: jQuery.validator.format("Введите процент в пределе 1 ... 100")
+                                    },
+                                    dateStart: {
+                                        required: "Поле обязательно для заполнения",
+                                    },
+                                    dateEnd: {
+                                        required: "Поле обязательно для заполнения",
+                                    }
+                                }
+                            });
+                        });
+
+
                     this.editableItem = null;
                 },
                 cancelEdit: function () {
@@ -161,10 +207,10 @@
                             this.addDisLogic()
                         ])
                             .then(axios.spread((first_response) => {
-                                // Если скидку удалось добавить, то загрузить данные скидок товара
-                                if (first_response == true) {
+                                setTimeout(() => {
                                     this.LoadData();
-                                }
+                                }, 500);
+
 
                             }))
                     },

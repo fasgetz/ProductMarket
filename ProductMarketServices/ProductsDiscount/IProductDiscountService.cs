@@ -18,7 +18,14 @@ namespace ProductMarketServices.ProductsDiscount
         /// <summary>
         /// Добавить продукт
         /// </summary>
-        /// <param name="discount"></param>
+        /// <param name="discount">Редактируемая Акция</param>
         public void AddDiscountProduct(DiscountProduct discount);
+
+
+        /// <summary>
+        /// Редактирование продукта
+        /// </summary>
+        /// <param name="discount">Редактируемая Акция</param>
+        public void EditDiscountProduct(DiscountProduct discount);
     }
 }

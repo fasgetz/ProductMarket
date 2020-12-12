@@ -5,14 +5,15 @@ using System.Text;
 
 namespace ProductMarketModels.ViewModels.Admin.DiscountController
 {
-    public partial class AddDiscountViewModel
+
+    /// <summary>
+    /// Редактирование акции продукта
+    /// </summary>
+    public partial class EditDiscountViewModel
     {
         // Айди акции
-        public int idDis { get; set; }
-
-
         [Required]
-        public int IdProduct { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "Пожалуйста, введите дату начала акции")]
         //[Range(1, double.MaxValue, ErrorMessage = "Выберите значение > 0")]

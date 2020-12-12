@@ -53,6 +53,7 @@ namespace ServiceProductMarket
             {
                 // Discounts
                 x.AddConsumer<AddDiscountConsumer>();
+                x.AddConsumer<EditDiscountConsumer>();
                 x.AddConsumer<GetDiscountsProductConsumer>();
 
 
@@ -89,6 +90,9 @@ namespace ServiceProductMarket
                         e.PrefetchCount = 16;
 
                         e.Consumer<AddDiscountConsumer>(context);
+                        e.Consumer<EditDiscountConsumer>(context);
+
+
                         e.Consumer<AddProductConsumer>(context);
                         e.Consumer<EditProductConsumer>(context);
                     });

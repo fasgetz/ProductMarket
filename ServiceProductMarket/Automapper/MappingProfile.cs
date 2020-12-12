@@ -12,7 +12,8 @@ namespace ServiceProductMarket.Automapper
     {
         public MappingProfile()
         {
-            CreateMap<AddDiscountViewModel, DiscountProduct>(); //Map from Developer Object to DeveloperDTO Object
+            CreateMap<AddDiscountViewModel, DiscountProduct>();
+            CreateMap<EditDiscountViewModel, DiscountProduct>();
         }
     }
 }
