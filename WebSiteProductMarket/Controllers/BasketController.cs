@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Session;
+using ProductMarketModels.ViewModels.Basket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,24 +28,8 @@ namespace WebSiteProductMarket.Controllers
     }
 
 
-    #region Сущности корзины
 
-    public class Product
-    {
-        public int id { get; set; }
-
-        // Количество
-        public int count { get; set; }
-    }
-
-    public class Basket
-    {
-        public List<Product> products { get; set; } = new List<Product>();
-        //public int count { get; set; }
-    }
-
-    #endregion
-
+ 
 
     public class BasketController : Controller
     {
@@ -53,13 +39,18 @@ namespace WebSiteProductMarket.Controllers
         }
 
 
+        public IActionResult Payment()
+        {
+            return View(GetCart());
+        }
+
 
         #region Вспомогательные методы работы с корзиной
 
-        public IActionResult Add(Product product)
+        public IActionResult Add(ProductBasket product)
         {
             var bas = GetCart();
-            
+
 
             if (product.id != 0)
             {
@@ -69,7 +60,6 @@ namespace WebSiteProductMarket.Controllers
 
 
             return Json(bas);
-
         }
 
 
@@ -101,14 +91,14 @@ namespace WebSiteProductMarket.Controllers
         /// </summary>
         /// <param name="idProduct">Номер продукта</param>
         /// <returns>True, если продукт есть в базе</returns>
-        public bool haveItem(int idProduct)
+        public IActionResult haveItem(int idProduct)
         {
             var bas = GetCart();
 
             // Если итем есть в корзине, то верни true
-            var hasItem = bas.products.FirstOrDefault(i => i.id == idProduct) != null ? true : false;
+            var hasItem = bas.products.FirstOrDefault(i => i.id == idProduct); // != null ? true : false;
 
-            return hasItem;
+            return Json(hasItem);
         }
 
         public Basket GetCart()
@@ -116,6 +106,11 @@ namespace WebSiteProductMarket.Controllers
             var bas = HttpContext.Session.GetObjects<Basket>("basket") ?? new Basket();
 
             return bas;
+        }
+
+        public IActionResult GetCartJson()
+        {
+            return Json(GetCart());
         }
 
         public void SetCart(Basket basket)

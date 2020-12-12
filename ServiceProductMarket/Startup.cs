@@ -15,9 +15,11 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ProductMarketModels;
 using ProductMarketModels.MassTransit.Requests.Products;
+using ProductMarketServices.Basket;
 using ProductMarketServices.Categories;
 using ProductMarketServices.Products;
 using ProductMarketServices.ProductsDiscount;
+using ServiceProductMarket.Consumers.Basket;
 using ServiceProductMarket.Consumers.Category;
 using ServiceProductMarket.Consumers.Discounts;
 using ServiceProductMarket.Consumers.Products;
@@ -48,9 +50,14 @@ namespace ServiceProductMarket
             services.AddTransient<IProductDiscountService, ProductDiscountService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
+            services.AddTransient<IBasketService, BasketService>();
 
             services.AddMassTransit(x =>
             {
+                // Basket
+                x.AddConsumer<GetBasketProductConsumer>();
+
+
                 // Discounts
                 x.AddConsumer<AddDiscountConsumer>();
                 x.AddConsumer<EditDiscountConsumer>();
@@ -105,6 +112,9 @@ namespace ServiceProductMarket
                     {
                         e.PrefetchCount = 16;
                         e.UseMessageRetry(r => r.Interval(2, 100));
+
+                        e.Consumer<GetBasketProductConsumer>(context);
+
                         e.Consumer<GetDiscountsProductConsumer>(context);
 
 
