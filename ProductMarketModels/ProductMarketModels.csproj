@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="MassTransit\Requests\Discounts\Admin\Requests\" />
     <Folder Include="MassTransit\Requests\Products\Admin\" />
   </ItemGroup>
 

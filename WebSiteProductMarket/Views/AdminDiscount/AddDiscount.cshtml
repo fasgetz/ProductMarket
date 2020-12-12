@@ -3,103 +3,103 @@
 <div id="discount-product" class="discount-product container-fluid">
     <h3 class="edit-product__header text-center">
         Акции <span v-if="selectedItem != null">{{selectedItem.id}}</span>
-    </h3>
-    <div class="discount-product__elements">
-        <button v-on:click="addButtonClicked()" class="btn btn-success">Добавить</button>
-        <button v-on:click="edit()" class="btn btn-primary">Изменить</button>
-        <button v-on:click="removeItem()" class="btn btn-warning">Удалить</button>
-    </div>
-    <div v-if="editableItem != null" class="discount-product__edit-item-block">
-        <form>
-            <div>
-                <h5 class="text-center">Изменение скидки №{{editableItem.id}} </h5>
-                <div class="form-group">
-                    <label class="control-label">Дата начала</label>
-                    <input v-on:input="updateDateStart($event.target.value)" type="datetime-local" :value="editableItem.dateStart" min="2020-01-01" class="form-control" />
+        </h3>
+        <div class="discount-product__elements">
+            <button v-on:click="addButtonClicked()" class="btn btn-success">Добавить</button>
+            <button v-on:click="edit()" class="btn btn-primary">Изменить</button>
+            <button v-on:click="removeItem()" class="btn btn-warning">Удалить</button>
+        </div>
+        <div v-if="editableItem != null" class="discount-product__edit-item-block">
+            <form>
+                <div>
+                    <h5 class="text-center">Изменение скидки №{{editableItem.id}} </h5>
+                    <div class="form-group">
+                        <label class="control-label">Дата начала</label>
+                        <input v-on:input="updateDateStart($event.target.value)" type="datetime-local" :value="editableItem.dateStart" min="2020-01-01" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Дата окончания</label>
+                        <input v-on:input="updateDateEnd($event.target.value)" type="datetime-local" :value="editableItem.dateEnd" min="2020-01-01" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Скидка</label>
+                        <input type="number" v-model.number:value="editableItem.procent" class="form-control" />
+                    </div>
+                    <div class="form-group form-group_buttons text-center">
+                        <input class="btn btn-success" v-on:click="saveEdit" type="submit" value="Сохранить" />
+                        <input class="btn btn-warning" v-on:click="cancelEdit" type="submit" value="Отменить" />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label">Дата окончания</label>
-                    <input v-on:input="updateDateEnd($event.target.value)" type="datetime-local" :value="editableItem.dateEnd" min="2020-01-01" class="form-control" />
+            </form>
+        </div>
+        <div v-if="addedItem != null" class="discount-product__edit-item-block">
+            <form id="add-discount-form">
+                <div>
+                    <h5 class="text-center">Добавление скидки</h5>
+                    <div class="form-group">
+                        <label class="control-label">Дата начала</label>
+                        <input name="dateStart" v-on:input="updateAddedDateStart($event.target.value)" type="datetime-local" :value="addedItem.dateStart" min="2020-01-01" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Дата окончания</label>
+                        <input name="dateEnd" v-on:input="updateAddedDateEnd($event.target.value)" type="datetime-local" :value="addedItem.dateEnd" min="2020-01-01" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Скидка</label>
+                        <input name="ProcentDiscount" type="number" v-model.number:value="addedItem.procent" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Новая цена: {{price - (price / 100 * addedItem.procent)}}</label>
+                    </div>
+                    <div class="form-group form-group_buttons text-center">
+                        <input class="btn btn-success" v-on:click="addDiscount" type="submit" value="Добавить" />
+                        <input class="btn btn-warning" v-on:click="cancelAdded" type="submit" value="Отменить" />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label">Скидка</label>
-                    <input type="number" v-model.number:value="editableItem.procent" class="form-control" />
+            </form>
+        </div>
+        <div class="discount-product__list text-center">
+            <div class="row discount-product__list__header">
+                <div class="col">
+                    Номер
                 </div>
-                <div class="form-group form-group_buttons text-center">
-                    <input class="btn btn-success" v-on:click="saveEdit" type="submit" value="Сохранить" />
-                    <input class="btn btn-warning" v-on:click="cancelEdit" type="submit" value="Отменить" />
+                <div class="col">
+                    Дата начала
+                </div>
+                <div class="col">
+                    Дата окончания
+                </div>
+                <div class="col">
+                    Процент скидки
+                </div>
+                <div class="col">
+                    Новая цена
                 </div>
             </div>
-        </form>
-    </div>
-    <div v-if="addedItem != null" class="discount-product__edit-item-block">
-        <form id="add-discount-form">
-            <div>
-                <h5 class="text-center">Добавление скидки</h5>
-                <div class="form-group">
-                    <label class="control-label">Дата начала</label>
-                    <input name="dateStart" v-on:input="updateAddedDateStart($event.target.value)" type="datetime-local" :value="addedItem.dateStart" min="2020-01-01" class="form-control" />
+            <div v-on:click="testMethod(item, $event)" v-for="item in data" class="row discount-product__list__item">
+                <div class="col">
+                    {{item.id}}
                 </div>
-                <div class="form-group">
-                    <label class="control-label">Дата окончания</label>
-                    <input name="dateEnd" v-on:input="updateAddedDateEnd($event.target.value)" type="datetime-local" :value="addedItem.dateEnd" min="2020-01-01" class="form-control" />
+                <div class="col">
+                    {{item.dateStart}}
                 </div>
-                <div class="form-group">
-                    <label class="control-label">Скидка</label>
-                    <input name="ProcentDiscount" type="number" v-model.number:value="addedItem.procent" class="form-control" />
+                <div class="col">
+                    {{item.dateEnd}}
                 </div>
-                <div class="form-group">
-                    <label class="control-label">Новая цена: {{price - (price / 100 * addedItem.procent)}}</label>
+                <div class="col">
+                    {{item.procentDiscount}}
                 </div>
-                <div class="form-group form-group_buttons text-center">
-                    <input class="btn btn-success" v-on:click="addDiscount" type="submit" value="Добавить" />
-                    <input class="btn btn-warning" v-on:click="cancelAdded" type="submit" value="Отменить" />
+                <div class="col">
+                    {{price - (price / 100 * item.procentDiscount)}}
                 </div>
-            </div>
-        </form>
-    </div>
-    <div class="discount-product__list text-center">
-        <div class="row discount-product__list__header">
-            <div class="col">
-                Номер
-            </div>
-            <div class="col">
-                Дата начала
-            </div>
-            <div class="col">
-                Дата окончания
-            </div>
-            <div class="col">
-                Процент скидки
-            </div>
-            <div class="col">
-                Новая цена
             </div>
         </div>
-        <div v-on:click="testMethod(item, $event)" v-for="item in data" class="row discount-product__list__item">
-            <div class="col">
-                {{item.id}}
-            </div>
-            <div class="col">
-                {{item.dateStart}}
-            </div>
-            <div class="col">
-                {{item.dateEnd}}
-            </div>
-            <div class="col">
-                {{item.procent}}
-            </div>
-            <div class="col">
-                {{price - (price / 100 * item.procent)}}
-            </div>
-        </div>
-    </div>
 </div>
 
 <script>
             var discountApp = new Vue({
             el: '#discount-product',
-            data: () => ({
+                data: () => ({
                 selectedItem: null,
                 price: @Model.price,
                 editableItem: null, // Редактируемый итем
@@ -112,7 +112,18 @@
                     { id: 5, procent: 39.2, dateStart: '2017-09-18T08:30', dateEnd: '2019-09-18T08:30' },
                     { id: 6, procent: 25.7, dateStart: '2017-09-18T08:30', dateEnd: '2019-09-18T08:30' }]
             }),
-            methods: {
+                methods: {
+                    LoadData: function () {
+                        axios.get((urlApi + 'api/discount/GetDiscountsProduct'), {
+                            params: {
+                                idProduct: @Model.id
+                            }
+                        })
+                        .then(
+                            response => {
+                                this.data = response.data;
+                            });
+                    },
                 // UPDATE DateStart
                 updateDateStart: function (value) {
                     this.editableItem.dateStart = value;
@@ -128,7 +139,6 @@
                 },
                 saveEdit: function () {
                     // Отправляем данные с сохранением
-
                     this.editableItem = null;
                 },
                 cancelEdit: function () {
@@ -137,7 +147,6 @@
                 // update added date start value
                 updateAddedDateStart: function (value) {
                     this.addedItem.dateStart = value;
-
                     //this.addedItem = false;
                 },
                 updateAddedDateEnd: function (value) {
@@ -147,34 +156,40 @@
                 cancelAdded: function () {
                     this.addedItem = null;
                 },
-                addDiscount: function () {
+                    addDiscount: function () {
+                        axios.all([
+                            this.addDisLogic()
+                        ])
+                            .then(axios.spread((first_response) => {
+                                // Если скидку удалось добавить, то загрузить данные скидок товара
+                                if (first_response == true) {
+                                    this.LoadData();
+                                }
+
+                            }))
+                    },
+                    // Логика добавления скидки
+                addDisLogic: function () {
                     // Логика добавления итема в БД
                     event.preventDefault();
-
                     let formData = new FormData();
                     formData.append('IdProduct', @Model.id);
                     formData.append('DateStart', this.addedItem.dateStart);
                     formData.append('DateEnd', this.addedItem.dateEnd);
                     formData.append('ProcentDiscount', this.addedItem.procent);
-
                     console.log('>> formData >> ', formData);
-
-
-
-                    axios.post((urlApi + 'api/discount/AddDiscount'),
+                    return axios.post((urlApi + 'api/discount/AddDiscount'),
                         formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                         }
                     })
-                        .then(function (response) {
-                            // В случае успешного добавления необходимо загрузить по новой данные скидок
-                            //window.location.href = urlApp + "admin/"
-                            console.log(response);
+                        .then(
+                            response => {
+                                this.addedItem = null;
 
-
-                            this.addedItem = null;
-                        })
+                                return true
+                            })
                         .catch(function (response) {
                             $("#add-discount-form").validate({
                                 rules: {
@@ -215,7 +230,6 @@
                         dateEnd: "2020-01-01T00:00",
                         procent: 0
                     };
-
                     //this.addedItem = selectedItem;
                     this.editableItem = null;
                 },
@@ -224,8 +238,6 @@
                     if (this.selectedItem != null) {
                         // Логика удаления
                         alert(this.selectedItem.id);
-
-
                         this.selectedItem = null;
                     }
                 },
@@ -239,6 +251,8 @@
             mounted() {
                 // загрузка инфы о скидках товара
                 //alert('test');
+
+                this.LoadData();
             }
         });
-</script>
+</script> 

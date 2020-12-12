@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProductMarket.Identity;
+using ProductMarketModels;
+using ProductMarketModels.MassTransit.Products.Requests;
+using ProductMarketModels.MassTransit.Requests.Discounts.Admin.Responds;
 using ProductMarketModels.ViewModels.Admin.DiscountController;
 using System;
 using System.Collections.Generic;
@@ -32,18 +35,29 @@ namespace ProductMarketApi.Controllers.Admin
                 return BadRequest(ModelState);
             }
 
-            //Product product = new Product()
-            //{
-            //    Amount = prod.Amount,
-            //    IdSubCategory = prod.idSubCategoryProduct,
-            //    Name = prod.Name,
-            //    Price = prod.price,
-            //    Poster = imageData
-            //};
-
 
             await mPublishEndpoint.Publish(discount);
             return Ok("Success");
+        }
+
+
+        /// <summary>
+        /// Метод получения акций продукта
+        /// </summary>
+        /// <param name="idProduct">Айди продукта</param>
+        /// <returns>Акции продукта</returns>
+        [HttpGet("GetDiscountsProduct")]        
+        public async Task<List<DiscountProduct>> getData(int idProduct)
+        {
+            var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
+            var client = mPublishEndpoint.CreateRequestClient<IdProductRequest>(serviceAddress);
+
+            var response = await client.GetResponse<GetDiscountsProductRespond>(new IdProductRequest() { idProduct = idProduct });
+
+            //response.Message
+            //return response.Message.existProduct;
+
+            return response.Message.data;
         }
     }
 }

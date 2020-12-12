@@ -25,7 +25,7 @@ namespace ProductMarketServices.ProductsDiscount
         /// <returns>Все скидки продукта</returns>
         public async Task<List<DiscountProduct>> GetDiscountsProduct(int idProduct)
         {
-            var discountsProduct = await context.DiscountProduct.Where(i => i.IdProduct == idProduct).ToListAsync();
+            var discountsProduct = await context.DiscountProduct.Where(i => i.IdProduct == idProduct).OrderByDescending(i => i.Id).ToListAsync();
 
 
             return discountsProduct;
