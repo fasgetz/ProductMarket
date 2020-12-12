@@ -42,3 +42,31 @@
 .form-group_buttons {
     margin-top: 15px;
 }
+
+
+/* Скидки продуктов */
+
+/* Edit Product */
+
+
+.discount-product__list {
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+
+    .discount-product__list .discount-product__list__item:hover {
+        background-color: rgba(0,0,0,.1);
+    }
+
+.selected {
+    background-color: rgba(0,0,0,.1);
+}
+
+.discount-product__list__header {
+    font-size: 20px;
+    background-color: rgba(0,0,0,.2);
+}
+
+.discount-product__list__item {
+    font-size: 18px;
+}

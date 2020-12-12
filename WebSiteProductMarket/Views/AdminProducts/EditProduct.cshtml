@@ -36,7 +36,7 @@
             <input v-model.number:value="postBody.Amount" type="number" name="Amount" class="form-control" />
         </div>
         <div class="form-group__image text-center">
-            <img id="imagePoster" src="data:image/png;base64, @Convert.ToBase64String(Model.image)" alt="Alternate Text" />
+            <img id="imagePoster" src="data:image;base64, @Convert.ToBase64String(Model.image)" alt="Alternate Text" />
         </div>
         <div class="form-group form-group_buttons text-center">
             <input v-on:click="addProduct" class="btn btn-success" type="submit" value="Сохранить" />
@@ -46,8 +46,11 @@
 </form>
 
 
+<div id="discount-block">
 
-<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+</div>
+
+
 
 <script type="text/javascript" charset="utf-8">
     function getBase64(file) {
@@ -162,7 +165,7 @@
                     console.log('Error: ', error);
                 };
 
-                
+
             }
         },
         mounted() {
@@ -184,4 +187,29 @@
                     });
         }
     });
+
+
+
 </script>
+
+
+<script>
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: '/AdminDiscount/AddDiscount',
+
+            data: {
+                id: @Model.id, price: @Model.price
+            },
+
+            success: function (data) {
+                $("#discount-block").html(data);
+            }
+        });
+    })
+
+
+</script>
+

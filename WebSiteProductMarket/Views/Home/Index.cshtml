@@ -344,22 +344,28 @@
                     </div>
                     <div class="Product__basket">
                         <div class="container-fluid p-0">
-                            <div class="row">
-                                <div class="col p-0 basket__detail">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-4 p-0"><input class="btn btn-primary w-100" v-on:click="decrement" type="button" value="-"></div>
-                                            <div class="col-4 p-0 text-center d-flex align-items-center justify-content-center"><span>{{count}}</span></div>
-                                            <div class="col-4 p-0"><input class="btn btn-primary w-100" v-on:click="count++" type="button" value="+"></div>
+                            <div v-if="addToBasket == false">
+                                <div class="row">
+                                    <div class="col p-0 basket__detail">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-4 p-0"><input class="btn btn-primary w-100" v-on:click="decrement" type="button" value="-"></div>
+                                                <div class="col-4 p-0 text-center d-flex align-items-center justify-content-center"><span>{{count}}</span></div>
+                                                <div class="col-4 p-0"><input class="btn btn-primary w-100" v-on:click="count++" type="button" value="+"></div>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="col p-0">
+                                        <input class="btn btn-danger w-100" type="button" v-on:click="AddProduct"  value="В КОРЗИНУ">
+                                    </div>
                                 </div>
-                                <div class="col p-0">
-                                    <input class="btn btn-danger w-100" type="button" v-on:click="AddProduct"  value="В КОРЗИНУ">
+                                <div class="basket__totalSum">
+                                    <p class="text-center">{{count}}x{{item.price}} = {{item.price * count}} <span>руб.</span></p>
                                 </div>
                             </div>
-                            <div class="basket__totalSum">
-                                <p class="text-center">120x1 = 120</p>
+                            <div v-else>
+                                    <button class="btn btn-success w-100">ОПЛАТИТЬ {{count}}x{{item.price}} = {{item.price * count}} <span>руб.</span></button>
+                                    <button class="btn btn-danger w-100" v-on:click="cancel">ОТМЕНИТЬ</button>
                             </div>
                         </div>
                     </div>
@@ -370,13 +376,53 @@
                     count: 1,
                     item: this.data,
                     auth: false,
-                    exist_product: false
+                    addToBasket: false
                 }
             },
             mounted() {
+                // Функция которая загрузит инфу, добавлен ли итем в корзину
+                axios.all([
+                    this.HasItem()
+                ])
+                    .then(axios.spread((first_response) => {
+                        this.addToBasket = first_response;
+                    }))
+
                 //this.authorized = @User.Identity.IsAuthenticated.ToString();
             },
             methods: {
+                HasItem: function () {
+                    return axios.get(('Basket/haveItem'), {
+                        params: {
+                            idProduct: this.item.id
+                        }
+                    })
+                        .then(function (response) {
+                            var exist = response.data;
+
+                            return exist;
+                        });
+                },
+                removeProduct: function () {
+                    return axios.get(('Basket/Remove'), {
+                        params: {
+                            idProduct: this.item.id
+                        }
+                    })
+                        .then(function (response) {
+                            return response.data;
+                        });
+                },
+                cancel: function () {
+                    axios.all([
+                        this.removeProduct()
+                    ])
+                        .then(axios.spread((first_response) => {
+                            if (first_response == true)
+                                this.addToBasket = false;
+                            //this.addToBasket = first_response;
+                        }))
+                },
                 decrement: function () {
                     if (this.count > 1) {
                         this.count--;
@@ -430,22 +476,17 @@
                 },
                 AddProduct: function () {
                     event.preventDefault();
-                        //this.ExistProduct();
-                        //this.Add();
-
-
 
                     axios.all([
                         this.ExistProduct()
                     ])
                         .then(axios.spread((first_response) => {
-                            if (first_response == true)
+                            if (first_response == true) {
                                 this.Add();
+                                this.addToBasket = true;
+                            }
+                                
                         }))
-
-
-
-
                 },
                 getImage: function (array) {
                     return 'data:image/jpg;base64, ' + array

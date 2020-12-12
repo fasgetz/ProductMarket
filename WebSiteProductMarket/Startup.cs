@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -82,8 +84,15 @@ namespace WebSiteProductMarket
             services.AddSession(options =>
             {                
                 options.Cookie.Name = ".AspNetCore.Session";
-                options.IdleTimeout = TimeSpan.FromSeconds(10); // —брасывание сессии, если нет активности 2 часа
+                options.IdleTimeout = TimeSpan.FromSeconds(30); // —брасывание сессии, если нет активности 2 часа
                 options.Cookie.IsEssential = true;
+            });
+
+            services.AddResponseCompression(options => options.EnableForHttps = true);
+
+            services.Configure<GzipCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Optimal;
             });
 
         }
@@ -106,7 +115,19 @@ namespace WebSiteProductMarket
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                OnPrepareResponse =
+                    r =>
+                    {
+                        string path = r.File.PhysicalPath;
+                        if (path.EndsWith(".css") || path.EndsWith(".js") || path.EndsWith(".gif") || path.EndsWith(".jpg") || path.EndsWith(".png") || path.EndsWith(".svg"))
+                        {
+                            TimeSpan maxAge = new TimeSpan(7, 0, 0, 0);
+                            r.Context.Response.Headers.Append("Cache-Control", "max-age=" + maxAge.TotalSeconds.ToString("0"));
+                        }
+                    }
+            });
 
             app.UseRouting();
 
@@ -114,6 +135,8 @@ namespace WebSiteProductMarket
             app.UseAuthorization();
 
             app.UseSession();
+
+            app.UseResponseCompression();
 
             app.UseEndpoints(endpoints =>
             {

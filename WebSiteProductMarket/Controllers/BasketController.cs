@@ -59,6 +59,41 @@ namespace WebSiteProductMarket.Controllers
             return Json(bas);
 
         }
+
+        public bool Remove(int idProduct)
+        {
+            var bas = GetCart();
+
+            var product = bas.products.FirstOrDefault(i => i.id == idProduct);
+
+            if (product != null)
+            {
+                bas.products.Remove(product);
+                bas.count--;
+                SetCart(bas);
+
+                return true;
+            }
+
+
+            return false;
+        }
+
+        /// <summary>
+        /// Метод проверки, есть ли продукт в корзине
+        /// </summary>
+        /// <param name="idProduct">Номер продукта</param>
+        /// <returns>True, если продукт есть в базе</returns>
+        public bool haveItem(int idProduct)
+        {
+            var bas = GetCart();
+
+            // Если итем есть в корзине, то верни true
+            var hasItem = bas.products.FirstOrDefault(i => i.id == idProduct) != null ? true : false;
+
+            return hasItem;
+        }
+
         public Basket GetCart()
         {
             var bas = HttpContext.Session.GetObjects<Basket>("basket") ?? new Basket();

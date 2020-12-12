@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using GreenPipes;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
@@ -16,7 +17,9 @@ using ProductMarketModels;
 using ProductMarketModels.MassTransit.Requests.Products;
 using ProductMarketServices.Categories;
 using ProductMarketServices.Products;
+using ProductMarketServices.ProductsDiscount;
 using ServiceProductMarket.Consumers.Category;
+using ServiceProductMarket.Consumers.Discounts;
 using ServiceProductMarket.Consumers.Products;
 
 namespace ServiceProductMarket
@@ -39,12 +42,19 @@ namespace ServiceProductMarket
             services.AddDbContext<ProductMarketContext>(options =>
                 options.UseSqlServer(connection), ServiceLifetime.Transient);
 
+            // Добавляем автомаппер
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+            services.AddTransient<IProductDiscountService, ProductDiscountService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
 
             services.AddMassTransit(x =>
             {
+                // Discounts
+                x.AddConsumer<AddDiscountConsumer>();
+
+
                 // Products
                 x.AddConsumer<AddProductConsumer>();
                 x.AddConsumer<EditProductConsumer>();
@@ -68,29 +78,58 @@ namespace ServiceProductMarket
                         configurator.Username("guest");
                         configurator.Password("guest");
                     });
-                    
+
+
+                    #region Продукты
+
+                    // Очередь для админ действий
+                    cfg.ReceiveEndpoint("ProductsAdminQueue", e =>
+                    {
+                        e.PrefetchCount = 16;
+
+                        e.Consumer<AddDiscountConsumer>(context);
+                        e.Consumer<AddProductConsumer>(context);
+                        e.Consumer<EditProductConsumer>(context);
+                    });
+
+
+                    // Очередь для обычных пользователей
                     cfg.ReceiveEndpoint("ProductsQueue", e =>
                     {
                         e.PrefetchCount = 16;
                         e.UseMessageRetry(r => r.Interval(2, 100));
                         e.Consumer<GetProductsConsumer>(context);
-                        e.Consumer<AddProductConsumer>(context);
-                        e.Consumer<EditProductConsumer>(context);
+
                         e.Consumer<GetNewsProductsConsumer>(context);
                         e.Consumer<ExistProductConsumer>(context);
 
                     });
 
+                    #endregion
+
+                    #region Категории
+
                     cfg.ReceiveEndpoint("CategoriesQueue", e =>
                     {
                         e.PrefetchCount = 16;
                         e.UseMessageRetry(r => r.Interval(2, 100));
+
                         e.Consumer<GetProductsOnSubcategoryInCategoryConsumer>(context);
                         e.Consumer<GetSubCategoriesOnCategoryConsumer>(context);
+                    });
+
+
+                    cfg.ReceiveEndpoint("CategoriesAdminQueue", e =>
+                    {
+                        e.PrefetchCount = 16;
+                        e.UseMessageRetry(r => r.Interval(2, 100));
+
                         e.Consumer<AddCategoryConsumer>(context);
                         e.Consumer<AddSubCategoryConsumer>(context);
                         e.Consumer<EditCategoryConsumer>(context);
                     });
+
+                    #endregion
 
                     cfg.ConfigureJsonSerializer(settings =>
                     {
