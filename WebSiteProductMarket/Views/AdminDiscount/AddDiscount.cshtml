@@ -278,14 +278,39 @@
                     };
                     //this.addedItem = selectedItem;
                     this.editableItem = null;
-                },
+                    },
+                // Логика удаления элемента
+                    removeLogic: function () {
+                        if (this.selectedItem != null) {
+                            // Логика удаления
+
+                            return axios.get((urlApi + 'api/discount/RemoveDiscount'), {
+                                params: {
+                                    id: this.selectedItem.id
+                                }
+                            })
+                                .then(
+                                    response => {
+
+                                        this.selectedItem = null;
+
+                                        return response.data
+                                    });
+                        }
+                    },
                 // Удаление элемента
                 removeItem: function () {
-                    if (this.selectedItem != null) {
-                        // Логика удаления
-                        alert(this.selectedItem.id);
-                        this.selectedItem = null;
-                    }
+
+                    axios.all([
+                        this.removeLogic()
+                    ])
+                        .then(axios.spread((first_response) => {
+                            if (first_response == true) {
+                                setTimeout(() => {
+                                    this.LoadData();
+                                }, 500);
+                            }
+                        }))
                 },
                 testMethod: function (item, event) {
                     // Ставим стиль selected элементу, на который кликнули. Остальным убираем

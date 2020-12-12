@@ -45,6 +45,31 @@ namespace ProductMarketServices.ProductsDiscount
         }
 
         /// <summary>
+        /// Удаление из базы данных
+        /// </summary>
+        /// <param name="IdDiscount">Номер акции</param>
+        /// <returns>True, если удаление успешно</returns>
+        public async Task<bool> RemoveDiscountProduct(int IdDiscount)
+        {
+            using (context = new ProductMarketContext())
+            {
+                var dis = await context.DiscountProduct.FirstOrDefaultAsync(i => i.Id == IdDiscount);
+
+                if (dis != null)
+                {
+                    context.DiscountProduct.Remove(dis);
+
+                    await context.SaveChangesAsync();
+
+                    return true;
+                }
+
+                return false;
+
+            }
+        }
+
+        /// <summary>
         /// Редактирование продукта
         /// </summary>
         /// <param name="discount">Редактируемая Акция</param>

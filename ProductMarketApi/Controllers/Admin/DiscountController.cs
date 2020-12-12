@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProductMarket.Identity;
 using ProductMarketModels;
 using ProductMarketModels.MassTransit.Products.Requests;
+using ProductMarketModels.MassTransit.Requests.Discounts.Admin.Requests;
 using ProductMarketModels.MassTransit.Requests.Discounts.Admin.Responds;
 using ProductMarketModels.ViewModels.Admin.DiscountController;
 using System;
@@ -41,6 +42,19 @@ namespace ProductMarketApi.Controllers.Admin
         }
 
 
+
+        [HttpGet("RemoveDiscount")]
+        public async Task<bool> disRemove(int id)
+        {
+            var serviceAddress = new Uri("rabbitmq://localhost/ProductsAdminQueue");
+            var client = mPublishEndpoint.CreateRequestClient<IdDiscountRequest>(serviceAddress);
+
+
+            var response = await client.GetResponse<RemovedDiscountRespond>(new IdDiscountRequest() { IdDiscount = id });
+
+            return response.Message.HasRemoved;
+        }
+
         [HttpPost("EditDiscount")]
         public async Task<IActionResult> disEdit([FromForm] EditDiscountViewModel discount)
         {
@@ -64,11 +78,9 @@ namespace ProductMarketApi.Controllers.Admin
         {
             var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
             var client = mPublishEndpoint.CreateRequestClient<IdProductRequest>(serviceAddress);
+                        
 
             var response = await client.GetResponse<GetDiscountsProductRespond>(new IdProductRequest() { idProduct = idProduct });
-
-            //response.Message
-            //return response.Message.existProduct;
 
             return response.Message.data;
         }

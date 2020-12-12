@@ -55,6 +55,7 @@ namespace ServiceProductMarket
                 x.AddConsumer<AddDiscountConsumer>();
                 x.AddConsumer<EditDiscountConsumer>();
                 x.AddConsumer<GetDiscountsProductConsumer>();
+                x.AddConsumer<RemoveDiscountConsumer>();
 
 
                 // Products
@@ -91,6 +92,7 @@ namespace ServiceProductMarket
 
                         e.Consumer<AddDiscountConsumer>(context);
                         e.Consumer<EditDiscountConsumer>(context);
+                        e.Consumer<RemoveDiscountConsumer>(context);
 
 
                         e.Consumer<AddProductConsumer>(context);

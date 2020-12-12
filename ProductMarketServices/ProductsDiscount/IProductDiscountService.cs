@@ -27,5 +27,14 @@ namespace ProductMarketServices.ProductsDiscount
         /// </summary>
         /// <param name="discount">Редактируемая Акция</param>
         public void EditDiscountProduct(DiscountProduct discount);
+
+
+
+        /// <summary>
+        /// Удаление из базы данных
+        /// </summary>
+        /// <param name="IdDiscount">Номер акции</param>
+        /// <returns>True, если удаление успешно</returns>
+        public Task<bool> RemoveDiscountProduct(int IdDiscount);
     }
 }
