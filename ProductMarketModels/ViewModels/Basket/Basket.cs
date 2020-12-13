@@ -9,10 +9,6 @@ namespace ProductMarketModels.ViewModels.Basket
     /// </summary>
     public partial class Basket
     {
-        /// <summary>
-        /// Имя пользователя
-        /// </summary>
-        public string userName { get; set; }
 
         /// <summary>
         /// Корзина покупок

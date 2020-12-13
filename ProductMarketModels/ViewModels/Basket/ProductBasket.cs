@@ -15,10 +15,27 @@ namespace ProductMarketModels.ViewModels.Basket
         /// </summary>
         public int id { get; set; }
 
-        // Количество
+        /// <summary>
+        /// Количество товара заказано
+        /// </summary>
         public int count { get; set; }
 
-        // Сам продукт
-        public Product product { get; set; }
+
+        // Данные
+
+        public string Name { get; set; }
+        public decimal? Price { get; set; }
+
+        /// <summary>
+        /// Всего на складе
+        /// </summary>
+        public int? Amount { get; set; }
+        public byte[] Poster { get; set; }
+
+
+        // Процент скидки
+        public double? ProcentDiscount { get; set; }
+
+
     }
 }

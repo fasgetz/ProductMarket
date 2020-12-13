@@ -47,6 +47,45 @@ namespace WebSiteProductMarket.Controllers
 
         #region Вспомогательные методы работы с корзиной
 
+        public class data
+        {
+            public int id { get; set; }
+            public int count { get; set; }
+        }
+
+        [HttpPost]
+        public IActionResult UpdateCountProduct([FromBody] data data)
+        {
+            var bas = GetCart();
+
+            // Если итем есть в корзине, то обновить данные
+            bas.products.FirstOrDefault(i => i.id == data.id).count = data.count;
+
+            // Сохраняем
+            SetCart(bas);
+
+
+            return Ok("success");
+        }
+
+
+        [HttpPost]
+        public IActionResult RemoveItemBasket([FromBody] data data)
+        {
+            var bas = GetCart();
+
+            var product = bas.products.FirstOrDefault(i => i.id == data.id);
+
+            if (product != null)
+            {
+                bas.products.Remove(product);
+                SetCart(bas);
+            }
+
+
+            return Ok("success");
+        }
+
         public IActionResult Add(ProductBasket product)
         {
             var bas = GetCart();

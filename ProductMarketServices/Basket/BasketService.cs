@@ -34,21 +34,27 @@ namespace ProductMarketServices.Basket
             // Запрос на выборку продуктов, которые пользователь добавил в корзину
             var products = await context.Product
                 .Where(i => idsItems.Contains(i.Id))
-                .Select(s => new Product()
+                .Select(s => new ProductBasket()
                 {
-                    Id = s.Id,
+                    id = s.Id,
                     Amount = s.Amount,
                     Name = s.Name,
                     Poster = s.Poster,
+                    //count = basket.products.FirstOrDefault().count,
                     Price = s.Price,
-                    DiscountProduct = s.DiscountProduct.Where(f => f.DateEnd > DateTime.Now && f.DateStart < DateTime.Now).ToList()
+
+                    // Скидка товара
+                    ProcentDiscount = s.DiscountProduct.Where(f => f.DateEnd > DateTime.Now && f.DateStart < DateTime.Now).FirstOrDefault().ProcentDiscount
                 })
                 .ToListAsync();
 
+            products.ForEach(i =>
+            {
+                i.count = basket.products.FirstOrDefault(s => s.id == i.id).count;
+            });
+
             // Добавляем к корзине товаров 
-            basket.products.ForEach(i =>
-                i.product = products.FirstOrDefault(s => s.Id == i.id)
-            );
+            basket.products = products;
 
             // Возвращаем корзину
             return basket;

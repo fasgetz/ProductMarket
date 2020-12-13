@@ -4,50 +4,27 @@
 }
 
 
-
-<h1>@ViewData["Title"]</h1>
-
-<p>Добро пожаловать на корзину товаровов))</p>
-
-<a href="#">content</a>
-
 <div id="basket">
-    <p>{{basket}}</p>
-    <p>{{data}}</p>
-    <p>{{test}}</p>
-    <input class="btn btn-primary" type="button" v-on:click="testMethod" name="name" value="Загрузить данные" />
+    <basket-render></basket-render>    
 </div>
 
-
+@section Css {
+    <link href="~/css/Basket/basket.css" rel="stylesheet" />
+}
 
 @section Scripts {
 
+    <script src="~/js/Components/Basket/ProductBasket.js"></script>
+    <script src="~/js/Components/Basket/BasketComponent.js"></script>
+
     <script>
-        var newProducts = new Vue({
+        var discountProductApp = new Vue({
             el: '#basket',
-            data: () => ({
-                basket: null,
-                test: 'item))'
-            }),
-            mounted() {
-                axios.get(('GetCartJson'))
-                        .then(
-                            response => {
-                                this.basket = response.data;
-                            });
-            },
-            methods: {
-                testMethod: function () {
-
-                    this.basket.userName = '@User.Identity.Name';
-
-                    axios.post((urlApi + 'api/basket/getBasketProducts'), this.basket)
-                    .then(
-                        response => {
-                            //this.data = response.data;
-                        });
-                }
+            components: {
+                'basket-render': basket
             }
         });
+
+
     </script>
 }
