@@ -93,10 +93,10 @@ Vue.component('product', {
     },
     methods: {
         GoPay: function () {
-            location.href = "Basket/Payment";
+            location.href = "/Basket/Payment";
         },
         HasItem: function () {
-            return axios.get(('Basket/haveItem'), {
+            return axios.get(('/Basket/haveItem'), {
                 params: {
                     idProduct: this.item.id
                 }
@@ -108,7 +108,7 @@ Vue.component('product', {
                 });
         },
         removeProduct: function () {
-            return axios.get(('Basket/Remove'), {
+            return axios.get(('/Basket/Remove'), {
                 params: {
                     idProduct: this.item.id
                 }
@@ -157,7 +157,7 @@ Vue.component('product', {
             //formData.append('idSubCategoryProduct', this.postBody.idSubCategoryProduct);
 
 
-            axios.post(('Basket/Add'),
+            axios.post(('/Basket/Add'),
                 formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',

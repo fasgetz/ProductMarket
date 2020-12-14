@@ -53,14 +53,24 @@ Vue.component('product-basket', {
     },
     methods: {
         updateCard: function () {
-            axios.post(('updateCountProduct'), this.productBasket)
+
+            var data = {
+                id: this.productBasket.id,
+                count: this.productBasket.count
+            }
+
+            axios.post(('updateCountProduct'), data)
                 .then(
                     response => {
 
                     });
         },
         removeItem: function () {
-            axios.post(('RemoveItemBasket'), this.productBasket)
+            var data = {
+                id: this.productBasket.id
+            }
+
+            axios.post(('RemoveItemBasket'), data)
                 .then(
                     response => {
 

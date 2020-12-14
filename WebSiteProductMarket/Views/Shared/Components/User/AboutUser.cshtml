@@ -14,6 +14,7 @@
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <a asp-controller="Profile" asp-action="Index" asp-route-name="@User.Identity.Name" class="dropdown-item">Профиль</a>
+        <a class="dropdown-item basket-menu" asp-controller="Basket" asp-action="Payment">Корзина <i class="fa fa-shopping-basket"></i></a>
         @if (User.IsInRole("Администратор"))
         {
             <a asp-controller="Admin" asp-action="Index" class="dropdown-item">Панель Администратора</a>

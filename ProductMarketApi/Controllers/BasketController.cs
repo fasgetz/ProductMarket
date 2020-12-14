@@ -1,5 +1,7 @@
 ﻿using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProductMarketModels;
 using ProductMarketModels.MassTransit.Requests.Basket;
 using ProductMarketModels.MassTransit.Requests.Categories;
 using ProductMarketModels.MassTransit.Responds.Basket;
@@ -28,12 +30,35 @@ namespace ProductMarketApi.Controllers
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="basket"></param>
+        /// <returns></returns>
+        [HttpPost("AddOrder")]
+        [Authorize]
+        public async Task<IActionResult> orderAdd(OrderBasket basket)
+        {
+            if (basket.basket.products.Count == 0)
+                return BadRequest("Корзина товаров пустая");
+
+            basket.userName = User.Claims.FirstOrDefault()?.Value;
+
+            var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
+            var client = mPublishEndpoint.CreateRequestClient<orderBasketRequest>(serviceAddress);
+
+
+            var response = await client.GetResponse<getOrderRespond>(new orderBasketRequest() { basket = basket });
+
+            return new JsonResult(response.Message.order);
+        }
+
 
         /// <summary>
         /// Получить продукты в корзине
         /// </summary>
         /// <param name="basket"></param>
-        /// <returns></returns>
+        /// <returns></returns>        
         [HttpPost("getBasketProducts")]
         public async Task<Basket> basketGet(Basket basket)
         {
@@ -42,7 +67,7 @@ namespace ProductMarketApi.Controllers
             var client = mPublishEndpoint.CreateRequestClient<getBasketProductsRequest>(serviceAddress);
 
 
-            var response = await client.GetResponse<getBasketProductsRespond>(new getBasketProductsRequest() { basket = basket});
+            var response = await client.GetResponse<getBasketProductsRespond>(new getBasketProductsRequest() { basket = basket });
 
 
             return response.Message.basket;

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Session;
+using ProductMarketModels;
 using ProductMarketModels.ViewModels.Basket;
 using System;
 using System.Collections.Generic;
@@ -39,22 +40,34 @@ namespace WebSiteProductMarket.Controllers
         }
 
 
+
+
+
+
+
+        /// <summary>
+        /// Форма корзины
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Payment()
         {
-            return View(GetCart());
+            return View();
+        }
+        
+        /// <summary>
+        /// Форма оплаты
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult pay()
+        {
+            return View();
         }
 
 
         #region Вспомогательные методы работы с корзиной
 
-        public class data
-        {
-            public int id { get; set; }
-            public int count { get; set; }
-        }
-
         [HttpPost]
-        public IActionResult UpdateCountProduct([FromBody] data data)
+        public IActionResult UpdateCountProduct([FromBody] ProductBasket data)
         {
             var bas = GetCart();
 
@@ -70,7 +83,7 @@ namespace WebSiteProductMarket.Controllers
 
 
         [HttpPost]
-        public IActionResult RemoveItemBasket([FromBody] data data)
+        public IActionResult RemoveItemBasket([FromBody] ProductBasket data)
         {
             var bas = GetCart();
 
@@ -125,6 +138,13 @@ namespace WebSiteProductMarket.Controllers
             return false;
         }
 
+
+        public void ClearBasket()
+        {
+            HttpContext.Session.Clear();
+        }
+
+
         /// <summary>
         /// Метод проверки, есть ли продукт в корзине
         /// </summary>
@@ -142,7 +162,7 @@ namespace WebSiteProductMarket.Controllers
 
         public Basket GetCart()
         {
-            var bas = HttpContext.Session.GetObjects<Basket>("basket") ?? new Basket();
+            var bas = HttpContext.Session.GetObjects<Basket>("basket") ?? new Basket();            
 
             return bas;
         }

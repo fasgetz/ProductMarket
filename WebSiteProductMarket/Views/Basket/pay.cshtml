@@ -1,0 +1,184 @@
+﻿
+@{
+    ViewData["Title"] = "Форма оплаты";
+}
+
+<div id="pay-block">
+    <form v-if="added == false" id="form-pay" class="form-pay">
+        <div>
+            <h1 class="text-center">Контактная информация</h1>
+            <div class="form-group">
+                <label class="control-label">Адрес доставки</label>
+                <input name="address" v-model="address" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Комментарий к оплате</label>
+                <textarea v-model="commentary" class="form-control" rows="7"></textarea>
+            </div>
+            <div class="form-group form-pay__warning-block">
+                <p><i class="fa fa-exclamation"></i>Функционал оплаты не реализован в настоящем виде по причине демонстрации проекта</p>
+            </div>
+            <div class="form-group text-center">
+                <button v-on:click="addOrder" class="btn btn-primary">Оплатить</button>
+            </div>
+        </div>
+    </form>
+    <div v-else class="payed-successful-block container-fluid">
+        <h3 class="text-center payed-successful-block__header">Ваш заказ успешно оформлен!</h3>
+        <div class="row">
+            <div class="col-2 payed-successful-block__poster text-center">
+                <i class="fa fa-shopping-basket"></i>
+            </div>
+            <div class="col">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-2">
+                            <span>Номер заказа:</span>
+                        </div>
+                        <div class="col">
+                            {{productBasket.id}}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-2">
+                            <span>Сумма заказа:</span>
+                        </div>
+                        <div class="col">
+                            {{productBasket.totalPrice}} руб.
+                        </div>
+                    </div>
+                </div>
+                <div class="payed-successful-block__inform-email">
+                    <p><i class="fa fa-exclamation"></i>На вашу почту <span>{{productBasket.userId}}</span> вам придет оповещение!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="payed-successful-block__buttons text-center">
+            <button v-on:click="GoIndex" class="btn btn-success m-1">МОИ ЗАКАЗЫ</button>
+            <button v-on:click="GoIndex" class="btn btn-danger m-1">НА ГЛАВНУЮ</button>
+        </div>
+    </div>
+</div>
+
+
+
+@section Css {
+    <link href="~/css/Basket/basket_pay.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script>
+        var paymentApp = new Vue({
+            el: '#pay-block',
+            data: () => ({
+                added: false,
+                productBasket: null,
+                address: null,
+                commentary: null
+            }),
+            mounted() {
+                this.GetCart()
+
+            },
+            methods: {
+                // На главную
+                GoIndex: function () {
+                    location.href = "/Home/Index";
+                },
+                // Получения корзины продуктов
+                GetCart: function () {
+                    // Загружаем из кеша, что добавлено в корзину
+                    return axios.get(('GetCartJson'))
+                        .then(
+                            response => {
+                                this.productBasket = response.data;
+                                return true;
+                            });
+                },
+                clearBasket: function () {                    
+                    // Очищаем кеш добавленных продуктов
+                    axios.post(('ClearBasket'))
+                        .then(
+                            response => {
+
+                            });
+                },
+                addOrderPost: function () {
+                    var data = {
+                        basket: this.productBasket,
+                        address: this.address,
+                        commentary: this.commentary
+                    }
+
+                    return axios.post((urlApi + 'api/basket/AddOrder'), data)
+                        .then(
+                            response => {
+
+                                return response.data;
+
+                            }).catch(error => {
+
+                                // Если ошибка 401, то пользователь не авторизован
+                                if (error.response.status == 401) {
+                                    $('#loginButton').click();
+                                }
+                                else if (error.response.status == 400) {
+                                    alert(error.response.data)
+                                }
+                                else {
+                                    $("#form-pay").validate({
+                                        rules: {
+                                            address: {
+                                                required: true,
+                                                minlength: 10
+                                            }
+                                        },
+                                        messages: {
+                                            address: {
+                                                required: "Поле обязательно для заполнения",
+                                                minlength: jQuery.validator.format("Длина имени должна быть больше 10-ти символов")
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                },
+                addOrder: function () {
+                    event.preventDefault();
+
+                    axios.all([
+                        this.GetCart()
+                    ])
+                        .then(axios.spread((first_response) => {
+                            if (first_response == true) {
+
+                                axios.all([
+                                    this.addOrderPost()
+                                    ])
+                                .then(axios.spread((two_response) => {
+                                    if (two_response != null) {
+                                        // Очищаем кеш
+                                        this.clearBasket();
+
+                                        // Присваиваем свойства
+                                        this.productBasket = two_response;
+                                        this.added = true;
+                                    }
+                                }))
+
+                            }
+                        }))
+
+
+
+                }
+            }
+        });
+    </script>
+
+}

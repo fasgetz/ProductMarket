@@ -1,0 +1,25 @@
+.form-pay__warning-block i {
+    margin: 5px;
+    font-size: 30px;
+}
+
+.payed-successful-block__poster i {
+    font-size: 100px;
+}
+
+.payed-successful-block {
+    margin-top: 20px;
+}
+
+.payed-successful-block__header {
+    margin-bottom: 10px;
+}
+
+.payed-successful-block__inform-email {
+    margin-top: 10px;
+}
+
+.payed-successful-block__inform-email i {
+    font-size: 30px;
+    margin-right: 5px;
+}

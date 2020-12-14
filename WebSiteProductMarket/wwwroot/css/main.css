@@ -43,12 +43,16 @@
     border: 1px solid #e7e9eb;
 }
 
+.basket-menu i {
+    font-size: 25px;
+    margin-left: 5px;
+}
+
 
 /* Header */
-
 .header nav {
-  border-bottom: 1px solid #ededed;
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    border-bottom: 1px solid #ededed;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
 /* End Header *

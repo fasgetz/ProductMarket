@@ -56,6 +56,7 @@ namespace ServiceProductMarket
             {
                 // Basket
                 x.AddConsumer<GetBasketProductConsumer>();
+                x.AddConsumer<AddOrderConsumer>();
 
 
                 // Discounts
@@ -113,8 +114,11 @@ namespace ServiceProductMarket
                         e.PrefetchCount = 16;
                         e.UseMessageRetry(r => r.Interval(2, 100));
 
+                        // Basket
                         e.Consumer<GetBasketProductConsumer>(context);
+                        e.Consumer<AddOrderConsumer>(context);
 
+                        // Discount
                         e.Consumer<GetDiscountsProductConsumer>(context);
 
 
