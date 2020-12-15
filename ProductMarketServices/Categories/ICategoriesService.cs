@@ -9,6 +9,14 @@ namespace ProductMarketServices.Categories
 {
     public interface ICategoriesService
     {
+        /// <summary>
+        /// Получить полную информацию о подкатегории
+        /// </summary>
+        /// <param name="CategoryId">Категория продукта</param>
+        /// <param name="addPoster">Необязательный параметр для выборки добавления постера</param>
+        /// <returns>Информации о подкатегории продуктов</returns>
+        public Task<SubCategoryProduct> GetSubCategoryProductData(short CategoryId, bool addPoster = false);
+
 
         /// <summary>
         /// Выборка категорий и субкатегорий с количеством продуктов в них

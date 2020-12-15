@@ -3,7 +3,7 @@
 /* Аккордион меню */
 
 .submenu a {
-    cursor: pointer
+    cursor: pointer;
 }
 
 .accordion a:hover {
@@ -111,7 +111,7 @@ a {
         .submenu a {
             display: block;
             text-decoration: none;
-            color: #d9d9d9;
+            color: black;
             padding: 12px;
             -webkit-transition: all 0.25s ease;
             -o-transition: all 0.25s ease;

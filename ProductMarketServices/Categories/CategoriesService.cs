@@ -144,5 +144,29 @@ namespace ProductMarketServices.Categories
         }
 
 
+        /// <summary>
+        /// Получить полную информацию о подкатегории
+        /// </summary>
+        /// <param name="CategoryId">Категория продукта</param>
+        /// <param name="addPoster">Необязательный параметр для выборки добавления постера</param>
+        /// <returns>Информации о подкатегории продуктов</returns>
+        public async Task<SubCategoryProduct> GetSubCategoryProductData(short CategoryId, bool addPoster = false)
+        {
+            var subCategory = await context.SubCategoryProduct
+                .Select(i => new SubCategoryProduct()
+                { 
+                    Id = i.Id,
+                    IdCategory = i.IdCategory,
+                    Name = i.Name,
+                    // Если выбран параметр добавления постера продукта, то добавить к выборке, иначе не добавлять к выборке
+                    Poster = addPoster == true ? i.Poster : null
+                })
+                .FirstOrDefaultAsync(i => i.Id == CategoryId);
+
+
+            return subCategory;
+        }
+
+
     }
 }

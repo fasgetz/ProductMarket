@@ -8,7 +8,12 @@
 
 
 
-
+.submenu__count__img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    margin-left: 5px;
+}
 
 /* Секция авторизации */
 .auth__div {
@@ -52,7 +57,7 @@
 /* Header */
 .header nav {
     border-bottom: 1px solid #ededed;
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    /*box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);*/
 }
 
 /* End Header *
@@ -65,7 +70,7 @@
 
 .body .menu .accordion {
   position: fixed;
-	width: inherit; /*change here*/
+  width: inherit; /*change here*/
   height: 100%;
   overflow: auto;
 }
@@ -144,6 +149,7 @@ width: 4px;
     padding: 0;
     margin: 0;
   }
+
 }
 
 @media screen and (max-width: 429.98px) {
@@ -161,5 +167,30 @@ width: 4px;
 
 
 .body {
-    margin-top: 70px;
+    margin-top: 60px;
 }
+
+
+/* Блок поиска товаров */
+
+.search-block {
+    padding-top: 10px;
+    border: 1px solid #ced4da;
+    padding-bottom: 10px;
+}
+
+/* Иконка*/
+    .search-block span {
+        padding-top: 5px;
+        font-size: 20px;
+        width: 38px;
+        height: 38px;
+        border: 1px solid #ced4da;
+    }
+
+/* Поле ввода */
+
+    .search-block input {
+        padding-left: 10px;
+        height: 38px;
+    }

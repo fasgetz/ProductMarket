@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="utf-8" />    
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebSiteProductMarket</title>
+    <title>WebSiteProductMarket - @ViewData["Title"] </title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/css/Accordion.css" rel="stylesheet" />
@@ -11,13 +11,13 @@
     @RenderSection("Css", required: false)
 </head>
 <body>
-    
+
     @if (!User.Identity.IsAuthenticated)
     {
         <!-- Окно входа в аккаунт -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                
+
 
                 <div id="tabs" class="modal-content">
                     <div class="modal-close">
@@ -55,7 +55,7 @@
                         {
                             <div class="auth__div">
                                 @await Component.InvokeAsync("User")
-                            </div>                            
+                            </div>
                         }
                         else
                         {
@@ -71,34 +71,31 @@
     <section>
         <div class="body">
             <div class="container-fluid">
-                <div class="row">                    
+                <div class="row">
                     <div class="col-md-2 p-0 menu">
                         <ul id="accordion" class="accordion p-0">
-                            <li v-for="category in data">                                                               
+                            <li v-for="category in data">
                                 <div class="link p-0">
                                     <img v-bind:src="getImage(category.poster)" /> {{ category.name }} <i class="fa fa-chevron-down"></i>
                                 </div>
                                 <ul class="submenu">
                                     <li v-for="(item, index) in category.subCategoryProduct">
-                                        <a>
-                                            <div class="row">
-                                                <div class="col-9">
-                                                    {{ item.name }}
-                                                </div>
-                                                <div class="col-3">
-                                                    <span class="submenu__countBooks">{{ item.countProducts }}</span>
-                                                </div>
-                                            </div>
-                                        </a>
+                                        @*Поиск по категории при клике (вынести в отдельный компонент)*@
+                                        <category :data="item"></category>
                                     </li>
                                 </ul>
                             </li>
                         </ul>
                     </div>
                     <div class="col-md">
+                        <form asp-action="SearchName" asp-controller="Search" method="get">
+                            <div class="search-block input-group mb-4 pl-3 pr-3">
+                                <span class="fa fa-search text-center"></span>
+                                <input name="name" type="text" class="form-control" placeholder="Поиск по названию продукта">
+                                <button class="btn btn-light" type="submit">Поиск</button>
+                            </div>
+                        </form>
                         @RenderBody()
-
-
                     </div>
                 </div>
             </div>
@@ -115,17 +112,64 @@
 
     @* Vue JS and AXIOS to ajax query *@
     <script src="https://unpkg.com/vue"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="~/js/script.js"></script>
-    
 
+    <script>
+        // Компонент категории
+Vue.component('category', {
+    props: ['data'],
+    template: `
+                                        <a v-bind:href="'/search/category/'+ item.id" class="pt-1 pb-1">
+                                            <div class="row">
+                                                <div class="col-10 col-md-7">
+                                                    {{ item.name }}
+                                                </div>
+                                                <div class="col-2 col-md-5 submenu__count p-0">
+                                                    <span class="submenu__countBooks">{{ item.countProducts }}</span>
+                                                    <img class="submenu__count__img" v-bind:src="getImage(item.poster)" alt="Alternate Text" />
+                                                </div>
+                                            </div>
+                                        </a>
+`,
+    data: function () {
+        return {
+            item: this.data
+        }
+    },
+    mounted() {
+
+    },
+    methods: {
+        CategorySearch: function () {
+            location.href = "/search/category/" + this.item.id;
+        },
+        HasItem: function () {
+            axios.get(('/Basket/haveItem'), {
+                params: {
+                    idProduct: this.item.id
+                }
+            })
+                .then(response => {
+                    var exist = response.data;
+
+                });
+        },
+        getImage: function (array) {
+            return 'data:image/jpg;base64, ' + array
+        }
+    }
+})
+
+    </script>
     <script>
         var app = new Vue({
             el: '#accordion',
             data() {
                 return {
                     data: null,
-                    images: null
+                    images: null,
+                    loaded: false
                 };
             },
             mounted() {
@@ -164,9 +208,9 @@
 
         // Устанавливаем заголовок, чтобы при каждом запросе отправлять токен
         axios.defaults.headers.get['Authorization'] = "Bearer " + getCookieValue('token') // for GET requests
-        axios.defaults.headers.post['Authorization'] = "Bearer " + getCookieValue('token') // for POST requests        
+        axios.defaults.headers.post['Authorization'] = "Bearer " + getCookieValue('token') // for POST requests
 
-        function getCookieValue(cname) { // cname is nothing but the cookie value which 
+        function getCookieValue(cname) { // cname is nothing but the cookie value which
             //contains the value
             var name = cname + "=";
             var decodedCookie = decodeURIComponent(document.cookie);

@@ -1,6 +1,7 @@
 ﻿using MassTransit;
 using ProductMarketModels;
 using ProductMarketModels.MassTransit.Requests.Products;
+using ProductMarketServices.Categories;
 using ProductMarketServices.Products;
 using System;
 using System.Collections.Generic;
@@ -17,29 +18,28 @@ namespace ServiceProductMarket.Consumers.Products
         }
 
         private readonly IProductService service;
+        private readonly ICategoriesService categoryService;
 
-        public GetProductsConsumer(IProductService service)
+        public GetProductsConsumer(IProductService service, ICategoriesService categoryService)
         {
             this.service = service;
+            this.categoryService = categoryService;
         }
 
 
+        /// <summary>
+        /// Получить продукт по подкатегории
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async Task Consume(ConsumeContext<GetSubcategoriesRequest> context)
         {
-            await context.RespondAsync<GetProductsRespond>(new GetProductsRespond(await service.GetProducts(context.Message.IdCategoryProduct)));
+
+            var products = await service.GetProducts(context.Message.IdCategoryProduct);
+            var subCategory = await categoryService.GetSubCategoryProductData(context.Message.IdCategoryProduct);
 
 
-            //var list = new List<Product>()
-            //{
-            //    new Product()
-            //    {
-            //        Name = "tested"
-            //    }
-            //};
-
-            //await context.RespondAsync<GetProductsRequest>(context);
-            //var result = await service.GetProducts(context.Message.IdCategoryProduct);
-            //wait context.RespondAsync<GetProductsRequest>(new GetProductsRespond(null));            
+            await context.RespondAsync<GetProductsRespond>(new GetProductsRespond(products, subCategory));         
         }
     }
 }

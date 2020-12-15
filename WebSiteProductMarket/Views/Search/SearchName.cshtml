@@ -1,0 +1,58 @@
+﻿@model int
+
+@section Css {
+
+@*    <link href="~/css/Products/productItem.css" rel="stylesheet" />
+    <link href="~/css/search/searchCategory.css" rel="stylesheet" />*@
+}
+
+
+
+<h1>NAME SEARCH</h1>
+
+
+@*<div id="productsData" class="products-block">
+    <h1 v-if="category != null" class="products-block__title">Поиск по категории продукта: {{category.name}}</h1>
+    <div class="container-fluid">
+        <transition-group name="list" tag="div" class="row">
+            <product v-if="products.length > 0" v-for="item in products" v-bind:key="item.id" :data="item"></product>
+            <div v-else class="products-block__not-found-block">
+                <h2>Нет продуктов в базе данных по данной категории</h2>
+            </div>
+        </transition-group>
+    </div>
+</div>*@
+
+
+
+
+
+@section Scripts {
+
+@*    <script src="~/js/Components/ProductComponent.js"></script>
+    <script>
+        var productsApp = new Vue({
+            el: '#productsData',
+            data: () => ({
+                products: null,
+                category: null
+            }),
+            mounted() {
+                axios.get((urlApi + 'api/product/category'), {
+                    params: {
+                        CategoryProduct: @Model
+                    }
+                })
+                    .then(
+                        response => {
+                            this.products = response.data.products;
+                            this.category = response.data.category;
+                        });
+            },
+            methods: {
+
+            }
+        });
+    </script>*@
+
+}

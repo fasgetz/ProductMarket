@@ -7,6 +7,7 @@ using ProductMarketModels.MassTransit.Products.Requests;
 using ProductMarketModels.MassTransit.Requests;
 using ProductMarketModels.MassTransit.Requests.Products;
 using ProductMarketModels.MassTransit.Requests.Products.Responds;
+using ProductMarketModels.ViewModels.Products;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,8 +29,13 @@ namespace ProductMarketApi.Controllers
 
 
         
-        [HttpGet("get")]
-        public async Task<List<Product>> GetProducts(short CategoryProduct)
+        /// <summary>
+        /// Получить продукты по категории
+        /// </summary>
+        /// <param name="CategoryProduct">Категория продукта</param>
+        /// <returns>Продукты</returns>
+        [HttpGet("category")]
+        public async Task<GetProductsInCategory> GetProducts(short CategoryProduct)
         {
             
             var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
@@ -37,8 +43,15 @@ namespace ProductMarketApi.Controllers
 
 
             var response = await client.GetResponse<GetProductsRespond>(new GetSubcategoriesRequest() { IdCategoryProduct = CategoryProduct });
+            
+            var data = new GetProductsInCategory()
+            {
+                products = response.Message.Products,
+                category = response.Message.categoryProduct
+            };
 
-            return response.Message.Products;
+
+            return data;
         }
 
 

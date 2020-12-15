@@ -72,7 +72,7 @@ namespace ProductMarketServices.Products
                     Poster = i.Poster,
                     Price = i.Price,
                     Amount = i.Amount,
-                    IdSubCategoryNavigation = i.IdSubCategoryNavigation,
+                    IdSubCategoryNavigation = new SubCategoryProduct() { Id = i.IdSubCategoryNavigation.Id, Name = i.IdSubCategoryNavigation.Name },
                     
                                        
                 })
@@ -88,9 +88,53 @@ namespace ProductMarketServices.Products
         /// <returns>Продукты</returns>
         public async Task<List<Product>> GetProducts(short IdCategory)
         {
-            // Выборка
-            var products = await context.Product.Where(i => i.IdSubCategory == IdCategory).ToListAsync();
+            var products = await context.Product.Where(i => i.IdSubCategory == IdCategory)
+                .Include("IdSubCategoryNavigation")
+                .OrderByDescending(i => i.Id)
+                .Select(i => new Product()
+                {
+                    // Скидка продукта
+                    DiscountProduct = i.DiscountProduct.Where(i => i.DateStart < DateTime.Now && i.DateEnd > DateTime.Now).ToList(),
 
+                    Id = i.Id,
+                    Name = i.Name,
+                    Poster = i.Poster,
+                    Price = i.Price,
+                    Amount = i.Amount,
+                    //IdSubCategoryNavigation = new SubCategoryProduct() { Id = i.IdSubCategoryNavigation.Id, Name = i.IdSubCategoryNavigation.Name },
+
+
+                })
+                .ToListAsync();
+
+            return products;
+        }
+
+        /// <summary>
+        /// Поиск продуктов по названию
+        /// </summary>
+        /// <param name="name">Название продукта</param>
+        /// <returns>Продукты</returns>
+        public async Task<List<Product>> GetProducts(string name)
+        {
+            var products = await context.Product.Where(i => i.Name.Contains(name))
+                .Include("IdSubCategoryNavigation")
+                .OrderByDescending(i => i.Id)
+                .Select(i => new Product()
+                {
+                    // Скидка продукта
+                    DiscountProduct = i.DiscountProduct.Where(i => i.DateStart < DateTime.Now && i.DateEnd > DateTime.Now).ToList(),
+
+                    Id = i.Id,
+                    Name = i.Name,
+                    Poster = i.Poster,
+                    Price = i.Price,
+                    Amount = i.Amount,
+                    IdSubCategoryNavigation = new SubCategoryProduct() { Id = i.IdSubCategoryNavigation.Id, Name = i.IdSubCategoryNavigation.Name },
+
+
+                })
+                .ToListAsync();
 
             return products;
         }
@@ -104,8 +148,23 @@ namespace ProductMarketServices.Products
         /// <returns>Продукты</returns>
         public async Task<List<Product>> GetProducts(short IdCategory, int TakeCount = 0, int SkipCount = 0)
         {
-            // Выборка
-            var products = await context.Product.Where(i => i.IdSubCategory == IdCategory).Skip(SkipCount).Take(TakeCount).ToListAsync();
+            var products = await context.Product.Where(i => i.IdSubCategory == IdCategory).Skip(SkipCount).Take(TakeCount)
+                .Include("IdSubCategoryNavigation")
+                .OrderByDescending(i => i.Id)
+                .Select(i => new Product()
+                {
+                    // Скидка продукта
+                    DiscountProduct = i.DiscountProduct.Where(i => i.DateStart < DateTime.Now && i.DateEnd > DateTime.Now).ToList(),
+
+                    Id = i.Id,
+                    Name = i.Name,
+                    Poster = i.Poster,
+                    Price = i.Price,
+                    Amount = i.Amount,
+                    IdSubCategoryNavigation = new SubCategoryProduct() { Id = i.IdSubCategoryNavigation.Id, Name = i.IdSubCategoryNavigation.Name },
+
+                })
+                .ToListAsync();            
 
 
             return products;

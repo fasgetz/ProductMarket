@@ -34,9 +34,7 @@ namespace ProductMarketServices.Products
         /// <summary>
         /// Выборка ВСЕХ продуктов по категории
         /// </summary>
-        /// <param name="IdCategory">Категория продуктов</param>
-        /// <param name="IdCategory">Категория продуктов</param>
-        /// <param name="IdCategory">Категория продуктов</param>        
+        /// <param name="IdCategory">Категория продуктов</param>    
         /// <returns>Продукты</returns>
         Task<List<Product>> GetProducts(short IdCategory);
 

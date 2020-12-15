@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using ProductMarket.Identity;
 using System;
+using System.IO.Compression;
 using System.Text;
 
 namespace ProductMarketApi
@@ -93,6 +95,14 @@ namespace ProductMarketApi
             });
 
             services.AddMassTransitHostedService();
+
+
+            services.AddResponseCompression(options => options.EnableForHttps = true);
+
+            services.Configure<GzipCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Optimal;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -109,6 +119,9 @@ namespace ProductMarketApi
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+
+            app.UseResponseCompression();
 
             app.UseEndpoints(endpoints =>
             {

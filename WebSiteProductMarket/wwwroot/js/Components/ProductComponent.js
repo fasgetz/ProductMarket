@@ -2,7 +2,7 @@
 Vue.component('product', {
     props: ['data'],
     template: `
-                <div class="col-md-6 col-lg-4 col-xl Product"">
+                <div class="col-md-6 col-lg-4 col-xl-2 Product"">
                     <div class="Product__procent">
                         <span v-if="item.discountProduct[0] != null">{{item.discountProduct[0].procentDiscount}}%</span>
                     </div>
@@ -11,6 +11,11 @@ Vue.component('product', {
                     </div>
                     <div class="Product__title text-center">
                         {{item.name}}
+                    </div>
+                    <div v-if="item.idSubCategoryNavigation != null" class="Product__category">
+                        <a v-bind:href="'/search/category/'+ item.idSubCategoryNavigation.id">
+                            Категория: <span>{{item.idSubCategoryNavigation.name}}</span>
+                        </a>
                     </div>
                     <div class="Product__count">
                         <span>{{item.amount}}</span> в наличии!

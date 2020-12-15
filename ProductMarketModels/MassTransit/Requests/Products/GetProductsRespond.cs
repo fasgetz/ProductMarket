@@ -8,9 +8,15 @@ namespace ProductMarketModels.MassTransit.Requests.Products
     {
         public List<Product> Products { get; set; }
 
-        public GetProductsRespond(List<Product> products)
+
+        // Категория продукта
+        public SubCategoryProduct categoryProduct { get; set; }
+
+
+        public GetProductsRespond(List<Product> products, SubCategoryProduct categoryProduct = null)
         {
             this.Products = products;
+            this.categoryProduct = categoryProduct;
         }
     }
 }

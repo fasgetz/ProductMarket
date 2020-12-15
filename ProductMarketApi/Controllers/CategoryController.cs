@@ -57,8 +57,7 @@ namespace ProductMarketApi.Controllers
 
 
             var response = await client.GetResponse<GetSubcategoriesRespond>(new SubcategoriesRequest(IdCategory));
-
-
+            
             return response.Message.Category;
         }
 

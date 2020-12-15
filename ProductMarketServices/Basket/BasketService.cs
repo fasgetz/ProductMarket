@@ -31,28 +31,36 @@ namespace ProductMarketServices.Basket
             using (var transaction = context.Database.BeginTransaction())
             {
                 try
-                {
-                    // Запрос на выборку продуктов, которые пользователь добавил в корзину
-                    var products = await context.Product
-                        .Where(i => orderBasket.basket.products.Select(i => i.id).Contains(i.Id)) // выборка продуктов добавленных в корзину
+                {                    
+                    // Выборка продуктов из БД, которые юзер добавил в корзину
+                    var getProducts = await context.Product
+                        .Select(i => new Product()
+                        {
+                            Id = i.Id,
+                            Price = i.Price,
+                            Amount = i.Amount,
+                            DiscountProduct = i.DiscountProduct.Where(f => f.DateEnd > DateTime.Now && f.DateStart < DateTime.Now).ToList()
+                        })
+                        .Where(i => orderBasket.basket.products.Select(i => i.id).Contains(i.Id)).ToListAsync(); // выборка продуктов добавленных в корзину
+
+
+                    // Формируем корзину
+                    var products = getProducts
+                        //.Where(i => orderBasket.basket.products.Select(i => i.id).Contains(i.Id)) // выборка продуктов добавленных в корзину
                         .Select(s => new ProductBasket()
                         {
                             id = s.Id,
                             Price = s.Price,
-
-                        // Скидка товара
-                        ProcentDiscount = s.DiscountProduct.Where(f => f.DateEnd > DateTime.Now && f.DateStart < DateTime.Now).FirstOrDefault().ProcentDiscount
-                        })
-                        .ToListAsync();
-
-                    // Присваиваем количество товаров
-                    products.ForEach(i =>
-                    {
-                        i.count = orderBasket.basket.products.FirstOrDefault(s => s.id == i.id).count;
-                    });
+                            //Amount = s.Amount,
+                            count = orderBasket.basket.products.FirstOrDefault(i => i.id == s.Id).count,
+                            // Скидка товара
+                            ProcentDiscount = s.DiscountProduct.FirstOrDefault()?.ProcentDiscount
+                        }).ToList();
 
 
-                    // Делать запрос к базе данных - есть ли пользователь
+
+
+                    // Формируем заказ
                     Order order = new Order()
                     {
                         // Сумма заказа
@@ -70,10 +78,22 @@ namespace ProductMarketServices.Basket
                             }
                         },
                         ProductsInOrder = orderBasket.basket.products.Select(i => new ProductsInOrder() { IdProduct = i.id, Count = (short)i.count }).ToList()
-                    };
+                    };                   
 
                     // Добавляем в базу данных
                     context.Order.Add(order);
+
+                    // Теперь необходимо вычесть разницу между имеющимся на складе товаром и купленным
+                    foreach (var item in getProducts)
+                    {
+                        item.Amount = item.Amount - products.FirstOrDefault(s => s.id == item.Id).count;
+
+                        // Указать, что запись изменилась
+                        context.Product.Attach(item);
+                        context.Entry(item)
+                            .Property(c => c.Amount).IsModified = true;
+                    }
+
                     context.SaveChanges();
 
                     // Получаем номер заказа в базе данных

@@ -1,11 +1,19 @@
 .products__table__header {
     border: 1px solid black;
     background: #f7f7f7;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     padding-bottom: 5px;
     padding-top: 5px;
 }
+
+@media screen and (max-width: 767.98px) {
+
+    * {
+        font-size: 90%;
+    }
+}
+
 
 .products__table__items .row {
     border: 1px solid black;
@@ -15,7 +23,7 @@
 
 .products__table__items {
     background: #f8f7f700;
-    font-size: 18px;    
+    font-size: 16px;    
 }
 
 .products__table img {

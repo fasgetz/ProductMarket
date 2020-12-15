@@ -1,103 +1,28 @@
 /* Слайдер */
-
 .carousel-inner img {
 
   height: 500px;
 }
 
+@media screen and (max-width: 767.98px) {
 
-/* Товары по акции */
+    .carousel-inner img {
+        height: 350px;
+    }
+}
 
-.DiscountBlock {
+@media screen and (max-width: 429.98px) {
+
+    .carousel-inner img {
+        height: 200px;
+    }
+}
+
+
+/* Товары */
+
+.products-block {
     margin-top: 20px;
 }
 
-/* Карточка товаров */
 
-.Product {
-    border: 1px solid #ececec;
-    padding: 25px;
-}
-
-
-.Product__procent {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    height: 30px;
-}
-
-    .Product__procent span {
-        border: 1px solid grey;
-        background: lightgreen;
-        padding: 5px;
-        color: white;
-    }
-
-
-.Product__Poster img {
-    width: 150px;
-    height: 100%;
-}
-
-.Product__Poster {
-    height: 150px;
-}
-
-.Product__title {
-    font-weight: bold;
-}
-
-.Product__count {
-    margin-top: 10px;
-}
-
-    .Product__count span, .Product__price span {
-        font-weight: bold;
-    }
-
-.Product__price .oldPrice {
-    color: grey;
-    text-decoration: line-through
-}
-
-.Product__economy {
-    margin-top: 10px;
-    height: 30px;
-}
-
-.Product__economy__procent {
-    border: 1px solid grey;
-    background: #ffd83a;
-    color: grey;
-}
-
-.Product__economy {
-    border-bottom: 1px solid #ececec;
-    padding-bottom: 20px;
-}
-
-
-.Product:hover {
-    -moz-box-shadow: 3px 1px 10px #777;
-    -webkit-box-shadow: 3px 1px 10px #777;
-    box-shadow: 3px 1px 10px #777;
-}
-
-.Product__basket {
-    margin-top: 20px;
-}
-
-    .Product__basket .btn {
-        border-radius: 0;
-        font-size: 15px;
-    }
-
-.basket__detail span {
-    margin-top: 0px;
-}
-
-
-.basket__totalSum {
-    padding-top: 10px;
-}
-/* Конец карточки продукта */
