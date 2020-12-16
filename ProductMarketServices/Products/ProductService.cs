@@ -1,20 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductMarketModels;
+using ProductMarketServices.ElasticSearch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ProductMarketServices.Products
 {
     public class ProductService : IProductService
     {
-        private readonly ProductMarketContext context;
+        private ProductMarketContext context;
+        private readonly IElasticSearchService elasticService;
 
-        public ProductService(ProductMarketContext context)
+        public ProductService(ProductMarketContext context, IElasticSearchService elasticService)
         {
             this.context = context;
+            this.elasticService = elasticService;
         }
 
 
@@ -25,8 +29,29 @@ namespace ProductMarketServices.Products
         public async Task AddProduct(Product product)
         {
 
-            context.Product.Add(product);
-            context.SaveChanges();
+            try
+            {
+                using (context = new ProductMarketContext())
+                {
+                    context.Product.Add(product);
+                    await context.SaveChangesAsync();
+
+                    // В отдельном потоке добавить в эластик серч продукт
+                    Thread thread = new Thread(new ThreadStart(() => {
+                        elasticService.SaveSingleAsync(product);
+                    }));
+
+                    thread.Start();
+
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+
+
+
 
 
         }

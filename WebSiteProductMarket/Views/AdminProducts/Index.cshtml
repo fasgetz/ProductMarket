@@ -126,7 +126,7 @@
                 },
                 loadProducts() {
 
-                    axios.get((urlApi + 'api/product/get'), {
+                    axios.get((urlApi + 'api/product/category'), {
                         params: {
                             CategoryProduct: this.body.CategoryProduct
                         }
@@ -134,7 +134,7 @@
 
                         .then(
                             response => {
-                                this.products = response.data;
+                                this.products = response.data.products;
                                 alert(products);
                             });
                 }

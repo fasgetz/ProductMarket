@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using CustomElasticSearch;
 using GreenPipes;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
@@ -10,13 +11,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Nest;
 using Newtonsoft.Json;
 using ProductMarketModels;
 using ProductMarketModels.MassTransit.Requests.Products;
 using ProductMarketServices.Basket;
 using ProductMarketServices.Categories;
+using ProductMarketServices.ElasticSearch;
 using ProductMarketServices.Products;
 using ProductMarketServices.ProductsDiscount;
 using ServiceProductMarket.Consumers.Basket;
@@ -51,6 +55,13 @@ namespace ServiceProductMarket
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IBasketService, BasketService>();
+
+
+            // Добавляем эластик серч
+            services.AddSingleton<IElasticSearchService, ElasticSearchService>();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddElasticSearch(Configuration);
+
 
             services.AddMassTransit(x =>
             {

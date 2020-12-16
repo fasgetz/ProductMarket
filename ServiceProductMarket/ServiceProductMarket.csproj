@@ -12,10 +12,12 @@
     <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.0.4" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="7.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
+    <PackageReference Include="NEST" Version="7.10.1" />
     <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CustomElasticSearch\CustomElasticSearch.csproj" />
     <ProjectReference Include="..\ProductMarketModels\ProductMarketModels.csproj" />
     <ProjectReference Include="..\ProductMarketServices\ProductMarketServices.csproj" />
   </ItemGroup>
