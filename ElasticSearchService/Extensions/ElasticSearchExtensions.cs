@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Nest;
 using System;
 using ProductMarketModelsElastic.Models;
+using ProductMarketModels.Constants;
 
 namespace ElasticSearchService.Extensions
 {
@@ -12,7 +13,7 @@ namespace ElasticSearchService.Extensions
         public static void AddElasticSearch(
             this IServiceCollection services, IConfiguration configuration)
         {
-            var url = "http://localhost:9200";
+            var url = ServiceAdresses.ElasticSearch;
             var defaultIndex = "products";
 
             var settings = new ConnectionSettings(new Uri(url))
