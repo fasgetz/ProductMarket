@@ -76,6 +76,7 @@ namespace ServiceProductMarket
                 x.AddConsumer<GetProductsNameConsumer>();
                 x.AddConsumer<GetNewsProductsConsumer>();
                 x.AddConsumer<ExistProductConsumer>();
+                x.AddConsumer<GetRandomProductsConsumer>();
 
                 // Categories
                 x.AddConsumer<GetProductsOnSubcategoryInCategoryConsumer>();
@@ -129,6 +130,7 @@ namespace ServiceProductMarket
                         e.Consumer<GetProductsConsumer>(context);
                         e.Consumer<GetProductsNameConsumer>(context);
                         e.Consumer<GetNewsProductsConsumer>(context);
+                        e.Consumer<GetRandomProductsConsumer>(context);
                         e.Consumer<ExistProductConsumer>(context);
 
                     });

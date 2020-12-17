@@ -10,7 +10,7 @@
 
 
 <div id="productsData" class="products-block">
-    <h1 class="products-block__title">Поиск по названию продукта: @Model.name</h1>
+    <h1 v-if="name != null" class="products-block__title">Поиск по названию продукта: @Model.name</h1>
     <div v-if="products.length > 0" class="container-fluid">
         <transition-group  name="list" tag="div" class="row">
             <product v-for="item in products" v-bind:key="item.id" :data="item"></product>

@@ -35,10 +35,10 @@ var basket = Vue.component('basket', {
                                 Всего товаров: {{watchCount}}
                             </div>
                             <div class="basket-block__table-result__statistic__discount">
-                                Скидка: {{watchDiscount}} руб.
+                                Скидка: {{watchDiscount.toFixed(2)}} руб.
                             </div>
                             <div>
-                                Итого: {{watchTotalPrice}} руб.
+                                Итого: {{watchTotalPrice.toFixed(2)}} руб.
                             </div>
                         </div>
                         <div class="row">

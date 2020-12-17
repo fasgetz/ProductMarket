@@ -83,6 +83,27 @@ namespace ProductMarketApi.Controllers
         }
 
 
+        /// <summary>
+        /// Выборка рандомно добавленных товаров
+        /// </summary>
+        /// <param name="count">Количество</param>
+        /// <returns>Товары</returns>
+        [HttpGet("randomProducts")]
+        public async Task<List<Product>> GetProductsRandom(int count)
+        {
+            var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
+            var client = mPublishEndpoint.CreateRequestClient<GetRandomProductsRequest>(serviceAddress);
+
+            var response = await client.GetResponse<GetProductsRespond>(new GetRandomProductsRequest() { countProducts = count });
+
+            return response.Message.Products;
+        }
+
+        /// <summary>
+        /// Выборка недавно добавленных товаров
+        /// </summary>
+        /// <param name="count">Количество</param>
+        /// <returns>Товары</returns>
         [HttpGet("newsProduct")]
         public async Task<List<Product>> GetProducts(int count)
         {

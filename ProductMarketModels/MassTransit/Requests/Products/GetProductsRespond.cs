@@ -18,5 +18,10 @@ namespace ProductMarketModels.MassTransit.Requests.Products
             this.Products = products;
             this.categoryProduct = categoryProduct;
         }
+
+        public GetProductsRespond()
+        {
+
+        }
     }
 }

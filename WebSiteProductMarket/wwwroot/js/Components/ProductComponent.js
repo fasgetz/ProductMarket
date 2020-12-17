@@ -26,7 +26,7 @@ Vue.component('product', {
                                 <div class="col p-0"><span>{{item.price}}</span> руб/шт</div>
                             </div>
                             <div v-else class="row">
-                                <div class="col-7 p-0"><span>{{item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)}}</span> руб/шт</div>
+                                <div class="col-7 p-0"><span>{{(item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)).toFixed(2)}}</span> руб/шт</div>
                                 <div class="col p-0 oldPrice">{{item.price}} руб.</div>
                             </div>
                         </div>
@@ -54,7 +54,7 @@ Vue.component('product', {
                                 <div class="basket__totalSum">
                                     <p class="text-center">
                                         <span v-if="item.discountProduct[0] == null">{{count}}x{{item.price}} = {{item.price * count}} </span>
-                                        <span v-else>{{count}}x{{item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)}} = {{(item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)) * count}} </span>
+                                        <span v-else>{{count}}x{{item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)}} = {{((item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)) * count).toFixed(2)}} </span>
                                         <span>руб.</span>
                                     </p>
                                 </div>
@@ -62,7 +62,7 @@ Vue.component('product', {
                             <div class="Product__basket__buttons" v-else>
                                     <button v-on:click="GoPay" class="btn btn-success w-100">ОПЛАТИТЬ
                                         <span v-if="item.discountProduct[0] == null">{{count}}x{{item.price}} = {{item.price * count}} </span>
-                                        <span v-else>{{count}}x{{item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)}} = {{(item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)) * count}} </span>
+                                        <span v-else>{{count}}x{{item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)}} = {{((item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)) * count).toFixed(2)}} </span>
                                         <span>руб.</span>
                                     </button>
                                     <button class="btn btn-danger w-100" v-on:click="cancel">ОТМЕНИТЬ</button>

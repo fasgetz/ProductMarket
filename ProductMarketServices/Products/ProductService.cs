@@ -141,6 +141,65 @@ namespace ProductMarketServices.Products
             context.SaveChanges();
         }
 
+
+        /// <summary>
+        /// Метод на выборку из базы данных рандомных номеров продуктов которые сейчас по акции
+        /// </summary>
+        /// <param name="countTake">Количество товаров</param>
+        /// <returns>Рандомные номера продуктов по скидке</returns>
+        private async Task<List<int>> GetRandomDiscountsProductIDs(int countTake)
+        {
+            Random rand = new Random();
+
+            //
+            var allDiscountsProduct = await context.Product
+                // Все айдишники, товары которые имеют скидки на текущую дату
+                .Where(s => s.DiscountProduct.Where(i => i.DateStart < DateTime.Now && i.DateEnd > DateTime.Now).FirstOrDefault() != null)
+                .Select(i => i.Id)
+                .ToListAsync();
+
+            var randoms = allDiscountsProduct.OrderBy(x => rand.Next()).Take(countTake).ToList();
+
+            return randoms;
+        }
+
+
+        /// <summary>
+        /// Выборка рандомных товаров по скидке
+        /// </summary>
+        /// <param name="countTake">Количество</param>
+        /// <returns>Рандомные товары</returns>
+        public async Task<List<Product>> GetRandomDiscountProducts(int countTake = 6)
+        {
+            // Получаем рандомный список товаров по акции
+            var randomIds = await GetRandomDiscountsProductIDs(countTake);
+
+
+            // Выборка
+            var randomProducts = await context.Product
+                .Where(i => randomIds.Contains(i.Id)) // выборка продуктов добавленных в корзину
+                .Include("IdSubCategoryNavigation")
+                .OrderByDescending(i => i.Id)
+                .Select(i => new Product()
+                {
+                    // Скидка продукта
+                    DiscountProduct = i.DiscountProduct.Where(i => i.DateStart < DateTime.Now && i.DateEnd > DateTime.Now).ToList(),
+
+                    Id = i.Id,
+                    Name = i.Name,
+                    Poster = i.Poster,
+                    Price = i.Price,
+                    Amount = i.Amount,
+                    IdSubCategoryNavigation = new SubCategoryProduct() { Id = i.IdSubCategoryNavigation.Id, Name = i.IdSubCategoryNavigation.Name },
+
+
+                })
+                .ToListAsync();
+
+            return randomProducts;
+        }
+
+
         /// <summary>
         /// Выборка недавно добавленных продуктов
         /// </summary>
@@ -148,6 +207,7 @@ namespace ProductMarketServices.Products
         /// <returns></returns>
         public async Task<List<Product>> GetNewsProduct(int count)
         {
+
             // Выборка
             var newsProducts = await context.Product.Skip(context.Product.Count() - count).Take(count)
                 .Include("IdSubCategoryNavigation")

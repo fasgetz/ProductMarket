@@ -62,7 +62,7 @@
             <h2>Товары по акции</h2>
             <div class="container-fluid">
                 <transition-group name="list" tag="div" class="row">
-                    <product v-for="item in newsproducts" v-bind:key="item.id" :data="item"></product>
+                    <product v-for="item in randomproducts" v-bind:key="item.id" :data="item"></product>
                 </transition-group>
             </div>
         </div>
@@ -87,9 +87,12 @@
         var newProducts = new Vue({
             el: '#productsData',
             data: () => ({
-                newsproducts: null
+                newsproducts: null,
+                randomproducts: null
             }),
             mounted() {
+                this.getRandomProducts();
+
                 axios.get((urlApi + 'api/product/newsProduct'), {
                     params: {
                         count: 6
@@ -101,7 +104,17 @@
                         });
             },
             methods: {
-                
+                getRandomProducts: function () {
+                    axios.get((urlApi + 'api/product/randomProducts'), {
+                        params: {
+                            count: 6
+                        }
+                    })
+                        .then(
+                            response => {
+                                this.randomproducts = response.data;
+                            });
+                }
             }
         });
     </script>

@@ -28,7 +28,7 @@ Vue.component('product-basket', {
                                 <span>{{productBasket.price * productBasket.count}}</span> руб.
                             </div>
                             <div class="basket-block__table-item__price-product__new-price">
-                                <span>{{(productBasket.price - (productBasket.price / 100 * productBasket.procentDiscount)) * productBasket.count}}</span> руб.
+                                <span>{{((productBasket.price - (productBasket.price / 100 * productBasket.procentDiscount)) * productBasket.count).toFixed(2)}}</span> руб.
                             </div>
                         </div>
                         <div v-else>
