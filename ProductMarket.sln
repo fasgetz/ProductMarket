@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceProductMarket", "Ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSiteProductMarket", "WebSiteProductMarket\WebSiteProductMarket.csproj", "{5353D3E0-AC82-4CBF-9D4F-39F846AA0758}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElasticSearchService", "ElasticSearchService\ElasticSearchService.csproj", "{3006CA29-80D4-4022-8C6E-86E381993551}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticSearchService", "ElasticSearchService\ElasticSearchService.csproj", "{3006CA29-80D4-4022-8C6E-86E381993551}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductMarketModelsElastic", "ProductMarketModelsElastic\ProductMarketModelsElastic.csproj", "{3C3EDCBC-5072-42F7-9966-B47AC2DB6D2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductMarketModelsElastic", "ProductMarketModelsElastic\ProductMarketModelsElastic.csproj", "{3C3EDCBC-5072-42F7-9966-B47AC2DB6D2B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{54E0769C-8D4A-4B1B-A384-59342C472D12}"
 EndProject
