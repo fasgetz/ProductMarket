@@ -1,4 +1,4 @@
-@model string
+@model WebSiteProductMarket.Models.ViewModels.Search.SearchData
 
 @section Css {
 
@@ -10,16 +10,21 @@
 
 
 <div id="productsData" class="products-block">
-    <h1 class="products-block__title">Поиск по названию продукта: {{name}}</h1>
-    <div class="container-fluid">
-        <transition-group name="list" tag="div" class="row">
-            <product v-if="products.length > 0" v-for="item in products" v-bind:key="item.id" :data="item"></product>
-            <div v-else class="products-block__not-found-block">
-                <h2>Нет продуктов в базе данных по названию <span>{{name}}</span></h2>
-            </div>
+    <h1 class="products-block__title">Поиск по названию продукта: @Model.name</h1>
+    <div v-if="products.length > 0" class="container-fluid">
+        <transition-group  name="list" tag="div" class="row">
+            <product v-for="item in products" v-bind:key="item.id" :data="item"></product>
         </transition-group>
     </div>
+    <div v-else class="products-block__not-found-block">
+        <h2>Нет продуктов в базе данных</h2>
+    </div>
+    <div class="buttons-navigations text-center mt-3">
+        <a v-if="page > 0" class="btn btn-outline-primary m-5" v-bind:href="'/search?name='+ name + '&page=' + (page - 1) + '&count=' + count">НАЗАД</a>
+        <a v-if="products.length == count" class="btn btn-outline-primary m-5" v-bind:href="'/search?name='+ name + '&page=' + (page + 1) + '&count=' + count">ВПЕРЕД</a>
+    </div>
 </div>
+
 
 
 
@@ -33,13 +38,21 @@
             el: '#productsData',
             data: () => ({
                 products: null,
-                name: '@Model'
+                name: null,
+                page: null,
+                count: null
             }),
             mounted() {
+                this.name = '@Model.name'
+                this.page = @(Model.page)
+                this.count = @(Model.count)
+
 
                 axios.get((urlApi + 'api/product/searchName'), {
                     params: {
-                        name: '@Model'
+                        name: this.name,
+                        page: this.page,
+                        count: this.count
                     }
                 })
                     .then(

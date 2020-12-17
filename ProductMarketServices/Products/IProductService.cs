@@ -32,21 +32,16 @@ namespace ProductMarketServices.Products
 
 
         /// <summary>
-        /// Выборка ВСЕХ продуктов по категории
+        /// Выборка продуктов по категории
         /// </summary>
-        /// <param name="IdCategory">Категория продуктов</param>    
+        /// <param name="IdCategory">Категория продуктов</param>   
+        /// <param name="page">Страница</param>
+        /// <param name="counts">Количество итемов, которые вывести</param>
         /// <returns>Продукты</returns>
-        Task<List<Product>> GetProducts(short IdCategory);
+        Task<List<Product>> GetProducts(short IdCategory, int page = 0, int count = 18);
 
 
-        /// <summary>
-        /// Выборка продуктов по категории в количестве (для страничной навигации)
-        /// </summary>
-        /// <param name="IdCategory">Категория продуктов</param>
-        /// <param name="TakeCount">Взять из выборки</param>
-        /// <param name="SkipCount">Пропуск из выборки</param>        
-        /// <returns>Продукты</returns>
-        Task<List<Product>> GetProducts(short IdCategory, int TakeCount = 0, int SkipCount = 0);
+
 
 
         /// <summary>
@@ -69,8 +64,10 @@ namespace ProductMarketServices.Products
         /// Поиск продуктов по названию
         /// </summary>
         /// <param name="name">Название продукта</param>
+        /// <param name="page">Страница</param>
+        /// <param name="counts">Количество итемов, которые вывести</param>
         /// <returns>Продукты</returns>
-        public Task<List<Product>> GetProducts(string name);
+        public Task<List<Product>> GetProducts(string name, int page = 0, int count = 18);
 
 
     }

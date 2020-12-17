@@ -15,8 +15,15 @@
 /* Карточка товаров */
 
 .Product {
+    margin-top: 30px;
     border: 1px solid #ececec;
     padding: 25px;
+}
+
+@media screen and (max-width: 767.98px) {
+    .Product {
+        margin-top: 0px;
+    }
 }
 
 

@@ -1,4 +1,4 @@
-﻿@model int
+﻿@model WebSiteProductMarket.Models.ViewModels.Search.SearchData
 
 @section Css {
 
@@ -18,6 +18,10 @@
             </div>
         </transition-group>
     </div>
+    <div class="buttons-navigations text-center mt-3">
+        <a v-if="page > 0" class="btn btn-outline-primary m-5" v-bind:href="'/category/search?category='+ idCategory + '&page=' + (page - 1) + '&count=' + count">НАЗАД</a>
+        <a v-if="products.length == count" class="btn btn-outline-primary m-5" v-bind:href="'/category/search?category='+ idCategory + '&page=' + (page + 1) + '&count=' + count">ВПЕРЕД</a>
+    </div>
 </div>
 
 
@@ -32,12 +36,22 @@
             el: '#productsData',
             data: () => ({
                 products: null,
-                category: null
+                category: null,
+                idCategory: null,
+                page: null,
+                count: null
             }),
             mounted() {
+                this.idCategory = @(Model.idSubCategory);
+                this.page = @(Model.page)
+                this.count = @(Model.count)
+
+
                 axios.get((urlApi + 'api/product/category'), {
                     params: {
-                        CategoryProduct: @Model
+                        CategoryProduct: this.idCategory,
+                        page: this.page,
+                        count: this.count
                     }
                 })
                     .then(

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebSiteProductMarket.Models.ViewModels.Search;
 
 namespace WebSiteProductMarket.Controllers
 {
@@ -19,10 +20,18 @@ namespace WebSiteProductMarket.Controllers
         /// </summary>
         /// <param name="category"></param>
         /// <returns></returns>
-        [Route("search/category/{category?}")]
-        public IActionResult SearchCategory(int? category)
+        [Route("category/search")]
+        public IActionResult SearchCategory(int category, int page = 0, int count = 18)
         {
-            return View(category);
+            SearchData data = new SearchData()
+            {
+                idSubCategory = category,
+                page = page,
+                count = count
+            };
+
+
+            return View(data);
         }
 
 
@@ -32,9 +41,16 @@ namespace WebSiteProductMarket.Controllers
         /// <param name="category"></param>
         /// <returns></returns>
         [Route("search")]
-        public IActionResult SearchName(string name)
+        public IActionResult SearchName(string name, int page = 0, int count = 18)
         {
-            return View("SearchName", name);
+            SearchData data = new SearchData()
+            {
+                name = name,
+                page = page,
+                count = count
+            };
+
+            return View("SearchName", data);
         }
     }
 }

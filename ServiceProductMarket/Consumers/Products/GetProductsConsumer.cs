@@ -30,7 +30,7 @@ namespace ServiceProductMarket.Consumers.Products
         public async Task Consume(ConsumeContext<GetSubcategoriesRequest> context)
         {
 
-            var products = await service.GetProducts(context.Message.IdCategoryProduct);
+            var products = await service.GetProducts(context.Message.IdCategoryProduct, context.Message.page, context.Message.count);
             var subCategory = await categoryService.GetSubCategoryProductData(context.Message.IdCategoryProduct);
 
 

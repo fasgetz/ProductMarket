@@ -37,16 +37,20 @@ namespace ProductMarketApi.Controllers
         /// Получить продукты по названию
         /// </summary>
         /// <param name="name">Название продукта</param>
+        /// <param name="page">Страница</param>
+        /// <param name="counts">Количество итемов, которые вывести</param>
         /// <returns>Продукты</returns>
         [HttpGet("searchName")]
-        public async Task<List<Product>> GetProducts(string name)
+        public async Task<List<Product>> GetProducts(string name, int page = 0, int count = 18)
         {
+            if (name != null)
+                name = name.Replace("&quot;", "\"");
 
             var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
             var client = mPublishEndpoint.CreateRequestClient<GetProductsNameRequest>(serviceAddress);
 
 
-            var response = await client.GetResponse<GetProductsRespond>(new GetProductsNameRequest() { name = name });
+            var response = await client.GetResponse<GetProductsRespond>(new GetProductsNameRequest() { name = name, page = page, count = count });
 
             return response.Message.Products;
         }
@@ -55,16 +59,18 @@ namespace ProductMarketApi.Controllers
         /// Получить продукты по категории
         /// </summary>
         /// <param name="CategoryProduct">Категория продукта</param>
+        /// <param name="page">Страница</param>
+        /// <param name="counts">Количество итемов, которые вывести</param>
         /// <returns>Продукты</returns>
         [HttpGet("category")]
-        public async Task<GetProductsInCategory> GetProducts(short CategoryProduct)
+        public async Task<GetProductsInCategory> GetProducts(short CategoryProduct, int page = 0, int count = 18)
         {
             
             var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
             var client = mPublishEndpoint.CreateRequestClient<GetSubcategoriesRequest>(serviceAddress);
 
 
-            var response = await client.GetResponse<GetProductsRespond>(new GetSubcategoriesRequest() { IdCategoryProduct = CategoryProduct });
+            var response = await client.GetResponse<GetProductsRespond>(new GetSubcategoriesRequest() { IdCategoryProduct = CategoryProduct, page = page, count = count });
             
             var data = new GetProductsInCategory()
             {

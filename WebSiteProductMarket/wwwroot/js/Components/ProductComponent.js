@@ -13,7 +13,7 @@ Vue.component('product', {
                         {{item.name}}
                     </div>
                     <div v-if="item.idSubCategoryNavigation != null" class="Product__category">
-                        <a v-bind:href="'/search/category/'+ item.idSubCategoryNavigation.id">
+                        <a v-bind:href="'/category/search?category='+ item.idSubCategoryNavigation.id">
                             Категория: <span>{{item.idSubCategoryNavigation.name}}</span>
                         </a>
                     </div>

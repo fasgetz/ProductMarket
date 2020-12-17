@@ -19,7 +19,7 @@ Vue.component('edit-category', {
             <input v-on:click="editCategory" class="btn btn-primary" value="Сохранить" type="submit" />
         </div>
         <div class="form-group text-center mt-1">
-            <input class="btn btn-primary" value="Удалить" type="submit" />
+            <input class="btn btn-primary" value="Удалить (неактивен)" type="submit" />
         </div>
     </div>
 </form>

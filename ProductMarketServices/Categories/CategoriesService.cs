@@ -46,18 +46,21 @@ namespace ProductMarketServices.Categories
 
         public async Task DeleteCategory(CategoryProduct category)
         {
-            var categoryDb = await context.CategoryProduct.FirstOrDefaultAsync(i => i.Id == category.Id);
+            /* Функционал убран для защиты */
+/*            var categoryDb = await context.CategoryProduct.FirstOrDefaultAsync(i => i.Id == category.Id);
 
             context.CategoryProduct.Remove(categoryDb);
-            context.SaveChanges();
+            context.SaveChanges();*/
         }
 
         public async Task DeleteSubCategory(SubCategoryProduct category)
         {
-            var categoryDb = await context.SubCategoryProduct.FirstOrDefaultAsync(i => i.Id == category.Id);
+            /* Функционал убран для защиты */
+
+/*            var categoryDb = await context.SubCategoryProduct.FirstOrDefaultAsync(i => i.Id == category.Id);
 
             context.SubCategoryProduct.Remove(categoryDb);
-            context.SaveChanges();
+            context.SaveChanges();*/
         }
 
         public async Task EditCategory(CategoryProduct category)

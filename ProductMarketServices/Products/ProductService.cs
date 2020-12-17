@@ -172,13 +172,16 @@ namespace ProductMarketServices.Products
         }
 
         /// <summary>
-        /// Выборка ВСЕХ продуктов по категории
+        /// Выборка продуктов по категории
         /// </summary>
         /// <param name="IdCategory">Категория продуктов</param>   
+        /// <param name="page">Страница</param>
+        /// <param name="counts">Количество итемов, которые вывести</param>
         /// <returns>Продукты</returns>
-        public async Task<List<Product>> GetProducts(short IdCategory)
+        public async Task<List<Product>> GetProducts(short IdCategory, int page = 0, int count = 18)
         {
             var products = await context.Product.Where(i => i.IdSubCategory == IdCategory)
+                .Skip(page * count).Take(count)
                 .Include("IdSubCategoryNavigation")
                 .OrderByDescending(i => i.Id)
                 .Select(i => new Product()
@@ -204,10 +207,13 @@ namespace ProductMarketServices.Products
         /// Поиск продуктов по названию
         /// </summary>
         /// <param name="name">Название продукта</param>
+        /// <param name="page">Страница</param>
+        /// <param name="counts">Количество итемов, которые вывести</param>
         /// <returns>Продукты</returns>
-        public async Task<List<Product>> GetProducts(string name)
+        public async Task<List<Product>> GetProducts(string name, int page = 0, int count = 18)
         {
-            var products = await context.Product.Where(i => i.Name.Contains(name))
+            var products = await context.Product.Where(i => name != null ? i.Name.Contains(name) : true)
+                .Skip(page * count).Take(count)
                 .Include("IdSubCategoryNavigation")
                 .OrderByDescending(i => i.Id)
                 .Select(i => new Product()
@@ -225,37 +231,6 @@ namespace ProductMarketServices.Products
 
                 })
                 .ToListAsync();
-
-            return products;
-        }
-
-        /// <summary>
-        /// Выборка продуктов по категории в количестве (для страничной навигации)
-        /// </summary>
-        /// <param name="IdCategory">Категория продуктов</param>
-        /// <param name="TakeCount">Взять из выборки</param>
-        /// <param name="SkipCount">Пропуск из выборки</param>        
-        /// <returns>Продукты</returns>
-        public async Task<List<Product>> GetProducts(short IdCategory, int TakeCount = 0, int SkipCount = 0)
-        {
-            var products = await context.Product.Where(i => i.IdSubCategory == IdCategory).Skip(SkipCount).Take(TakeCount)
-                .Include("IdSubCategoryNavigation")
-                .OrderByDescending(i => i.Id)
-                .Select(i => new Product()
-                {
-                    // Скидка продукта
-                    DiscountProduct = i.DiscountProduct.Where(i => i.DateStart < DateTime.Now && i.DateEnd > DateTime.Now).ToList(),
-
-                    Id = i.Id,
-                    Name = i.Name,
-                    Poster = i.Poster,
-                    Price = i.Price,
-                    Amount = i.Amount,
-                    IdSubCategoryNavigation = new SubCategoryProduct() { Id = i.IdSubCategoryNavigation.Id, Name = i.IdSubCategoryNavigation.Name },
-
-                })
-                .ToListAsync();
-
 
             return products;
         }
