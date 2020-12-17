@@ -92,7 +92,7 @@
                             <div>
                                 <div v class="search-block input-group mb-4 pl-3 pr-3">
                                     <span class="fa fa-search text-center"></span>
-                                    <input name="name" v-on:focus="focused = true" v-on:blur="focused = false" v-model="text" v-on:input="searchText" :value="text" type="text" class="form-control" placeholder="Поиск по названию продукта">
+                                    <input name="name" v-on:focus="focused = true" v-on:blur="focused = false" v-model="text" v-on:input="searchText" type="text" class="form-control" placeholder="Поиск по названию продукта">
                                     <button class="btn btn-light" type="submit">Поиск</button>
                                     <div v-on:mousedown="handleItemClick(item)" v-for="item in searchData" v-show="focused" class="search-products-input__result">
                                         <a class="row search-products-input__result__item" v-bind:href="'/search?name='+ item.name">{{item.name}}</a>

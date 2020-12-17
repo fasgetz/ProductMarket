@@ -50,10 +50,10 @@ namespace ServiceProductMarket
             // Добавляем автомаппер
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddTransient<IProductDiscountService, ProductDiscountService>();
-            services.AddTransient<IProductService, ProductService>();
-            services.AddTransient<ICategoriesService, CategoriesService>();
-            services.AddTransient<IBasketService, BasketService>();
+            services.AddScoped<IProductDiscountService, ProductDiscountService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICategoriesService, CategoriesService>();
+            services.AddScoped<IBasketService, BasketService>();
 
             services.AddMassTransit(x =>
             {
@@ -73,6 +73,7 @@ namespace ServiceProductMarket
                 x.AddConsumer<AddProductConsumer>();
                 x.AddConsumer<EditProductConsumer>();
                 x.AddConsumer<GetProductsConsumer>();
+                x.AddConsumer<GetProductsNameConsumer>();
                 x.AddConsumer<GetNewsProductsConsumer>();
                 x.AddConsumer<ExistProductConsumer>();
 
@@ -126,6 +127,7 @@ namespace ServiceProductMarket
 
 
                         e.Consumer<GetProductsConsumer>(context);
+                        e.Consumer<GetProductsNameConsumer>(context);
                         e.Consumer<GetNewsProductsConsumer>(context);
                         e.Consumer<ExistProductConsumer>(context);
 

@@ -65,5 +65,13 @@ namespace ProductMarketServices.Products
         Task<Product> GetProduct(int id);
 
 
+        /// <summary>
+        /// Поиск продуктов по названию
+        /// </summary>
+        /// <param name="name">Название продукта</param>
+        /// <returns>Продукты</returns>
+        public Task<List<Product>> GetProducts(string name);
+
+
     }
 }

@@ -12,11 +12,6 @@ namespace ServiceProductMarket.Consumers.Products
 {
     public class GetProductsConsumer : IConsumer<GetSubcategoriesRequest>
     {
-        public GetProductsConsumer()
-        {
-
-        }
-
         private readonly IProductService service;
         private readonly ICategoriesService categoryService;
 

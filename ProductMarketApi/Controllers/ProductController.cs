@@ -31,7 +31,26 @@ namespace ProductMarketApi.Controllers
         }
 
 
-        
+
+
+        /// <summary>
+        /// Получить продукты по названию
+        /// </summary>
+        /// <param name="name">Название продукта</param>
+        /// <returns>Продукты</returns>
+        [HttpGet("searchName")]
+        public async Task<List<Product>> GetProducts(string name)
+        {
+
+            var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
+            var client = mPublishEndpoint.CreateRequestClient<GetProductsNameRequest>(serviceAddress);
+
+
+            var response = await client.GetResponse<GetProductsRespond>(new GetProductsNameRequest() { name = name });
+
+            return response.Message.Products;
+        }
+
         /// <summary>
         /// Получить продукты по категории
         /// </summary>

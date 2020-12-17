@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -16,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.WebEncoders;
 using Microsoft.IdentityModel.Tokens;
 using WebSiteProductMarket.Identity;
 
@@ -79,6 +82,11 @@ namespace WebSiteProductMarket
                 config.AddPolicy(Policies.User, Policies.UserPolicy());
             });
 
+            //Чтобы кирилические символы не переводились в соответствующий Unicode Hex Character Code
+            services.Configure<WebEncoderOptions>(options =>
+            {
+                options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
+            });
 
             services.AddMemoryCache();
             services.AddSession(options =>
@@ -140,6 +148,8 @@ namespace WebSiteProductMarket
 
             app.UseEndpoints(endpoints =>
             {
+  
+
                 endpoints.MapControllerRoute(
                     name: "admin",
                     pattern: "admin/products/{action}",
