@@ -88,14 +88,21 @@
                         </ul>
                     </div>
                     <div class="col-md">
-                        <form asp-action="SearchName" asp-controller="Search" method="get">
-                            <div class="search-block input-group mb-4 pl-3 pr-3">
-                                <span class="fa fa-search text-center"></span>
-                                <input name="name" type="text" class="form-control" placeholder="Поиск по названию продукта">
-                                <button class="btn btn-light" type="submit">Поиск</button>
+                        <form id="search-products-input" asp-action="SearchName" asp-controller="Search" method="get">
+                            <div>
+                                <div v class="search-block input-group mb-4 pl-3 pr-3">
+                                    <span class="fa fa-search text-center"></span>
+                                    <input name="name" v-on:focus="focused = true" v-on:blur="focused = false" v-model="text" v-on:input="searchText" :value="text" type="text" class="form-control" placeholder="Поиск по названию продукта">
+                                    <button class="btn btn-light" type="submit">Поиск</button>
+                                    <div v-on:mousedown="handleItemClick(item)" v-for="item in searchData" v-show="focused" class="search-products-input__result">
+                                        <a class="row search-products-input__result__item" v-bind:href="'/search?name='+ item.name">{{item.name}}</a>
+                                    </div>
+                                </div>
                             </div>
                         </form>
+
                         @RenderBody()
+
                     </div>
                 </div>
             </div>
@@ -122,10 +129,10 @@ Vue.component('category', {
     template: `
                                         <a v-bind:href="'/search/category/'+ item.id" class="pt-1 pb-1">
                                             <div class="row">
-                                                <div class="col-10 col-md-7">
+                                                <div class="col-sm-10 col-9 col-md-12 text-md-center col-lg-7 text-lg-left">
                                                     {{ item.name }}
                                                 </div>
-                                                <div class="col-2 col-md-5 submenu__count p-0">
+                                                <div class="col-sm-2 col-3 m-0 p-0 text-md-center col-md-12 col-lg-5 submenu__count">
                                                     <span class="submenu__countBooks">{{ item.countProducts }}</span>
                                                     <img class="submenu__count__img" v-bind:src="getImage(item.poster)" alt="Alternate Text" />
                                                 </div>
@@ -192,9 +199,58 @@ Vue.component('category', {
             }
         });
 
+    </script>
 
+    <script>
+        var searchProductInput = new Vue({
+            el: '#search-products-input',
+            data() {
+                return {
+                    searchData: null,
+                    text: null,
+                    focused: false,
+                    mutableValue: null
+                };
+            },
+            mounted() {
+
+                this.searchText();
+            },
+            computed: {
+                watchText: function () {
+                    return this.text;
+                },
+                // Список продуктов
+                watchProducts: function () {
+
+                    return this.searchData;
+                }
+            },
+            methods: {
+                // Функция выбранного элемента в поиске
+                handleItemClick: function (item) {
+
+                    // Переходим по ссылке
+                    location.href = "/search?name=" + item.name;
+
+                    this.focused = !this.focused;
+                },
+                // Функция поиска
+                searchText: function () {
+                    axios
+                        .get('https://localhost:44330/elasticsearch?text=' + this.text)
+                        .then(
+                            response => {
+                                this.searchData = response.data
+
+                            });
+                },
+
+            }
+        });
 
     </script>
+
     <script>
 
 

@@ -21,11 +21,6 @@ namespace ProductMarketServices.ElasticSearch
         public ElasticSearchService(IElasticClient elasticClient)
         {
             _elasticClient = elasticClient;
-
-
-            var abs = GetProductSuggests("мол");
-
-
         }
 
         #region Методы сервиса
@@ -70,10 +65,7 @@ namespace ProductMarketServices.ElasticSearch
                                idSubCategory = option.Source.idSubCategory
                            };
 
-
-            var data = suggests.ToList();
-
-            return data;
+            return suggests.ToList();
         }
 
         /// <summary>

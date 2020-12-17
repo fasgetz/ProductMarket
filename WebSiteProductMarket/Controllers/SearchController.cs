@@ -34,7 +34,7 @@ namespace WebSiteProductMarket.Controllers
         [Route("search")]
         public IActionResult SearchName(string name)
         {
-            return View();
+            return View("SearchName", name);
         }
     }
 }

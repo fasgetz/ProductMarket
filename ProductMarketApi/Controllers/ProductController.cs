@@ -1,6 +1,7 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ProductMarket.Identity;
 using ProductMarketModels;
 using ProductMarketModels.MassTransit.Products.Requests;
@@ -11,6 +12,8 @@ using ProductMarketModels.ViewModels.Products;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ProductMarketApi.Controllers
@@ -58,7 +61,6 @@ namespace ProductMarketApi.Controllers
         [HttpGet("newsProduct")]
         public async Task<List<Product>> GetProducts(int count)
         {
-
             var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
             var client = mPublishEndpoint.CreateRequestClient<GetNewsProductsRequest>(serviceAddress);
 

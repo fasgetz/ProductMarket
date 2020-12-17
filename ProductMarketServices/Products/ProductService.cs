@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using ProductMarketModels;
 using ProductMarketServices.ElasticSearch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,14 +16,64 @@ namespace ProductMarketServices.Products
     public class ProductService : IProductService
     {
         private ProductMarketContext context;
-        private readonly IElasticSearchService elasticService;
 
-        public ProductService(ProductMarketContext context, IElasticSearchService elasticService)
+        public ProductService(ProductMarketContext context)
         {
             this.context = context;
-            this.elasticService = elasticService;
         }
 
+        #region Запросы к сервису эластика
+
+        /// <summary>
+        /// Добавление продукта в документы эластика
+        /// </summary>
+        /// <param name="product">Продукт</param>
+        /// <returns></returns>
+        private async Task AddToElasticProduct(Product product)
+        {
+            try
+            {
+                // В отдельном потоке добавить в эластик серч продукт
+                using (var MyClient = new HttpClient())
+                {
+
+                    MyClient.BaseAddress = new Uri("https://localhost:44330/");
+                    var data = JsonConvert.SerializeObject(product);
+                    var content = new StringContent(
+                        data, Encoding.UTF8, "application/json");
+
+                    var MyResponse = await MyClient.PostAsync("ElasticSearch/AddProduct", content);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private async Task UpdateElasticProduct(Product product)
+        {
+            try
+            {
+                // В отдельном потоке добавить в эластик серч продукт
+                using (var MyClient = new HttpClient())
+                {
+
+                    MyClient.BaseAddress = new Uri("https://localhost:44330/");
+                    var data = JsonConvert.SerializeObject(product);
+                    var content = new StringContent(
+                        data, Encoding.UTF8, "application/json");
+
+                    var MyResponse = await MyClient.PostAsync("ElasticSearch/UpdateProduct", content);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// Добавить продукт
@@ -37,8 +90,10 @@ namespace ProductMarketServices.Products
                     await context.SaveChangesAsync();
 
                     // В отдельном потоке добавить в эластик серч продукт
-                    Thread thread = new Thread(new ThreadStart(() => {
-                        elasticService.SaveSingleAsync(product);
+                    Thread thread = new Thread(new ThreadStart(() =>
+                    {
+                        AddToElasticProduct(product);
+
                     }));
 
                     thread.Start();
@@ -73,6 +128,16 @@ namespace ProductMarketServices.Products
             if (product.Poster != null)
                 p.Poster = product.Poster;
 
+
+            // В отдельном потоке добавить в эластик серч продукт
+            Thread thread = new Thread(new ThreadStart(() =>
+            {
+                UpdateElasticProduct(product);
+
+            }));
+
+            thread.Start();
+
             context.SaveChanges();
         }
 
@@ -84,7 +149,7 @@ namespace ProductMarketServices.Products
         public async Task<List<Product>> GetNewsProduct(int count)
         {
             // Выборка
-            var newsProducts = await context.Product.Skip(context.Product.Count() - count).Take(count)                
+            var newsProducts = await context.Product.Skip(context.Product.Count() - count).Take(count)
                 .Include("IdSubCategoryNavigation")
                 .OrderByDescending(i => i.Id)
                 .Select(i => new Product()
@@ -98,8 +163,8 @@ namespace ProductMarketServices.Products
                     Price = i.Price,
                     Amount = i.Amount,
                     IdSubCategoryNavigation = new SubCategoryProduct() { Id = i.IdSubCategoryNavigation.Id, Name = i.IdSubCategoryNavigation.Name },
-                    
-                                       
+
+
                 })
                 .ToListAsync();
 
@@ -189,7 +254,7 @@ namespace ProductMarketServices.Products
                     IdSubCategoryNavigation = new SubCategoryProduct() { Id = i.IdSubCategoryNavigation.Id, Name = i.IdSubCategoryNavigation.Name },
 
                 })
-                .ToListAsync();            
+                .ToListAsync();
 
 
             return products;

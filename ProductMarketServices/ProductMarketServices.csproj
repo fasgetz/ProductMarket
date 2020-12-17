@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CustomElasticSearch\CustomElasticSearch.csproj" />
     <ProjectReference Include="..\ProductMarketModelsElastic\ProductMarketModelsElastic.csproj" />
     <ProjectReference Include="..\ProductMarketModels\ProductMarketModels.csproj" />
   </ItemGroup>

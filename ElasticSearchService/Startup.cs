@@ -31,6 +31,9 @@ namespace ElasticSearchService
         {
             services.AddControllers();
 
+            services.AddCors();
+            services.AddHttpContextAccessor();
+
             // Добавляем эластик серч
             services.AddSingleton<IElasticSearchService, ProductMarketServices.ElasticSearch.ElasticSearchService>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -50,6 +53,9 @@ namespace ElasticSearchService
             app.UseRouting();
 
             app.UseAuthorization();
+
+            //// подключаем CORS для кросс платформенных запросов
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseEndpoints(endpoints =>
             {

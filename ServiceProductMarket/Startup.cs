@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using CustomElasticSearch;
 using GreenPipes;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
@@ -55,13 +54,6 @@ namespace ServiceProductMarket
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IBasketService, BasketService>();
-
-
-            // Добавляем эластик серч
-            services.AddSingleton<IElasticSearchService, ElasticSearchService>();
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddElasticSearch(Configuration);
-
 
             services.AddMassTransit(x =>
             {
