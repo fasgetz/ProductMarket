@@ -27,5 +27,10 @@ namespace WebSiteProductMarket.Models.ViewModels.Account
         [DataType(DataType.Password)]
         [Display(Name = "Подтвердить пароль")]
         public string PasswordConfirm { get; set; }
+
+        /// <summary>
+        /// Для возврата на предыдущий URL
+        /// </summary>
+        public string ReturnUrl { get; set; }
     }
 }

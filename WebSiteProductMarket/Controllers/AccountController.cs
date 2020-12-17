@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WebSiteProductMarket.Identity;
 using WebSiteProductMarket.Models.ViewModels.Account;
@@ -63,11 +64,31 @@ namespace WebSiteProductMarket.Controllers
             _signInManager = signInManager;
         }
 
+
+        private bool IsValidEmail(string email)
+        {
+            string pattern = "[.\\-_a-z0-9]+@([a-z0-9][\\-a-z0-9]+\\.)+[a-z]{2,6}";
+            Match isMatch = Regex.Match(email, pattern, RegexOptions.IgnoreCase);
+            return isMatch.Success;
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterUserViewModel vm)
         {
             if (ModelState.IsValid)
             {
+
+                // Проверка валидного email
+                var isMath = IsValidEmail(vm.Email);
+
+                if (isMath == false)
+                {
+                    ModelState.AddModelError(string.Empty, "Введите валидный email!");
+                    return PartialView("Controllers/Account/Register", vm);
+                }
+                    
+
                 User user = new User()
                 {
                     Email = vm.Email,
@@ -106,7 +127,7 @@ namespace WebSiteProductMarket.Controllers
 
             }
 
-            return View("Register", vm);
+            return PartialView("Controllers/Account/Register", vm);
         }
 
 
