@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
@@ -21,6 +22,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.IdentityModel.Tokens;
 using WebSiteProductMarket.Identity;
+using WebSiteProductMarket.Service;
 
 namespace WebSiteProductMarket
 {
@@ -54,9 +56,12 @@ namespace WebSiteProductMarket
                 options.UseSqlServer(userConnect));
 
 
+            // Добавляем сервис администрирования профилем
+            services.AddScoped<IProfileService, ProfileService>();
+
 
             services.AddIdentity<User, IdentityRole>(i =>
-            {
+            {                
                 i.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<UsersContext>()
                .AddDefaultTokenProviders();
@@ -81,6 +86,12 @@ namespace WebSiteProductMarket
                 config.AddPolicy(Policies.Admin, Policies.AdminPolicy());
                 config.AddPolicy(Policies.User, Policies.UserPolicy());
             });
+
+
+            // Переадресация в случае неавторизованности
+            services.ConfigureApplicationCookie(options => options.LoginPath = "/Home/Index");
+
+
 
             //Чтобы кирилические символы не переводились в соответствующий Unicode Hex Character Code
             services.Configure<WebEncoderOptions>(options =>
@@ -138,6 +149,7 @@ namespace WebSiteProductMarket
             });
 
             app.UseRouting();
+
 
             app.UseAuthentication();
             app.UseAuthorization();

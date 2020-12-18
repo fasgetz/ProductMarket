@@ -1,0 +1,63 @@
+
+
+@{
+    ViewData["Title"] = "профиль";
+}
+
+@section Css {
+    <link href="~/css/Profile/ProfileUser.css" rel="stylesheet" />
+}
+
+<div class="container-fluid p-0 profile">
+    <div class="row">
+        <div id="profiledata" class="col-xl-9 profile__data">
+
+        </div>
+        <div class="col-xl-3">
+            <ul class="accordion">
+                <li>
+                    <a class="nav-link disabled">
+                        <div class="link"><i class="fa fa-shield"></i>Личные данные</div>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <div class="link"><i class="fa fa-shopping-basket"></i>Мои заказы</div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            $('.accordion a').on('click', function (e) {
+                $('.accordion a').removeClass("disabled").removeClass("nav-link");
+                $(this).addClass("nav-link").addClass("disabled");
+            });
+
+            // Прогружаем в ajax информацию о профиле
+            $.ajax({
+                type: "GET",
+                url: '/Profile/ProfileData',
+
+                data: {
+                    name: name
+                },
+
+                success: function (data) {
+
+                    $("#profiledata").html(data);
+                }
+            });
+        });
+    </script>
+
+
+
+}

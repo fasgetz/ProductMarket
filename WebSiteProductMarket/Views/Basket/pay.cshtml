@@ -127,9 +127,6 @@
                                 if (error.response.status == 401) {
                                     $('#loginButton').click();
                                 }
-                                else if (error.response.status == 400) {
-                                    alert(error.response.data)
-                                }
                                 else {
                                     $("#form-pay").validate({
                                         rules: {

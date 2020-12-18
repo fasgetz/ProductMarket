@@ -1,0 +1,300 @@
+﻿/* Профиль */
+
+/* Избранные книги */
+
+.favoriteBooks {
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+    .favoriteBooks h3 {
+        font-size: 20px;
+        color: blue;
+    }
+
+    .favoriteBooks h4 {
+        font-size: 16px;
+        color: blue;
+    }
+
+    .favoriteBooks img {
+        margin-top: 5px;
+        height: 170px;
+        width: 120px;
+    }
+/* ----------- */
+.profile {
+    margin-top: 10px;
+}
+
+.profile__title img {
+    border-radius: 50px;
+    width: 75px;
+    height: 75px;
+}
+
+.profile__title .btn i {
+    font-size: 25px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+}
+
+.profile__title .btn {
+    outline: none; /* Для синий ободки */
+    border: 0;
+    background: transparent;
+}
+
+.profile__title__about h3 {
+    font-size: 18px;
+}
+
+.profile__title__about h4 {
+    font-size: 14px;
+    color: grey;
+}
+
+/* Блок комментариев */
+
+/* Комментарии */
+.commentaryBox_book a {
+    font-size: 25px;
+    color: blue;
+}
+
+.commentaryBox_book h3 {
+    font-size: 20px;
+    margin-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid grey;
+}
+
+.commentaryBox_book img {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 100%;
+    width: 100px;
+}
+
+.aboutBookBox__myComment {
+    margin-top: 5px;
+    padding: 5px;
+    background: #F6FFF8;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.aboutBookBox__myComment__text p {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    margin: 0px;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.aboutBookBox__myComment__btn {
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+.aboutBookBox__myComment__date h6 {
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.aboutBookBox__myComment__rating span {
+    font-size: 20px;
+    color: gold;
+    text-shadow: 1px 1px #c60;
+}
+
+/* Комментарии остальных людей */
+.commentaryBox {
+    border: 1px solid #e3e3e3;
+    border-radius: 5px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.commentaryBox__good {
+    background: #cfc;
+}
+
+.commentaryBox__bad {
+    background: #f2f2f2;
+}
+
+.commentaryBox__title {
+    padding-top: 10px;
+    padding-left: 5px;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.commentaryBox__text {
+    padding-top: 10px;
+    padding-left: 10px;
+    margin-bottom: 5px;
+}
+
+
+.aboutBookBox {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+}
+
+    .aboutBookBox h3 {
+        margin: 5px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+
+
+/* Рейтинг звезд */
+
+.rating-result {
+    margin: 0 auto;
+}
+
+    .rating-result span {
+        padding: 0;
+        font-size: 20px;
+        line-height: 1;
+        color: lightgrey;
+        text-shadow: 1px 1px #bbb;
+    }
+
+    .rating-result > span:before {
+        content: '★';
+    }
+
+    .rating-result > span.active {
+        color: gold;
+        text-shadow: 1px 1px #c60;
+    }
+
+/* Блок недавно просмотренных книг */
+.LastVisitBook {
+    margin-top: 20px;
+    color: black;
+}
+
+    .LastVisitBook:hover {
+        -moz-box-shadow: 3px 1px 10px #777;
+        -webkit-box-shadow: 3px 1px 10px #777;
+        box-shadow: 3px 1px 10px #777;
+    }
+
+.profile__data .LastVisitBook__Poster img {
+    height: 100%;
+    width: 100px;
+}
+
+
+/* Аккордион меню */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+a {
+    color: #b63b4d;
+    text-decoration: none
+}
+
+.accordion {
+    width: 100%;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background: #FFF;
+}
+
+    .accordion .link:hover {
+        -moz-box-shadow: 3px 1px 10px #777;
+        -webkit-box-shadow: 3px 1px 10px #777;
+        box-shadow: 3px 1px 10px #777;
+    }
+
+.submenu__countBooks {
+    border: 1px solid grey;
+    padding: 3px;
+    border-radius: 5px;
+}
+
+.accordion .link {
+    cursor: pointer;
+    display: block;
+    padding: 15px 15px 15px 42px;
+    color: #4D4D4D;
+    font-size: 14px;
+    font-weight: 700;
+    border-bottom: 1px solid #CCC;
+    position: relative;
+}
+
+
+
+.accordion li:last-child .link {
+    border-bottom: 0
+}
+
+.accordion li i {
+    position: absolute;
+    top: 16px;
+    left: 12px;
+    font-size: 18px;
+    color: #595959;
+}
+
+    .accordion li i.fa-chevron-down {
+        right: 12px;
+        left: auto;
+        font-size: 16px
+    }
+
+.accordion li.open .link {
+    color: #AA00FF
+}
+
+.accordion li.open i {
+    color: #AA00FF
+}
+
+    .accordion li.open i.fa-chevron-down {
+        -webkit-transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        -o-transform: rotate(180deg);
+        transform: rotate(180deg)
+    }
+
+.submenu {
+    display: none;
+    background: #444359;
+    font-size: 14px
+}
+
+    .submenu li {
+        border-bottom: 1px solid #4b4a5e
+    }
+
+
+
+    .submenu a {
+        display: block;
+        text-decoration: none;
+        color: #d9d9d9;
+        padding: 12px;
+        -webkit-transition: all 0.25s ease;
+        -o-transition: all 0.25s ease;
+        transition: all 0.25s ease
+    }
+
+        .submenu a:hover {
+            background: #b63b4d;
+            color: #FFF
+        }

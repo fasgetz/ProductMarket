@@ -1,0 +1,161 @@
+@model WebSiteProductMarket.Models.ViewModels.Profile.IndexProfileViewModel
+
+<div>
+    <div class="row profile__title">
+        <div class="col-md-3 text-center">
+            <div class="dropdown open">
+                <button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @if (Model.user.ProfileImage != null)
+                    {
+                        <img src="data:image;base64, @System.Convert.ToBase64String(Model.user.ProfileImage)" alt="">
+                    }
+                    else
+                    {
+                        <img src="~/Images/avatar.png" alt="">
+                    }
+                    <i class="fa fa-camera"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <form v-on:change="loadAvatar" method="post">
+                        <div class="custom-file">
+                            <input id="uploadFile" type="file" accept="image/jpeg" class="custom-file-input">
+                            <label class="custom-file-label" for="uploadFile" data-browse="">Выберите JPEG</label>
+                        </div>
+                    </form>
+                    <div class="dropdown-divider"></div>
+                    <form asp-action="RemoveAvatar" asp-controller="Profile" asp-route-name="@Model.email" method="post">
+                        <input class="dropdown-item" type="submit" value="Удалить" />
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 text-left profile__title__about">
+            @if (string.IsNullOrEmpty(Model.user.Name) && string.IsNullOrEmpty(Model.user.Family))
+            {
+                <h3>@Model.user.Email</h3>
+            }
+            else
+            {
+                <h3>@Model.user.Name @Model.user.Family</h3>
+            }
+            <h4>Здесь вы можете изменить данные Вашей учетной записи</h4>
+        </div>
+    </div>
+    <form asp-action="SaveProfile" asp-controller="Profile" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <div class="form-group col-md">
+                <label asp-for="Name" class="control-label"></label>
+                <input autocomplete="off" asp-for="Name" class="form-control" value="@Model.user.Name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md">
+                <label asp-for="Family" class="control-label"></label>
+                <input autocomplete="off" asp-for="Family" class="form-control" value="@Model.user.Family" />
+                <span asp-validation-for="Family" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md">
+                <label asp-for="OldPassword" class="control-label"></label>
+                <input autocomplete="off" asp-for="OldPassword" class="form-control" />
+                <span asp-validation-for="OldPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md">
+                <label asp-for="NewPassword" class="control-label"></label>
+                <input autocomplete="off" asp-for="NewPassword" class="form-control" />
+                <span asp-validation-for="NewPassword" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row form-group col-md-6 mx-auto">
+            @{
+                int dayBirth = Model.user.dateBirth.Day;
+                int monthBirth = Model.user.dateBirth.Month;
+                int yearBirth = Model.user.dateBirth.Year;
+                <div class="col-md">
+                    <label class="control-label">День</label>
+                    <select asp-for="DayBirth" class="form-control">
+                        @for (int i = 1; i <= 31; i++)
+                        {
+                            if (i == dayBirth)
+                            {
+                                <option selected value="@i">@i</option>
+                            }
+                            else
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md">
+                    <label class="control-label">Месяц</label>
+                    <select asp-for="MonthBirth" class="form-control">
+                        @for (int i = 1; i <= 12; i++)
+                        {
+                            if (i == monthBirth)
+                            {
+                                <option selected value="@i">@i</option>
+                            }
+                            else
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md">
+                    <label class="control-label">Год</label>
+                    <select asp-for="YearBirth" class="form-control">
+                        @for (int i = 2006; i >= 1900; i--)
+                        {
+                            if (i == yearBirth)
+                            {
+                                <option selected value="@i">@i</option>
+                            }
+                            else
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        }
+                    </select>
+                </div>
+            }
+        </div>
+        <div class="form-group text-center">
+            <input class="btn btn-primary" type="submit" value="Сохранить" />
+        </div>
+    </form>
+</div>
+
+<script>
+    var profiledata = new Vue({
+        el: '#profiledata',
+        data: () => ({
+
+        }),
+        mounted() {
+
+        },
+        methods: {
+            loadAvatar: function () {
+                var files = document.getElementById('uploadFile').files;
+
+                if (files.length > 0) {
+
+                    var data = new FormData();
+                    for (var x = 0; x < files.length; x++) {
+                        data.append("file" + x, files[x]);
+                    }
+
+
+                    axios.post(('profile/load'), data)
+                        .then(
+                            response => {
+                                location.reload();
+                            });
+                }
+            }
+        }
+    });
+</script>

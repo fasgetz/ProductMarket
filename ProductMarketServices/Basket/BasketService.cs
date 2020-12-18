@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductMarketModels;
 using ProductMarketModels.ViewModels.Basket;
+using ProductMarketServices.Notification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -115,7 +116,9 @@ namespace ProductMarketServices.Basket
 
                     // В отдельном потоке оповестить пользователя по почте о формировании заказа
                     Thread thread = new Thread(new ThreadStart(() => {
-                        Thread.Sleep(10000);
+                        INotificationService notificationService = new NotificationServiceEmail();
+
+                        notificationService.NotificationUser(order);
 
 
                     }));
