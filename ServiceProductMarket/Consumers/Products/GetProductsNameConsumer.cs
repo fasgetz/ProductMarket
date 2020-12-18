@@ -20,7 +20,7 @@ namespace ServiceProductMarket.Consumers.Products
 
         public async Task Consume(ConsumeContext<GetProductsNameRequest> context)
         {
-            var products = await service.GetProducts(context.Message.name, context.Message.page, context.Message.count);
+            var products = await service.GetProducts(context.Message.name, context.Message.page, context.Message.count, context.Message.discount);
 
 
             await context.RespondAsync<GetProductsRespond>(new GetProductsRespond(products));

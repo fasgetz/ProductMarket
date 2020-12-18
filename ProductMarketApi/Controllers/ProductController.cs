@@ -31,17 +31,16 @@ namespace ProductMarketApi.Controllers
         }
 
 
-
-
         /// <summary>
         /// Получить продукты по названию
         /// </summary>
         /// <param name="name">Название продукта</param>
         /// <param name="page">Страница</param>
         /// <param name="counts">Количество итемов, которые вывести</param>
+        /// <param name="DiscountProduct">Выборка по скидке</param>        
         /// <returns>Продукты</returns>
         [HttpGet("searchName")]
-        public async Task<List<Product>> GetProducts(string name, int page = 0, int count = 18)
+        public async Task<List<Product>> GetProducts(string name = null, int page = 0, int count = 18, bool discount = false)
         {
             if (name != null)
                 name = name.Replace("&quot;", "\"");
@@ -50,7 +49,7 @@ namespace ProductMarketApi.Controllers
             var client = mPublishEndpoint.CreateRequestClient<GetProductsNameRequest>(serviceAddress);
 
 
-            var response = await client.GetResponse<GetProductsRespond>(new GetProductsNameRequest() { name = name, page = page, count = count });
+            var response = await client.GetResponse<GetProductsRespond>(new GetProductsNameRequest() { name = name, page = page, count = count, discount = discount });
 
             return response.Message.Products;
         }

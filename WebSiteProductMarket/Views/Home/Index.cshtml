@@ -59,7 +59,9 @@
 <div id="productsData" class="section-products">
     <section class="section-discounts-products">
         <div class="products-block">
-            <h2>Товары по акции</h2>
+            <h2>
+                <a v-bind:href="'/search?discount=true'">Товары по акции</a>
+            </h2>
             <div class="container-fluid">
                 <transition-group name="list" tag="div" class="row">
                     <product v-for="item in randomproducts" v-bind:key="item.id" :data="item"></product>

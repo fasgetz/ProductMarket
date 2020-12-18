@@ -13,5 +13,6 @@ namespace ProductMarketModels.MassTransit.Requests.Products
         public string name { get; set; }
         public int page { get; set; }
         public int count { get; set; }
+        public bool discount { get; set; }
     }
 }

@@ -25,4 +25,8 @@
     margin-top: 20px;
 }
 
+.products-block h2 a:hover {
+    text-decoration: none;
+}
+
 

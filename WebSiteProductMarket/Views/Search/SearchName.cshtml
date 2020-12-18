@@ -20,8 +20,8 @@
         <h2>Нет продуктов в базе данных</h2>
     </div>
     <div class="buttons-navigations text-center mt-3">
-        <a v-if="page > 0" class="btn btn-outline-primary m-5" v-bind:href="'/search?name='+ name + '&page=' + (page - 1) + '&count=' + count">НАЗАД</a>
-        <a v-if="products.length == count" class="btn btn-outline-primary m-5" v-bind:href="'/search?name='+ name + '&page=' + (page + 1) + '&count=' + count">ВПЕРЕД</a>
+        <a v-if="page > 0" class="btn btn-outline-primary m-5" v-bind:href="'/search?name='+ name + '&page=' + (page - 1) + '&count=' + count + '&discount=' + discount">НАЗАД</a>
+        <a v-if="products.length == count" class="btn btn-outline-primary m-5" v-bind:href="'/search?name='+ name + '&page=' + (page + 1) + '&count=' + count + '&discount=' + discount">ВПЕРЕД</a>
     </div>
 </div>
 
@@ -40,19 +40,23 @@
                 products: null,
                 name: null,
                 page: null,
-                count: null
+                count: null,
+                discount: null
             }),
             mounted() {
                 this.name = '@Model.name'
                 this.page = @(Model.page)
                 this.count = @(Model.count)
+                this.discount = '@(Model.discount.ToString().ToLower())'
+
 
 
                 axios.get((urlApi + 'api/product/searchName'), {
                     params: {
                         name: this.name,
                         page: this.page,
-                        count: this.count
+                        count: this.count,
+                        discount: this.discount
                     }
                 })
                     .then(

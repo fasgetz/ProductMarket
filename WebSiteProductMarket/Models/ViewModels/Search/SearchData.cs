@@ -15,5 +15,6 @@ namespace WebSiteProductMarket.Models.ViewModels.Search
         public int idSubCategory { get; set; }
         public int page { get; set; }
         public int count { get; set; }
+        public bool discount { get; set; }
     }
 }

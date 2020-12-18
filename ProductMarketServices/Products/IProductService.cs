@@ -74,8 +74,9 @@ namespace ProductMarketServices.Products
         /// <param name="name">Название продукта</param>
         /// <param name="page">Страница</param>
         /// <param name="counts">Количество итемов, которые вывести</param>
+        /// <param name="DiscountProduct">Выборка по скидке</param>
         /// <returns>Продукты</returns>
-        public Task<List<Product>> GetProducts(string name, int page = 0, int count = 18);
+        public Task<List<Product>> GetProducts(string name, int page = 0, int count = 18, bool DiscountProduct = false);
 
 
     }

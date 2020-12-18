@@ -34,9 +34,20 @@ namespace ProductMarketServices.Products
         {
             try
             {
+                var handler = new HttpClientHandler();
+                handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+                handler.ServerCertificateCustomValidationCallback =
+                    (httpRequestMessage, cert, cetChain, policyErrors) =>
+                    {
+                        return true;
+                    };
+
+
                 // В отдельном потоке добавить в эластик серч продукт
-                using (var MyClient = new HttpClient())
+                using (var MyClient = new HttpClient(handler))
                 {
+
+
 
                     MyClient.BaseAddress = new Uri(ServiceAdresses.ElasticSearchServive);
                     var data = JsonConvert.SerializeObject(product);
@@ -44,6 +55,8 @@ namespace ProductMarketServices.Products
                         data, Encoding.UTF8, "application/json");
 
                     var MyResponse = await MyClient.PostAsync("ElasticSearch/AddProduct", content);
+
+
                 }
             }
             catch (Exception ex)
@@ -56,10 +69,18 @@ namespace ProductMarketServices.Products
         {
             try
             {
-                // В отдельном потоке добавить в эластик серч продукт
-                using (var MyClient = new HttpClient())
-                {
 
+                var handler = new HttpClientHandler();
+                handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+                handler.ServerCertificateCustomValidationCallback =
+                    (httpRequestMessage, cert, cetChain, policyErrors) =>
+                    {
+                        return true;
+                    };
+
+                // В отдельном потоке добавить в эластик серч продукт
+                using (var MyClient = new HttpClient(handler))
+                {
                     MyClient.BaseAddress = new Uri(ServiceAdresses.ElasticSearchServive);
                     var data = JsonConvert.SerializeObject(product);
                     var content = new StringContent(
@@ -270,10 +291,13 @@ namespace ProductMarketServices.Products
         /// <param name="name">Название продукта</param>
         /// <param name="page">Страница</param>
         /// <param name="counts">Количество итемов, которые вывести</param>
+        /// <param name="DiscountProduct">Выборка по скидке</param>
         /// <returns>Продукты</returns>
-        public async Task<List<Product>> GetProducts(string name, int page = 0, int count = 18)
+        public async Task<List<Product>> GetProducts(string name, int page = 0, int count = 18, bool DiscountProduct = false)
         {
-            var products = await context.Product.Where(i => name != null ? i.Name.Contains(name) : true)
+            var products = await context.Product
+                .Where(i => name != null ? i.Name.Contains(name) : true) // фильтрация по названию
+                .Where(i => DiscountProduct == false ? true : i.DiscountProduct.Where(s => s.DateStart < DateTime.Now && s.DateEnd > DateTime.Now).Count() > 0) // Фильтрация по скидкам продукта
                 .Skip(page * count).Take(count)
                 .Include("IdSubCategoryNavigation")
                 .OrderByDescending(i => i.Id)

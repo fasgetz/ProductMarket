@@ -41,13 +41,14 @@ namespace WebSiteProductMarket.Controllers
         /// <param name="category"></param>
         /// <returns></returns>
         [Route("search")]
-        public IActionResult SearchName(string name, int page = 0, int count = 18)
+        public IActionResult SearchName(string name = null, int page = 0, int count = 18, bool discount = false)
         {
             SearchData data = new SearchData()
             {
                 name = name,
                 page = page,
-                count = count
+                count = count,
+                discount = discount
             };
 
             return View("SearchName", data);

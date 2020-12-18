@@ -90,7 +90,20 @@ namespace ProductMarketServices.ElasticSearch
         /// <returns></returns>
         public async Task UpdateProduct(Product product)
         {
-            await _elasticClient.UpdateAsync<Product>(product, u => u.Doc(product));
+            // формируем продукт с suggest'om для изменения запроса
+            ProductSuggest suggest = new ProductSuggest()
+            {
+                id = product.Id,
+                idSubCategory = product.IdSubCategory,
+                name = product.Name,
+                Suggest = new CompletionField()
+                {
+                    Input = new string[] { product.Name }
+                }
+            };
+
+            // Обновляем в эластике
+            await _elasticClient.UpdateAsync<ProductSuggest>(suggest, u => u.Doc(suggest));
         }
 
         /// <summary>
