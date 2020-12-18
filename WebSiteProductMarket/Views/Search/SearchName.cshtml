@@ -11,6 +11,43 @@
 
 <div id="productsData" class="products-block">
     <h1 v-if="name != null" class="products-block__title">Поиск по названию продукта: @Model.name</h1>
+    <div class="filter-block">
+        <div class="filter-block__button text-right">
+            <button class="btn btn-primary" v-on:click="filter = !filter">
+                ФИЛЬТР
+            </button>
+        </div>
+        <div>
+            <transition name="fade">
+                <div class="filter-block__detail" v-if="filter">
+                    <div class="container text-center">
+                        <div class="row">
+                            <div class="col">
+                                <label>Количество товаров на странице</label>
+                                <div>
+                                    <button v-on:click="clickCountsProductFilter(0, 10)" v-bind:class="buttonColor[0]" class="btn text-black-50">10</button>
+                                    <button v-on:click="clickCountsProductFilter(1, 15)" v-bind:class="buttonColor[1]" class="btn text-black-50">15</button>
+                                    <button v-on:click="clickCountsProductFilter(2, 20)" v-bind:class="buttonColor[2]" class="btn text-black-50">20</button>
+                                    <button v-on:click="clickCountsProductFilter(3, 25)" v-bind:class="buttonColor[3]" class="btn text-black-50">25</button>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label>Акция</label>
+                                <div>
+                                    <button v-on:click="clickDiscountProductFilter(0, true)" v-bind:class="discountButtonColor[0]" class="btn text-black-50">ДА</button>
+                                    <button v-on:click="clickDiscountProductFilter(1, false)" v-bind:class="discountButtonColor[1]" class="btn text-black-50">НЕТ</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-1">
+                            <a v-bind:href="'/search?name=' + name + '&count=' + filter_data.count + '&discount=' + filter_data.discount" class="btn btn-primary">ПРИМЕНИТЬ</a>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </div>
+
+    </div>
     <div v-if="products.length > 0" class="container-fluid">
         <transition-group  name="list" tag="div" class="row">
             <product v-for="item in products" v-bind:key="item.id" :data="item"></product>
@@ -37,18 +74,51 @@
         var productsApp = new Vue({
             el: '#productsData',
             data: () => ({
+                filter_data: {
+                    count: 10,
+                    discount: true,
+                    activeButton: 0,
+                    activeDiscountButton: 0
+                },                
+                filter: false,
                 products: null,
                 name: null,
                 page: null,
                 count: null,
                 discount: null
             }),
+            computed: {
+                discountButtonColor: function () {
+                    let result = [];
+                    for (var i = 0; i < 2; i++) {
+                        if (this.filter_data.activeDiscountButton == i) {
+                            result.push('btn-success');
+                        } else {
+                            result.push('btn-outline-light');
+                        }
+                    }
+
+                    return result;
+                },
+                buttonColor: function () {
+                    let result = [];
+                    for (var i = 0; i < 4; i++) {
+                        if (this.filter_data.activeButton == i) {
+                            result.push('btn-success');
+                        } else {
+                            result.push('btn-outline-light');
+                        }
+                    }
+
+                    return result;
+                }
+            },
             mounted() {
                 this.name = '@Model.name'
                 this.page = @(Model.page)
                 this.count = @(Model.count)
                 this.discount = '@(Model.discount.ToString().ToLower())'
-
+                
 
 
                 axios.get((urlApi + 'api/product/searchName'), {
@@ -65,7 +135,14 @@
                         });
             },
             methods: {
-
+                clickDiscountProductFilter: function (activeButton, active) {
+                    this.filter_data.discount = active;
+                    this.filter_data.activeDiscountButton = activeButton;
+                },
+                clickCountsProductFilter: function (activeButton, counts) {
+                    this.filter_data.activeButton = activeButton;
+                    this.filter_data.count = counts;
+                }
             }
         });
     </script>

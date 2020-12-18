@@ -7,3 +7,23 @@
 .products-block__not-found-block h2 {
     font-size: 16px;
 }
+
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+    opacity: 0;
+}
+
+.filter-block {
+    margin-bottom: 20px;
+
+}
+
+.filter-block__detail {
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid lightgrey;
+}

@@ -9,4 +9,8 @@
     <ProjectReference Include="..\ProductMarketModels\ProductMarketModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Notification\" />
+  </ItemGroup>
+
 </Project>
