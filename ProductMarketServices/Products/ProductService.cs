@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using ProductMarketModels;
+using ProductMarketModels.Constants;
 using ProductMarketServices.ElasticSearch;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace ProductMarketServices.Products
                 using (var MyClient = new HttpClient())
                 {
 
-                    MyClient.BaseAddress = new Uri("https://localhost:44330/");
+                    MyClient.BaseAddress = new Uri(ServiceAdresses.ElasticSearchServive);
                     var data = JsonConvert.SerializeObject(product);
                     var content = new StringContent(
                         data, Encoding.UTF8, "application/json");
@@ -59,7 +60,7 @@ namespace ProductMarketServices.Products
                 using (var MyClient = new HttpClient())
                 {
 
-                    MyClient.BaseAddress = new Uri("https://localhost:44330/");
+                    MyClient.BaseAddress = new Uri(ServiceAdresses.ElasticSearchServive);
                     var data = JsonConvert.SerializeObject(product);
                     var content = new StringContent(
                         data, Encoding.UTF8, "application/json");

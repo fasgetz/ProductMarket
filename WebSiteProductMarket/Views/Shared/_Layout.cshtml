@@ -238,7 +238,7 @@ Vue.component('category', {
                 // Функция поиска
                 searchText: function () {
                     axios
-                        .get('https://localhost:44330/elasticsearch?text=' + this.text)
+                        .get('https://192.168.1.66:9500/elasticsearch?text=' + this.text)
                         .then(
                             response => {
                                 this.searchData = response.data

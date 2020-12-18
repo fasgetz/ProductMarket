@@ -19,6 +19,6 @@ namespace ProductMarketModels.Constants
         /// <summary>
         /// Адрес сервиса эластика
         /// </summary>
-        public const string ElasticSearchServive = "http://192.168.1.66:9500/";
+        public const string ElasticSearchServive = "https://192.168.1.66:9500/";
     }
 }
