@@ -16,7 +16,7 @@
                     <i class="fa fa-camera"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <form v-on:change="loadAvatar" method="post">
+                    <form onchange="LoadAva()" method="post">
                         <div class="custom-file">
                             <input id="uploadFile" type="file" accept="image/jpeg" class="custom-file-input">
                             <label class="custom-file-label" for="uploadFile" data-browse="">Выберите JPEG</label>
@@ -128,34 +128,3 @@
     </form>
 </div>
 
-<script>
-    var profiledata = new Vue({
-        el: '#profiledata',
-        data: () => ({
-
-        }),
-        mounted() {
-
-        },
-        methods: {
-            loadAvatar: function () {
-                var files = document.getElementById('uploadFile').files;
-
-                if (files.length > 0) {
-
-                    var data = new FormData();
-                    for (var x = 0; x < files.length; x++) {
-                        data.append("file" + x, files[x]);
-                    }
-
-
-                    axios.post(('profile/load'), data)
-                        .then(
-                            response => {
-                                location.reload();
-                            });
-                }
-            }
-        }
-    });
-</script>

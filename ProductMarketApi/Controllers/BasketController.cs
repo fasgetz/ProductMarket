@@ -74,5 +74,41 @@ namespace ProductMarketApi.Controllers
 
             return response.Message.basket;
         }
+
+
+        /// <summary>
+        /// Получить заказы пользователя
+        /// </summary>
+        /// <param name="user">Пользователь</param>
+        /// <returns>Список заказов</returns>
+        [HttpGet("GetUserOrders")]
+        public async Task<IActionResult> GetUserOrders(string user)
+        {
+            try
+            {
+                var userAuth = User.Claims.FirstOrDefault().Value;
+
+
+                // Если текущий пользователь авторизован
+                // и является тем, кто отправил запрос, то вернуть список его заказов
+                if (userAuth != string.Empty && userAuth == user)
+                {
+                    var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
+                    var client = mPublishEndpoint.CreateRequestClient<UserOrdersRequest>(serviceAddress);
+
+
+                    var response = await client.GetResponse<UserOrdersRespond>(new UserOrdersRequest() { user = user });
+
+                    return new JsonResult(response.Message.userOrders);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+
+            return null;
+        }
     }
 }

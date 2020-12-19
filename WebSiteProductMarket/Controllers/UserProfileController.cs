@@ -30,6 +30,16 @@ namespace WebSiteProductMarket.Controllers
             return View("Index");
         }
 
+        /// <summary>
+        /// Заказы пользователя
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Orders")]
+        public IActionResult Orders()
+        {
+            return PartialView();
+        }
+
         [HttpGet("ProfileData")]
         public async Task<IActionResult> ProfileData()
         {
@@ -98,10 +108,7 @@ namespace WebSiteProductMarket.Controllers
             vm.email = User.Identity.Name;
             var updated = await service.UpdateUser(vm);
 
-            if (updated == true)
-                return Redirect($"/Profile/");
-
-            return View();
+            return Redirect($"/Profile/");
         }
     }
 }

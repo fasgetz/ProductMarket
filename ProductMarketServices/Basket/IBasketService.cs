@@ -24,5 +24,12 @@ namespace ProductMarketServices.Basket
         /// <param name="basket">Корзина</param>
         /// <returns>Корзину продуктов с подгруженной информацией</returns>
         public Task<ProductMarketModels.ViewModels.Basket.Basket> GetProductsFromBasket(ProductMarketModels.ViewModels.Basket.Basket basket);
+
+        /// <summary>
+        /// Получить список заказов пользователя
+        /// </summary>
+        /// <param name="UserName">Пользователь</param>
+        /// <returns>Список заказов пользователя</returns>
+        public Task<List<Order>> GetUserOrders(string UserName);
     }
 }

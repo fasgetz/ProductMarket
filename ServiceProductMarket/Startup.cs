@@ -60,6 +60,7 @@ namespace ServiceProductMarket
                 // Basket
                 x.AddConsumer<GetBasketProductConsumer>();
                 x.AddConsumer<AddOrderConsumer>();
+                x.AddConsumer<GetUserOrdersConsumer>();
 
 
                 // Discounts
@@ -122,6 +123,7 @@ namespace ServiceProductMarket
                         // Basket
                         e.Consumer<GetBasketProductConsumer>(context);
                         e.Consumer<AddOrderConsumer>(context);
+                        e.Consumer<GetUserOrdersConsumer>(context);
 
                         // Discount
                         e.Consumer<GetDiscountsProductConsumer>(context);

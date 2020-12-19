@@ -22,6 +22,18 @@ namespace ProductMarketServices.Basket
 
 
         /// <summary>
+        /// Получить список заказов пользователя
+        /// </summary>
+        /// <param name="UserName">Пользователь</param>
+        /// <returns>Список заказов пользователя</returns>
+        public async Task<List<Order>> GetUserOrders(string UserName)
+        {
+            var orders = await context.Order.Where(i => i.UserId == UserName).ToListAsync();
+
+            return orders;
+        }
+
+        /// <summary>
         /// Добавление заказа в базу данных
         /// </summary>
         /// <param name="orderBasket">Корзина товаров</param>

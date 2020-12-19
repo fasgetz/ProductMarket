@@ -1,0 +1,65 @@
+
+
+
+<div class="orders-block" id="orders">
+    <div class="orders-block__title text-center">
+        <h1>Мои заказы</h1>
+    </div>
+    <div class="orders-block__table mt-3">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">№</th>
+                    <th scope="col">Дата</th>
+                    <th scope="col">Сумма</th>
+                    <th scope="col">Адрес</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in orders">
+                    <th scope="row">{{item.id}}</th>
+                    <td>{{method(item.dateOrder)}}</td>
+                    <td>{{item.totalPrice}}</td>
+                    <td>{{item.address}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<script>
+
+
+    var orders = new Vue({
+        el: '#orders',
+        data: () => ({
+            orders: null
+        }),
+        filters: {
+            formatDate1: d => d.toLocaleString('ru-RU').replace('-', '.').slice(0,),
+        },
+        mounted() {
+
+
+            axios.get((urlApi + 'api/Basket/GetUserOrders'), {
+                params: {
+                    user: '@User.Identity.Name'
+                }
+            })
+                .then(
+                    response => {
+                        this.orders = response.data;
+                    });
+        },
+        methods: {
+            formatDate2: d => d.toLocaleString('ru-RU').replace(',', '').slice(0, -3),
+            method: function (mydate) {
+                const date = new Date(mydate);
+                const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+                return (date.toLocaleDateString('ru-RU', options));
+            }
+        }
+    });
+</script>

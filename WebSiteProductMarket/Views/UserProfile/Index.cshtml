@@ -10,18 +10,18 @@
 
 <div class="container-fluid p-0 profile">
     <div class="row">
-        <div id="profiledata" class="col-xl-9 profile__data">
+        <div id="profiledata" class="col-xl-9 order-2 order-xl-1 profile__data">
 
         </div>
-        <div class="col-xl-3">
-            <ul class="accordion">
+        <div class="col-xl-3 order-1 order-xl-2">
+            <ul id="accordion-profile" class="accordion">
                 <li>
-                    <a class="nav-link disabled">
+                    <a v-on:click="LoadProfile" class="nav-link disabled">
                         <div class="link"><i class="fa fa-shield"></i>Личные данные</div>
                     </a>
                 </li>
                 <li>
-                    <a>
+                    <a v-on:click="LoadOrders">
                         <div class="link"><i class="fa fa-shopping-basket"></i>Мои заказы</div>
                     </a>
                 </li>
@@ -55,6 +55,60 @@
                     $("#profiledata").html(data);
                 }
             });
+        });
+
+        function LoadAva() {
+            var files = document.getElementById('uploadFile').files;
+
+            if (files.length > 0) {
+
+                var data = new FormData();
+                for (var x = 0; x < files.length; x++) {
+                    data.append("file" + x, files[x]);
+                }
+
+
+                            $.ajax({
+                                url: '@Url.Action("Load", "Profile")',
+                                method: 'post',
+                                contentType: false,
+                                processData: false,
+                                data: data,
+                                success: function (data) {
+                                    //$("#uploadFile").val(null);
+                                    location.reload();
+                                }
+                            });
+            }
+        }
+
+
+
+    </script>
+
+
+
+    <script>
+        var profiledata = new Vue({
+            el: '#accordion-profile',
+            methods: {
+                LoadOrders: function () {
+
+                    axios.get(('/profile/Orders'))
+                        .then(
+                            response => {
+                                $("#profiledata").html(response.data);
+                            });
+                },
+                LoadProfile: function () {
+
+                    axios.get(('/profile/ProfileData'))
+                        .then(
+                            response => {
+                                $("#profiledata").html(response.data);
+                            });
+                }
+            }
         });
     </script>
 
