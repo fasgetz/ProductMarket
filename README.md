@@ -9,6 +9,7 @@
 
 + Инструментальные средства:
             
+  + `GitHub`            
   + `AspNet Core 3.1`
   + `AspNet Identity`  
   + `MS SQL`
