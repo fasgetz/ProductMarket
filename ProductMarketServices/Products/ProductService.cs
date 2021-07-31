@@ -104,32 +104,28 @@ namespace ProductMarketServices.Products
         public async Task AddProduct(Product product)
         {
 
+
+
             try
             {
-                using (context = new ProductMarketContext())
+
+                context.Product.Add(product);
+                context.SaveChanges();
+
+
+                // В отдельном потоке добавить в эластик серч продукт
+                Thread thread = new Thread(new ThreadStart(() =>
                 {
-                    context.Product.Add(product);
-                    await context.SaveChangesAsync();
+                    AddToElasticProduct(product);
 
-                    // В отдельном потоке добавить в эластик серч продукт
-                    Thread thread = new Thread(new ThreadStart(() =>
-                    {
-                        AddToElasticProduct(product);
+                }));
 
-                    }));
-
-                    thread.Start();
-
-                }
+                thread.Start();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
             }
-
-
-
-
 
         }
 

@@ -50,10 +50,10 @@ namespace ServiceProductMarket
             // Добавляем автомаппер
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddScoped<IProductDiscountService, ProductDiscountService>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<ICategoriesService, CategoriesService>();
-            services.AddScoped<IBasketService, BasketService>();
+            services.AddTransient<IProductDiscountService, ProductDiscountService>();
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<ICategoriesService, CategoriesService>();
+            services.AddTransient<IBasketService, BasketService>();
 
             services.AddMassTransit(x =>
             {
@@ -90,7 +90,7 @@ namespace ServiceProductMarket
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
-                    cfg.Host(new Uri("rabbitmq://localhost:5672/"), configurator =>
+                    cfg.Host(new Uri("rabbitmq://192.168.1.66:5672/"), configurator =>
                     {
                         configurator.Username("guest");
                         configurator.Password("guest");

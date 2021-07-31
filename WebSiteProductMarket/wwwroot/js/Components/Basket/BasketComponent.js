@@ -73,10 +73,10 @@ var basket = Vue.component('basket', {
             $('#loginButton').click();
         },*/
         GoPay: function () {
-            window.location.href = urlApp + "basket/pay"
+            window.location.href = "/basket/pay"
         },
         GoIndex: function () {
-            window.location.href = urlApp + "Home/Index"
+            window.location.href = "/Home/Index"
         },
         GetCart: function () {
             // Загружаем из кеша, что добавлено в корзину

@@ -3,5 +3,7 @@
 
 // Write your JavaScript code.
 
-urlApi = "https://localhost:44310/";
-urlApp = "https://localhost:44345/"
+urlApi = "https://market-products.online:44310/";
+
+
+urlApiNotTesting = "https://market-products.online:44310/";

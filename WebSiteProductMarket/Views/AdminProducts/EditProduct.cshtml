@@ -106,7 +106,9 @@
                     }
                 })
                     .then(function (response) {
-                        window.location.href = urlApp + "admin/"
+                        // Перезагрузить текущую страницу
+                        //Перезагрузить текущую страницу
+                        window.location.href = '/admin/products'; 
                         console.log(response);
                     })
                     .catch(function (response) {

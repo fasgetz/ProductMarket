@@ -105,9 +105,10 @@ namespace WebSiteProductMarket.Controllers
                     // Установка куки
                     await _signInManager.SignInAsync(user, false);
 
-                    // Авторизоваться в апи
+                    // Получить токен JWT
                     var token = GenerateJwtToken(vm.Email).Result;
 
+                    // Установить токен
                     HttpContext.Response.Cookies.Append("token", token,
                     new CookieOptions
                     {
@@ -115,7 +116,9 @@ namespace WebSiteProductMarket.Controllers
                         Secure = false
                     });
 
-                    return RedirectToAction("Index", "Home");
+                    string url = Request.Headers["Referer"].ToString();
+                    //Your code to store data     
+                    return PartialView("Controllers/Account/_AuthSuccessfully", url);
                 }
                 else
                 {

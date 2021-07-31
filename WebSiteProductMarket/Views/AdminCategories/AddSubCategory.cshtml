@@ -1,7 +1,6 @@
 ﻿<form id="form">
     <div>
         <h1 class="text-center">Добавление подкатегории</h1>
-        <p>{{postBody.IdCategory}}</p>
         <div class="form-group">
             <label class="control-label">Название</label>
             <input name="Name" v-model="postBody.Name" class="form-control" />
@@ -67,7 +66,8 @@
                     }
                 })
                     .then(function (response) {
-                        window.location.href = urlApp + "AdminCategories"
+                        // Перезагрузить текущую страницу
+                        document.location.reload();
                         console.log(response);
                     })
                     .catch(function (response) {

@@ -37,11 +37,8 @@ namespace ProductMarketServices.ProductsDiscount
         /// <param name="discount"></param>
         public async void AddDiscountProduct(DiscountProduct discount)
         {
-            using (context = new ProductMarketContext())
-            {
-                context.DiscountProduct.Add(discount);
-                await context.SaveChangesAsync();
-            }
+            context.DiscountProduct.Add(discount);
+            context.SaveChanges();
         }
 
         /// <summary>
@@ -51,22 +48,18 @@ namespace ProductMarketServices.ProductsDiscount
         /// <returns>True, если удаление успешно</returns>
         public async Task<bool> RemoveDiscountProduct(int IdDiscount)
         {
-            using (context = new ProductMarketContext())
+            var dis = context.DiscountProduct.FirstOrDefault(i => i.Id == IdDiscount);
+
+            if (dis != null)
             {
-                var dis = await context.DiscountProduct.FirstOrDefaultAsync(i => i.Id == IdDiscount);
+                context.DiscountProduct.Remove(dis);
 
-                if (dis != null)
-                {
-                    context.DiscountProduct.Remove(dis);
+                context.SaveChanges();
 
-                    await context.SaveChangesAsync();
-
-                    return true;
-                }
-
-                return false;
-
+                return true;
             }
+
+            return false;
         }
 
         /// <summary>
@@ -75,22 +68,17 @@ namespace ProductMarketServices.ProductsDiscount
         /// <param name="discount">Редактируемая Акция</param>
         public async void EditDiscountProduct(DiscountProduct discount)
         {
-            using (context = new ProductMarketContext())
+            var dis = context.DiscountProduct.FirstOrDefault(i => i.Id == discount.Id);
+
+            if (dis != null)
             {
-                var dis = await context.DiscountProduct.FirstOrDefaultAsync(i => i.Id == discount.Id);
+                dis.DateEnd = discount.DateEnd;
+                dis.DateStart = discount.DateStart;
+                dis.ProcentDiscount = discount.ProcentDiscount;
 
-                if (dis != null)
-                {
-                    dis.DateEnd = discount.DateEnd;
-                    dis.DateStart = discount.DateStart;
-                    dis.ProcentDiscount = discount.ProcentDiscount;
-
-                    await context.SaveChangesAsync();
-                }
-
-
-
+                context.SaveChanges();
             }
+
         }
     }
 }

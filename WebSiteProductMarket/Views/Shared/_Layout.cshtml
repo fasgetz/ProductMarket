@@ -108,6 +108,9 @@
             </div>
         </div>
     </section>
+    <section class="myfooter">
+
+    </section>
 
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -181,7 +184,7 @@ Vue.component('category', {
             },
             mounted() {
                 axios
-                    .get('https://localhost:44310/api/category/get')
+                    .get('https://market-products.online:44310/api/category/get')
                     .then(
                         response => {
                             (this.data = response.data);
@@ -238,7 +241,7 @@ Vue.component('category', {
                 // Функция поиска
                 searchText: function () {
                     axios
-                        .get('https://192.168.1.66:9500/elasticsearch?text=' + this.text)
+                        .get('https://market-products.online:9500/elasticsearch?text=' + this.text)
                         .then(
                             response => {
                                 this.searchData = response.data

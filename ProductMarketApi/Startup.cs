@@ -73,7 +73,7 @@ namespace ProductMarketApi
                 x.UsingRabbitMq((context, cfg) =>
                 {
 
-                    cfg.Host(new Uri("rabbitmq://localhost:5672/"), configurator =>
+                    cfg.Host(new Uri("rabbitmq://192.168.1.66:5672/"), configurator =>
                     {
                         configurator.Username("guest");
                         configurator.Password("guest");
