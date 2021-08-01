@@ -24,5 +24,20 @@ namespace ProductMarketModels
 
         public virtual ICollection<OrderStatus> OrderStatus { get; set; }
         public virtual ICollection<ProductsInOrder> ProductsInOrder { get; set; }
+
+
+        /// <summary>
+        /// Айди покупателя
+        /// </summary>
+        public string PayerID { get; set; }
+        /// <summary>
+        /// Айди покупателя
+        /// </summary>
+        public string PaymentId { get; set; }
+        /// <summary>
+        /// Токен
+        /// </summary>
+        public string token { get; set; }
+
     }
 }

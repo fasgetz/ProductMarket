@@ -128,21 +128,45 @@ height:0px
 width: 4px;
 }
 
-/* Медиа запросы к мобильным устройствам */
 
+.nav-link {
+    font-size: 20px
+}
+
+/* Медиа запросы к мобильным устройствам */
 @media screen and (max-width: 767.98px) {
 
 
+    .nav-link {
+        background: rgba(0, 0, 0, .1);
+        border-radius: 3px 3px;
+        margin-top: 10px;
+    }
 
-  .menu {
-    width: 100%;
-  }
+    .nav-link:hover {
+        background: rgba(0, 0, 0, .2)
+    }
+
+
+    .auth__div {
+        width: 100%
+    }
+
+    #loginButton {
+        width: 100%;
+        margin-top: 10px
+    }
+
+    .menu {
+        width: 100%;
+    }
 
   .body .menu .accordion {
     position: relative;
     width: inherit; /*change here*/
     height: auto;
     overflow: auto;
+    margin-top: 40px;
   }
 
   .body .menu .submenu .row {
@@ -167,7 +191,7 @@ width: 4px;
 
 
 .body {
-    margin-top: 60px;
+    margin-top: 75px;
 }
 
 

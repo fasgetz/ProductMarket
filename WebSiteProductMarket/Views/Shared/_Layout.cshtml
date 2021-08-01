@@ -47,13 +47,24 @@
     <section>
         <div class="header">
             <div class="container-fluid">
-                <nav class="navbar fixed-top navbar-expand-lg navbar-light ">
+                <nav class="navbar fixed-top navbar-expand-md navbar-light ">
                     <div class="container auth">
                         <a class="navbar-brand" asp-action="Index" asp-controller="Home">ProductMarket</a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark pl-2" asp-area="" asp-controller="Home" asp-action="Privacy">Контакты</a>
+                                </li>
+                            </ul>
+                        </div>
                         <!-- Button trigger modal -->
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <div class="auth__div">
+                            <div class="auth__div d-flex justify-content-center justify-content-lg-end">
                                 @await Component.InvokeAsync("User")
                             </div>
                         }
@@ -73,7 +84,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-2 p-0 menu">
-                        <ul id="accordion" class="accordion p-0">
+                        <ul id="accordion" v-cloak class="accordion p-0">
                             <li v-for="category in data">
                                 <div class="link p-0 text-md-center text-lg-left">
                                     <img v-bind:src="getImage(category.poster)" /> {{ category.name }} <i class="fa fa-chevron-down"></i>
@@ -88,7 +99,7 @@
                         </ul>
                     </div>
                     <div class="col-md">
-                        <form id="search-products-input" asp-action="SearchName" asp-controller="Search" method="get">
+                        <form id="search-products-input" v-cloak asp-action="SearchName" asp-controller="Search" method="get">
                             <div>
                                 <div v class="search-block input-group mb-4 pl-3 pr-3">
                                     <span class="fa fa-search text-center"></span>
