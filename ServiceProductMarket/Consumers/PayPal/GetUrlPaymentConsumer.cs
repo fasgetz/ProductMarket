@@ -35,6 +35,11 @@ namespace ServiceProductMarket.Consumers.PayPal
             //var orders = await service.GetUserOrders(context.Message.user);
             var data = await basketService.GetBasketProducts(context.Message.basket);
 
+            // Высчитываем скидки
+            foreach (var item in data.Where(i => i.ProcentDiscount != null))
+            {
+                item.Price -= item.Price.Value / 100 * Convert.ToDecimal(item.ProcentDiscount.Value);
+            }
 
             IEnumerable<ProductModelPayPal> items = data.Select(s => new ProductModelPayPal()
             {
