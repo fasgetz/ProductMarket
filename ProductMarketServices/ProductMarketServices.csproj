@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="PayPal.SDK.NETCore" Version="1.9.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ProductMarketModelsElastic\ProductMarketModelsElastic.csproj" />
     <ProjectReference Include="..\ProductMarketModels\ProductMarketModels.csproj" />
   </ItemGroup>

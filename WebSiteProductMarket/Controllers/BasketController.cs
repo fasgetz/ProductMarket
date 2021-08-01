@@ -2,11 +2,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Session;
+using Microsoft.Extensions.Configuration;
 using ProductMarketModels;
 using ProductMarketModels.ViewModels.Basket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -34,14 +37,69 @@ namespace WebSiteProductMarket.Controllers
 
     public class BasketController : Controller
     {
-        public BasketController()
-        {
 
+        private readonly IConfiguration config;
+
+        public BasketController(IConfiguration config)
+        {
+            this.config = config;
         }
 
 
 
+        /// <summary>
+        /// Форма оплаты
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> Success(string PayerID, string paymentId, string token)
+        {
+            // Отправить на сервер апи со стороны этого сервера данные платежа и получить boolean успешной оплаты или нет
+            try
+            {
+                var handler = new HttpClientHandler();
+                handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+                handler.ServerCertificateCustomValidationCallback =
+                    (httpRequestMessage, cert, cetChain, policyErrors) =>
+                    {
+                        return true;
+                    };
 
+
+                // В отдельном потоке добавить в эластик серч продукт
+                using (var MyClient = new HttpClient(handler))
+                {
+                    var payment = new
+                    {
+                        PayerID = PayerID,
+                        paymentId = paymentId,
+                        token = token
+                    };
+
+
+                    MyClient.BaseAddress = new Uri(config.GetValue<string>("apiUrl"));
+                    var data = Newtonsoft.Json.JsonConvert.SerializeObject(payment);
+                    var content = new StringContent(
+                        data, Encoding.UTF8, "application/json");
+
+                    var MyResponse = await MyClient.PostAsync("Basket/PayPalExecute", content);
+
+                    //  Если успешно прошла оплата, то вернуть данные об этом
+                    if (MyResponse.StatusCode != System.Net.HttpStatusCode.OK)
+                    {
+                        return BadRequest("Ошибка на стороне PayPal");
+                        
+                    }
+
+                    // Иначе оплата прошла успешно
+                    return View();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Ошибка на стороне PayPal");
+            }
+
+        }
 
 
 

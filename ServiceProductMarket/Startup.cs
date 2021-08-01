@@ -20,11 +20,13 @@ using ProductMarketModels.MassTransit.Requests.Products;
 using ProductMarketServices.Basket;
 using ProductMarketServices.Categories;
 using ProductMarketServices.ElasticSearch;
+using ProductMarketServices.PayPal;
 using ProductMarketServices.Products;
 using ProductMarketServices.ProductsDiscount;
 using ServiceProductMarket.Consumers.Basket;
 using ServiceProductMarket.Consumers.Category;
 using ServiceProductMarket.Consumers.Discounts;
+using ServiceProductMarket.Consumers.PayPal;
 using ServiceProductMarket.Consumers.Products;
 
 namespace ServiceProductMarket
@@ -47,6 +49,9 @@ namespace ServiceProductMarket
             services.AddDbContext<ProductMarketContext>(options =>
                 options.UseSqlServer(connection), ServiceLifetime.Transient);
 
+
+            services.AddMemoryCache();
+
             // Добавляем автомаппер
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -54,6 +59,7 @@ namespace ServiceProductMarket
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IBasketService, BasketService>();
+            services.AddSingleton<IPayPalService, PayPalService>();
 
             services.AddMassTransit(x =>
             {
@@ -69,6 +75,9 @@ namespace ServiceProductMarket
                 x.AddConsumer<GetDiscountsProductConsumer>();
                 x.AddConsumer<RemoveDiscountConsumer>();
 
+                // PayPal
+                x.AddConsumer<GetUrlPaymentConsumer>();
+                x.AddConsumer<ExecutePaymenConsumer>();
 
                 // Products
                 x.AddConsumer<AddProductConsumer>();
@@ -124,6 +133,10 @@ namespace ServiceProductMarket
                         e.Consumer<GetBasketProductConsumer>(context);
                         e.Consumer<AddOrderConsumer>(context);
                         e.Consumer<GetUserOrdersConsumer>(context);
+
+                        // PayPal
+                        e.Consumer<GetUrlPaymentConsumer>(context);
+                        e.Consumer<ExecutePaymenConsumer>(context);
 
                         // Discount
                         e.Consumer<GetDiscountsProductConsumer>(context);

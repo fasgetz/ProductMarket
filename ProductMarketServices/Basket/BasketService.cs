@@ -34,6 +34,48 @@ namespace ProductMarketServices.Basket
         }
 
         /// <summary>
+        /// Выборка продуктов из БД, которые юзер добавил в корзину
+        /// </summary>
+        /// <param name="orderBasket"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ProductBasket>> GetBasketProducts(OrderBasket orderBasket)
+        {
+            // Выборка продуктов из БД, которые юзер добавил в корзину
+            var getProducts = await context.Product
+                .Select(i => new Product()
+                {
+                    Id = i.Id,
+                    Price = i.Price,
+                    Amount = i.Amount,
+                    Name = i.Name,
+                    description = i.description,
+                    DiscountProduct = i.DiscountProduct.Where(f => f.DateEnd > DateTime.Now && f.DateStart < DateTime.Now).ToList()
+                })
+                .Where(i => orderBasket.basket.products.Select(i => i.id).Contains(i.Id)).ToListAsync(); // выборка продуктов добавленных в корзину
+
+            // Формируем корзину
+            var products = getProducts
+                //.Where(i => orderBasket.basket.products.Select(i => i.id).Contains(i.Id)) // выборка продуктов добавленных в корзину
+                .Select(s => new ProductBasket()
+                {
+                    id = s.Id,
+                    Price = s.Price,
+                    Name = s.Name,
+                    description = s.description,
+                            //Amount = s.Amount,
+                            count = orderBasket.basket.products.FirstOrDefault(i => i.id == s.Id).count,
+                            // Скидка товара
+                            ProcentDiscount = s.DiscountProduct.FirstOrDefault()?.ProcentDiscount
+                }).ToList();
+
+
+
+
+
+            return products;
+        }
+
+        /// <summary>
         /// Добавление заказа в базу данных
         /// </summary>
         /// <param name="orderBasket">Корзина товаров</param>

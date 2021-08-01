@@ -20,8 +20,8 @@ namespace ProductMarketModels.ViewModels.Basket
         /// <summary>
         /// Адрес доставки
         /// </summary>
-        [Required]
-        [MinLength(10)]
+        //[Required]
+        //[MinLength(10)]
         public string address { get; set; }
 
         /// <summary>

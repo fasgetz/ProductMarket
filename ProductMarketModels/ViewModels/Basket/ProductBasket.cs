@@ -32,6 +32,11 @@ namespace ProductMarketModels.ViewModels.Basket
         public int? Amount { get; set; }
         public byte[] Poster { get; set; }
 
+        /// <summary>
+        /// Описание
+        /// </summary>
+        public string description { get; set; }
+
 
         // Процент скидки
         public double? ProcentDiscount { get; set; }

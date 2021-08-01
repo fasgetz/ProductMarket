@@ -9,6 +9,16 @@ namespace ProductMarketServices.Basket
 {
     public interface IBasketService
     {
+
+
+        /// <summary>
+        /// Выборка продуктов из БД, которые юзер добавил в корзину
+        /// </summary>
+        /// <param name="orderBasket"></param>
+        /// <returns></returns>
+        public Task<IEnumerable<ProductBasket>> GetBasketProducts(OrderBasket orderBasket);
+
+
         /// <summary>
         /// Добавление заказа в базу данных
         /// </summary>

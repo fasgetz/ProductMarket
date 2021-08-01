@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using ProductMarketModels;
 using ProductMarketModels.MassTransit.Requests.Basket;
 using ProductMarketModels.MassTransit.Requests.Categories;
+using ProductMarketModels.MassTransit.Requests.PayPal;
 using ProductMarketModels.MassTransit.Responds.Basket;
+using ProductMarketModels.MassTransit.Responds.PayPal;
 using ProductMarketModels.ViewModels.Basket;
 using System;
 using System.Collections.Generic;
@@ -53,6 +55,58 @@ namespace ProductMarketApi.Controllers
             var response = await client.GetResponse<getOrderRespond>(new orderBasketRequest() { basket = basket });
 
             return new JsonResult(response.Message.order);
+        }
+
+        /// <summary>
+        /// Оплата через PayPal
+        /// </summary>
+        /// <param name="basket"></param>
+        /// <returns>Генерированная ссылка для оплаты PayPal</returns>
+        [HttpPost("PayPalPayment")]
+        [Authorize]
+        public async Task<IActionResult> paymentPayPal(OrderBasket basket)
+        {
+            if (basket.basket.products.Count == 0)
+                return BadRequest("Корзина товаров пустая");
+
+            basket.userName = User.Claims.FirstOrDefault()?.Value;
+
+            var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
+            var client = mPublishEndpoint.CreateRequestClient<orderBasketRequest>(serviceAddress);
+
+
+            var response = await client.GetResponse<GetUrlPayment>(new orderBasketRequest() { basket = basket });
+            // После получения корзины необходимо сформировать платежную корзину в пайпел и вернуть ссылку клиенту для оплаты
+
+            if (string.IsNullOrEmpty(response.Message.url))
+            {
+                return BadRequest("Payment PalPal not created!");
+            }
+
+            return Ok(response.Message.url);
+        }
+
+
+        /// <summary>
+        /// Подтверждение платежа PayPal
+        /// </summary>
+        /// <param name="payment">Данные платежа</param>
+        /// <returns>True, в случае успеха платежа</returns>
+        [HttpPost("PayPalExecute")]
+        public async Task<IActionResult> executePayPal(ExecutePaymentRequest payment)
+        {
+            var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
+            var client = mPublishEndpoint.CreateRequestClient<ExecutePaymentRequest>(serviceAddress);
+
+            var response = await client.GetResponse<ExecutePaymentRespond>(payment);
+
+
+            if (response.Message.successPayment == false)
+            {
+                return BadRequest("Оплата неуспешна");
+            }
+
+            return Ok(response.Message.successPayment);
         }
 
 

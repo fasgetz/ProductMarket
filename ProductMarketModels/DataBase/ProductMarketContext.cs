@@ -29,7 +29,7 @@ namespace ProductMarketModels
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=DESKTOP-C7LBCMN;Database=ProductMarket;Trusted_Connection=True;MultipleActiveResultSets=True");
+                optionsBuilder.UseSqlServer("Server=tcp: 192.168.1.66, 1433;Integrated security = false;User ID=fasgetz;Password=andrey061;Initial Catalog=ProductMarket;ConnectRetryCount=0;MultipleActiveResultSets=True;");
             }
         }
 
