@@ -7,9 +7,17 @@ using System.Threading.Tasks;
 
 namespace ProductMarketServices.Basket
 {
+    /// <summary>
+    /// Интерфейс работы с корзиной заказов
+    /// </summary>
     public interface IBasketService
     {
-
+        /// <summary>
+        /// Добавление заказа в БД
+        /// </summary>
+        /// <param name="order">Заказ</param>
+        /// <returns>True в случае успешного добавления заказа в БД</returns>
+        public Task<bool> AddOrder(Order order);
 
         /// <summary>
         /// Выборка продуктов из БД, которые юзер добавил в корзину

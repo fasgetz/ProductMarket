@@ -12,15 +12,15 @@
                     <th scope="col">№</th>
                     <th scope="col">Дата</th>
                     <th scope="col">Сумма</th>
-                    <th scope="col">Адрес</th>
+                    <th scope="col">Номер платежа</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="item in orders">
                     <th scope="row">{{item.id}}</th>
                     <td>{{method(item.dateOrder)}}</td>
-                    <td>{{item.totalPrice}}</td>
-                    <td>{{item.address}}</td>
+                    <td><b>{{item.totalPrice}}</b> EUR</td>
+                    <td>{{item.paymentId}}</td>
                 </tr>
             </tbody>
         </table>

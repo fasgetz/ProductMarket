@@ -2,11 +2,13 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using ProductMarketModels.MassTransit.Requests.Basket;
+using ProductMarketModels.MassTransit.Requests.PayPal;
 using ProductMarketModels.MassTransit.Responds.Basket;
 using ProductMarketModels.MassTransit.Responds.PayPal;
 using ProductMarketModels.PayPal;
 using ProductMarketServices.Basket;
 using ProductMarketServices.PayPal;
+using ServiceProductMarket.Models.PayPal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace ServiceProductMarket.Consumers.PayPal
 {
-    public class GetUrlPaymentConsumer : IConsumer<orderBasketRequest>
+    public class GetUrlPaymentConsumer : IConsumer<orderBasketRequestPayPal>
     {
 
         private readonly IPayPalService service;
@@ -30,7 +32,7 @@ namespace ServiceProductMarket.Consumers.PayPal
             this.cache = cache;
         }
 
-        public async Task Consume(ConsumeContext<orderBasketRequest> context)
+        public async Task Consume(ConsumeContext<orderBasketRequestPayPal> context)
         {
             //var orders = await service.GetUserOrders(context.Message.user);
             var data = await basketService.GetBasketProducts(context.Message.basket);
@@ -57,8 +59,16 @@ namespace ServiceProductMarket.Consumers.PayPal
             var getPayment = service.GetPayment(payment.id);
 
 
+            /// Модель для кэша
+            BasketPayPalModel model = new BasketPayPalModel()
+            {
+                userName = context.Message.basket.userName,
+                transactions = getPayment.transactions,
+                commentary = context.Message.basket.commentary
+            };
+            
             // Необходимо запомнить в кэш транзакцию, чтобы ее в дальнейшем подтвердить
-            cache.Set(payment.id, getPayment.transactions, new MemoryCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60) });
+            cache.Set(payment.id, model, new MemoryCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60) });
 
 
             var url = getPayment.links.FirstOrDefault(i => i.method == "REDIRECT").href;

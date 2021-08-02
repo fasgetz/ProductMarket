@@ -22,13 +22,35 @@ namespace ProductMarketServices.Basket
 
 
         /// <summary>
+        /// Добавление заказа в БД
+        /// </summary>
+        /// <param name="order">Заказ</param>
+        /// <returns>True в случае успешного добавления заказа в БД</returns>
+        public async Task<bool> AddOrder(Order order)
+        {
+            try
+            {
+                // Добавляем в базу данных
+                context.Order.Add(order);
+                context.SaveChanges();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
+        /// <summary>
         /// Получить список заказов пользователя
         /// </summary>
         /// <param name="UserName">Пользователь</param>
         /// <returns>Список заказов пользователя</returns>
         public async Task<List<Order>> GetUserOrders(string UserName)
         {
-            var orders = await context.Order.Where(i => i.UserId == UserName).ToListAsync();
+            var orders = await context.Order.Where(i => i.UserId == UserName).OrderByDescending(i => i.Id).ToListAsync();
 
             return orders;
         }
@@ -216,7 +238,7 @@ namespace ProductMarketServices.Basket
                     Poster = s.Poster,
                     //count = basket.products.FirstOrDefault().count,
                     Price = s.Price,
-
+                    description = s.description,
                     // Скидка товара
                     ProcentDiscount = s.DiscountProduct.Where(f => f.DateEnd > DateTime.Now && f.DateStart < DateTime.Now).FirstOrDefault().ProcentDiscount
                 })

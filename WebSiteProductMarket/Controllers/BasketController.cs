@@ -90,6 +90,11 @@ namespace WebSiteProductMarket.Controllers
                         
                     }
 
+                    // Очищаем кэш, т.к. оплата успешно произведена
+                    ClearBasket();
+
+                    ViewBag.paymentId = paymentId;
+
                     // Иначе оплата прошла успешно
                     return View();
                 }

@@ -1,7 +1,7 @@
 
 var basket = Vue.component('basket', {
     template: `
-            <div v-if="productBasket.products.length != 0" class="basket-block container-fluid">
+            <div v-bind:class="[loading == true ? 'disabled-block' : '']" v-if="productBasket.products.length != 0" class="basket-block container-fluid">
                 <div class="basket-block__header text-center">
                     <h1 class="basket-block__header-h1 mb-3">Корзина товаров</h1>
                 </div>
@@ -17,7 +17,7 @@ var basket = Vue.component('basket', {
                             Количество
                         </div>
                         <div class="col-xl d-none d-xl-block basket-block__table-header__column">
-                            Наличие
+                            Описание
                         </div>
                         <div class="col-xl d-none d-xl-block basket-block__table-header__column">
                             Стоимость
@@ -31,7 +31,7 @@ var basket = Vue.component('basket', {
                     </div>
                     <div class="basket-block__table-result m-0 row">
                         <div class="order-md-1 order-2 col-12 col-md-6 align-self-end">
-                            <div class="text-left justify-content-center justify-content-md-start d-flex">
+                            <div class="text-left mt-3 mt-md-0 justify-content-center justify-content-md-start d-flex">
                                 <button v-on:click="GoIndex" class="btn btn-primary">Вернуться к покупкам</button>
                             </div>
                         </div>
@@ -50,6 +50,9 @@ var basket = Vue.component('basket', {
                     </div>
                     <div>
                             <h3 class="mt-3">Оформление заказа</h3>
+                            <div class="form-group">
+                                <textarea maxlength="150" placeholder="Введите комментарий к оплате" v-model="commentary" class="form-control" rows="7"></textarea>
+                            </div>
                             <div>
                                 <ul>
                                   <li>Условия предоставления услуг <input type="checkbox" v-model="cbUsl"></li>
@@ -57,12 +60,11 @@ var basket = Vue.component('basket', {
                                   <li></li>
                                 </ul>
                             </div>
-                            <p>{{cbUsl}} && {{cbVozr}}</p>
                             <div class="col text-center payment-buttons-block" v-bind:class="[cbUsl == true && cbVozr == true ? '' : 'disabled-block']">
                                 <button v-on:click="GoPay" class="btn btn-warning">Оформить заказ</button>                                
                                 <button v-on:click="GoPay" class="btn btn-warning">Оформить заказ</button>
-                                <a href="https://yandex.ru"><img class="img-payment" src="/Images/PaypalButton.png" alt="paypal"/></a>
-                                <button v-on:click="PaymentPayPal" class="btn btn-primary">Оплатить</button>
+                                
+                                <button v-on:click="PaymentPayPal" class="btn"><img class="img-payment" src="/Images/PaypalButton.png" alt="paypal"/></button>
                             </div>
                     </div>
                 </div>
@@ -83,7 +85,9 @@ var basket = Vue.component('basket', {
         totalPrice: 0,
         totalDiscount: 0,
         cbUsl: null,
-        cbVozr: null
+        cbVozr: null,
+        commentary: null,
+        loading: false
     }),
     methods: {
 
@@ -96,10 +100,12 @@ var basket = Vue.component('basket', {
                     });
         },
         addOrderPost: function () {
+            this.loading = true
+
             var data = {
                 basket: this.productBasket,
                 //address: this.address,
-                //commentary: this.commentary
+                commentary: this.commentary
             }
 
             return axios.post((urlApi + 'api/basket/PayPalPayment'), data)

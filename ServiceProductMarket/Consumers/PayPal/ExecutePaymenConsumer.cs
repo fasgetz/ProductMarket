@@ -1,9 +1,12 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Caching.Memory;
 using PayPal.Api;
+using ProductMarketModels;
 using ProductMarketModels.MassTransit.Requests.PayPal;
 using ProductMarketModels.MassTransit.Responds.PayPal;
+using ProductMarketServices.Basket;
 using ProductMarketServices.PayPal;
+using ServiceProductMarket.Models.PayPal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,24 +18,63 @@ namespace ServiceProductMarket.Consumers.PayPal
     {
         private readonly IPayPalService PayPalService;
         private readonly IMemoryCache cache;
+        private readonly IBasketService basketService;
 
-        public ExecutePaymenConsumer(IMemoryCache cache, IPayPalService PayPalService)
+        public ExecutePaymenConsumer(IMemoryCache cache, IPayPalService PayPalService, IBasketService basketService)
         {
             this.cache = cache;
             this.PayPalService = PayPalService;
+            this.basketService = basketService;
         }
 
 
         public async Task Consume(ConsumeContext<ExecutePaymentRequest> context)
         {
-            List<Transaction> transactions = cache.Get<List<Transaction>>(context.Message.PaymentID);
+            BasketPayPalModel model = cache.Get<BasketPayPalModel>(context.Message.PaymentID);
 
-            bool success = PayPalService.ExecutePayment(context.Message.PaymentID, context.Message.PayerID, transactions);
+            bool success = PayPalService.ExecutePayment(context.Message.PaymentID, context.Message.PayerID, model.transactions);
 
             // Если оплата прошла успешно, то внести данные в БД
             if (success == true)
             {
+                try
+                {
+                    // Товары в корзине
+                    var itemsBasket = model.transactions.Select(i => i.item_list.items).FirstOrDefault().ToList();
 
+                    var totalPrice = itemsBasket.Sum(i => Convert.ToInt32(i.quantity) * Convert.ToDecimal(i.price.Replace('.', ',')));
+
+
+                    // Формируем заказ
+                    ProductMarketModels.Order order = new ProductMarketModels.Order()
+                    {
+                        PayerID = context.Message.PayerID,
+                        PaymentId = context.Message.PaymentID,
+                        token = context.Message.Token,
+                        // Сумма заказа
+                        TotalPrice = totalPrice,
+                        UserId = model.userName,
+                        //Address = orderBasket.address,
+                        Commentary = model.commentary,
+                        DateOrder = DateTime.Now,
+                        OrderStatus = new List<OrderStatus>() // Статус заказа
+                        {
+                            new OrderStatus()
+                            {
+                                IdStatus = 1,
+                                Date = DateTime.Now
+                            }
+                        },
+                        ProductsInOrder = itemsBasket.Select(i => new ProductsInOrder() { IdProduct = Convert.ToInt32(i.sku), Count = (short)Convert.ToInt16(i.quantity), priceBuy = Convert.ToDecimal(i.price.Replace('.', ','))}).ToList()
+                    };
+
+                    var addedOrder = await basketService.AddOrder(order);
+                }
+                catch (Exception ex)
+                {
+                    var message = "abc";
+                }
+                
             }
 
             await context.RespondAsync<ExecutePaymentRespond>(new ExecutePaymentRespond() { successPayment = success });

@@ -72,10 +72,10 @@ namespace ProductMarketApi.Controllers
             basket.userName = User.Claims.FirstOrDefault()?.Value;
 
             var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
-            var client = mPublishEndpoint.CreateRequestClient<orderBasketRequest>(serviceAddress);
+            var client = mPublishEndpoint.CreateRequestClient<orderBasketRequestPayPal>(serviceAddress);
 
 
-            var response = await client.GetResponse<GetUrlPayment>(new orderBasketRequest() { basket = basket });
+            var response = await client.GetResponse<GetUrlPayment>(new orderBasketRequestPayPal() { basket = basket });
             // После получения корзины необходимо сформировать платежную корзину в пайпел и вернуть ссылку клиенту для оплаты
 
             if (string.IsNullOrEmpty(response.Message.url))

@@ -19,8 +19,8 @@ Vue.component('product-basket', {
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl basket-block__table-item__all-count-product align-self-center">
-                        В наличии <span style="font-weight: bold">{{productBasket.amount}}</span>
+                    <div class="mt-3 mt-xl-0 mb-3 mb-xl-0 col-xl basket-block__table-item__all-count-product align-self-center">
+                        <span>{{productBasket.description}}</span>
                     </div>
                     <div class="col-xl basket-block__table-item__price-product align-self-center">
                         <div v-if="productBasket.procentDiscount != null">
@@ -28,12 +28,12 @@ Vue.component('product-basket', {
                                 <span>{{productBasket.price * productBasket.count}}</span> руб.
                             </div>
                             <div class="basket-block__table-item__price-product__new-price">
-                                <span>{{((productBasket.price - (productBasket.price / 100 * productBasket.procentDiscount)) * productBasket.count).toFixed(2)}}</span> руб.
+                                <span style="font-weight: bold">{{((productBasket.price - (productBasket.price / 100 * productBasket.procentDiscount)) * productBasket.count).toFixed(2)}}</span> руб.
                             </div>
                         </div>
                         <div v-else>
                             <div class="basket-block__table-item__price-product__new-price">
-                                <span>{{productBasket.price * productBasket.count}}</span> руб.
+                                <span style="font-weight: bold">{{productBasket.price * productBasket.count}}</span> руб.
                             </div>
                         </div>
                     </div>

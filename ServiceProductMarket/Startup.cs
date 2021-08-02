@@ -59,7 +59,7 @@ namespace ServiceProductMarket
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IBasketService, BasketService>();
-            services.AddSingleton<IPayPalService, PayPalService>();
+            services.AddTransient<IPayPalService, PayPalService>();
 
             services.AddMassTransit(x =>
             {
