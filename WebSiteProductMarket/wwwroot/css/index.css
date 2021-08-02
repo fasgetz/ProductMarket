@@ -1,23 +1,23 @@
 /* Слайдер */
 .carousel-inner img {
 
-  height: 500px;
+  height: auto;
 }
 
 
-
+/*
 @media screen and (max-width: 767.98px) {
     .carousel-inner img {
-        height: 350px;
+        height: auto;
     }
 }
 
 @media screen and (max-width: 429.98px) {
 
     .carousel-inner img {
-        height: 200px;
+        height: auto;
     }
-}
+}*/
 
 
 /* Товары */

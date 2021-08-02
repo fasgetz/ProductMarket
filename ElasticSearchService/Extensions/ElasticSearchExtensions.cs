@@ -14,7 +14,7 @@ namespace ElasticSearchService.Extensions
             this IServiceCollection services, IConfiguration configuration)
         {
             var url = ServiceAdresses.ElasticSearch;
-            var defaultIndex = "products";
+            var defaultIndex = "searchproducts";
 
             var settings = new ConnectionSettings(new Uri(url))
                 .DefaultIndex(defaultIndex);

@@ -12,18 +12,18 @@ Vue.component('product', {
                     <div class="Product__title text-center">
                         {{item.name}}
                     </div>
+                    <div class="Product__count text-center p-3">
+                        <span>{{item.description}}</span>
+                    </div>
                     <div v-if="item.idSubCategoryNavigation != null" class="Product__category">
                         <a v-bind:href="'/category/search?category='+ item.idSubCategoryNavigation.id">
                             Категория: <span>{{item.idSubCategoryNavigation.name}}</span>
                         </a>
                     </div>
-                    <div class="Product__count">
-                        <span>{{item.amount}}</span> в наличии!
-                    </div>
                     <div class="Product__price">
                         <div class="container-fluid">
                             <div v-if="item.discountProduct[0] == null" class="row">
-                                <div class="col p-0"><span>{{item.price}}</span> руб/шт</div>
+                                <div class="col p-0 text-center"><b><span>{{item.price}}</span></b> руб/шт</div>
                             </div>
                             <div v-else class="row">
                                 <div class="col-7 p-0"><span>{{(item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)).toFixed(2)}}</span> руб/шт</div>
@@ -32,7 +32,7 @@ Vue.component('product', {
                         </div>
                     </div>
                     <div class="Product__economy">
-                        <p v-if="item.discountProduct[0] != null"><span class="Product__economy__procent">-{{item.discountProduct[0].procentDiscount}}%</span> <span class="Product__economy__info">Экономия {{item.price / 100 * item.discountProduct[0].procentDiscount}} руб.</span></p>
+                        <p v-if="item.discountProduct[0] != null"><span class="Product__economy__procent">-{{item.discountProduct[0].procentDiscount}}%</span> <span class="Product__economy__info">Экономия {{(item.price / 100 * item.discountProduct[0].procentDiscount).toFixed(2)}} руб.</span></p>
                     </div>
                     <div class="Product__basket">
                         <div class="container-fluid p-0">

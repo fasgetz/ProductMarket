@@ -20,7 +20,7 @@ namespace ProductMarketServices.ElasticSearch
 
         public ElasticSearchService(IElasticClient elasticClient)
         {
-            _elasticClient = elasticClient;
+            _elasticClient = elasticClient;            
         }
 
         #region Методы сервиса
@@ -45,7 +45,7 @@ namespace ProductMarketServices.ElasticSearch
         public async Task<List<ProductSuggest>> GetProductSuggests(string searchText, int countTake = 5)
         {
             ISearchResponse<ProductSuggest> searchResponse = await _elasticClient.SearchAsync<ProductSuggest>(s => s
-                         .Index("products")
+                         .Index("searchproducts")
                          .Suggest(su => su
                               .Completion("suggestions", c => c
                                    .Field(f => f.Suggest)

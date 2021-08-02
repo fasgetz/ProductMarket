@@ -1,4 +1,68 @@
 
+.card-about-image {
+    width: auto;
+    height: 240px;
+}
+
+.card-preim-image {
+    max-height: 200px;
+    width: auto;
+}
+
+.card-about-description {
+    height: 150px
+}
+
+@media screen and (max-width: 900.98px) {
+
+    .card-preim-image {
+        max-height: 160px;
+    }
+
+
+}
+
+@media screen and (max-width: 1400.98px) {
+    .section-preim .card h5 {
+        height: 40px;
+    }
+
+    .card-about-image {
+        height: 180px;
+    }
+
+    .card-about-description {
+        height: 220px
+    }
+}
+
+@media screen and (max-width: 691.98px) {
+    .card h5 {
+        font-size: 22px;
+    }
+
+    .card-about-image {
+        height: 180px;
+    }
+
+    .card-about-description {
+        font-size: 20px;
+    }
+}
+
+
+.section-about-projects, .section-dlykogo {
+    background-color: #e9e4e5;
+}
+
+    .section-about-projects h5 {
+        margin-top: 10px;
+        line-height: 1.5em
+    }
+
+
+
+
 #accordion .link img {
     width: 40px;
     height: 40px;
@@ -65,7 +129,7 @@
 /* Меню */
 
 .menu {
-  width: 15.67%;
+    width: 16.59%;
 }
 
 .body .menu .accordion {

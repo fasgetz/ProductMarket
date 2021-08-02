@@ -71,7 +71,8 @@ namespace ProductMarketApi.Controllers.Admin
                 IdSubCategory = prod.idSubCategoryProduct,
                 Name = prod.Name,
                 Price = prod.price,
-                Poster = imageData
+                Poster = imageData,
+                description = prod.description
             };
 
 

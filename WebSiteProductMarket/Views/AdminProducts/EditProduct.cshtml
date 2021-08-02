@@ -35,6 +35,12 @@
             <label class="control-label">Количество товаров</label>
             <input v-model.number:value="postBody.Amount" type="number" name="Amount" class="form-control" />
         </div>
+        <div class="form-group">
+            <label class="control-label">Описание</label>
+            <div class="form-group">
+                <textarea maxlength="150" placeholder="Введите комментарий к оплате" v-model:value="postBody.description" class="form-control" rows="7"></textarea>
+            </div>
+        </div>
         <div class="form-group__image text-center">
             <img id="imagePoster" src="data:image;base64, @Convert.ToBase64String(Model.image)" alt="Alternate Text" />
         </div>
@@ -74,6 +80,7 @@
                 Price: null,
                 idSubCategoryProduct: null,
                 Amount: null,
+                description: null
             },
             index: null,
             categoriesProduct: null,
@@ -93,6 +100,7 @@
                 formData.append('name', this.postBody.Name);
                 formData.append('price', this.postBody.Price);
                 formData.append('count', this.postBody.Amount);
+                formData.append('description', this.postBody.description);
                 formData.append('subcategoryId', this.postBody.idSubCategoryProduct);
 
                 console.log('>> formData >> ', formData);

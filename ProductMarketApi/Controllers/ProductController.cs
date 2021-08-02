@@ -86,14 +86,15 @@ namespace ProductMarketApi.Controllers
         /// Выборка рандомно добавленных товаров
         /// </summary>
         /// <param name="count">Количество</param>
+        /// <param name="discount">Выборка рандомных товаров только у тех, у которых есть скидка</param>
         /// <returns>Товары</returns>
         [HttpGet("randomProducts")]
-        public async Task<List<Product>> GetProductsRandom(int count)
+        public async Task<List<Product>> GetProductsRandom(int count, bool discount = false)
         {
             var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
             var client = mPublishEndpoint.CreateRequestClient<GetRandomProductsRequest>(serviceAddress);
 
-            var response = await client.GetResponse<GetProductsRespond>(new GetRandomProductsRequest() { countProducts = count });
+            var response = await client.GetResponse<GetProductsRespond>(new GetRandomProductsRequest() { countProducts = count, discount = discount });
 
             return response.Message.Products;
         }

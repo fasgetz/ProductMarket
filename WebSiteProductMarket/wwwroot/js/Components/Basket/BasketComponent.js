@@ -54,10 +54,15 @@ var basket = Vue.component('basket', {
                                 <textarea maxlength="150" placeholder="Введите комментарий к оплате" v-model="commentary" class="form-control" rows="7"></textarea>
                             </div>
                             <div>
-                                <ul>
-                                  <li>Условия предоставления услуг <input type="checkbox" v-model="cbUsl"></li>
-                                  <li>Условия возврата денежных средств <input type="checkbox" v-model="cbVozr"></li>
-                                  <li></li>
+                                <ul style="font-size: 16px">
+                                  <li class="row">
+                                    <div class="col d-flex justify-content-end"><a style="color: blue" href="/Oferta/Oferta">Условия предоставления услуг</a></div>
+                                    <div class="col-2 col-md d-flex justify-content-start"><input  style="width: 20px; height: 20px;" type="checkbox" v-model="cbUsl"></div>
+                                  </li>
+                                  <li class="row mt-1">
+                                    <div class="col d-flex justify-content-end"><a style="color: blue" href="/Oferta/Refund">Условия возврата денежных средств</a></div>
+                                    <div class="col-2 col-md d-flex justify-content-start"><input  style="width: 20px; height: 20px;" type="checkbox" v-model="cbVozr"></div>
+                                  </li>                                  
                                 </ul>
                             </div>
                             <div class="col text-center payment-buttons-block" v-bind:class="[cbUsl == true && cbVozr == true ? '' : 'disabled-block']">

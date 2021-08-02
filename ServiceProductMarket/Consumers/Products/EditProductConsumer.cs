@@ -28,6 +28,7 @@ namespace ServiceProductMarket.Consumers.Products
                 Id = vm.id,
                 Amount = vm.count,
                 Price = vm.price,
+                description = vm.description,
                 IdSubCategory = (short)vm.subcategoryId,
                 Poster = vm.image
             };

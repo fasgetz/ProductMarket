@@ -14,6 +14,25 @@ using System.Threading.Tasks;
 
 namespace ProductMarketServices.Products
 {
+
+    public static class RandFisher
+    {
+        private static Random rng = new Random();
+
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
+    }
+
     public class ProductService : IProductService
     {
         private ProductMarketContext context;
@@ -49,7 +68,7 @@ namespace ProductMarketServices.Products
 
 
 
-                    MyClient.BaseAddress = new Uri(ServiceAdresses.ElasticSearchServive);
+                    MyClient.BaseAddress = new Uri(ServiceAdresses.test);
                     var data = JsonConvert.SerializeObject(product);
                     var content = new StringContent(
                         data, Encoding.UTF8, "application/json");
@@ -81,7 +100,7 @@ namespace ProductMarketServices.Products
                 // В отдельном потоке добавить в эластик серч продукт
                 using (var MyClient = new HttpClient(handler))
                 {
-                    MyClient.BaseAddress = new Uri(ServiceAdresses.ElasticSearchServive);
+                    MyClient.BaseAddress = new Uri(ServiceAdresses.test);
                     var data = JsonConvert.SerializeObject(product);
                     var content = new StringContent(
                         data, Encoding.UTF8, "application/json");
@@ -91,7 +110,7 @@ namespace ProductMarketServices.Products
             }
             catch (Exception ex)
             {
-
+                var sdfs = 35235;
             }
         }
 
@@ -141,6 +160,10 @@ namespace ProductMarketServices.Products
             p.Price = product.Price;
             p.Amount = product.Amount;
             p.IdSubCategory = product.IdSubCategory;
+            if (!string.IsNullOrEmpty(product.description))
+            {
+                p.description = product.description;
+            }
 
             // В случае если постер редактируемого продукта не добавлен, то не обновлять
             if (product.Poster != null)
@@ -197,12 +220,12 @@ namespace ProductMarketServices.Products
             var randomProducts = await context.Product
                 .Where(i => randomIds.Contains(i.Id)) // выборка продуктов добавленных в корзину
                 .Include("IdSubCategoryNavigation")
-                .OrderByDescending(i => i.Id)
+                //.OrderByDescending(i => i.Id)
                 .Select(i => new Product()
                 {
                     // Скидка продукта
                     DiscountProduct = i.DiscountProduct.Where(i => i.DateStart < DateTime.Now && i.DateEnd > DateTime.Now).ToList(),
-
+                    description = i.description,
                     Id = i.Id,
                     Name = i.Name,
                     Poster = i.Poster,
@@ -219,15 +242,68 @@ namespace ProductMarketServices.Products
 
 
         /// <summary>
+        /// Выборка случайных продуктов из всей базы данных
+        /// </summary>
+        /// <param name="countTake"></param>
+        /// <returns></returns>
+        public async Task<List<Product>> GetRandomProdutsAll(int countTake = 6)
+        {
+            // Получаем рандомный список товаров из всей бд
+            Random rand = new Random();
+
+            // Список айдишников случайных всех продуктов в БД
+            var allDiscountsProduct = await context.Product.Select(i => i.Id).ToListAsync();
+
+            allDiscountsProduct.Shuffle();
+
+            var randomIds = allDiscountsProduct.Take(countTake).ToList();
+
+
+            // Делаем выборку этих продуктов
+            var randomProducts = await context.Product
+                .Where(i => randomIds.Contains(i.Id)) // выборка продуктов добавленных в корзину
+                .Include("IdSubCategoryNavigation")
+                //.OrderByDescending(i => i.Id)
+                .Select(i => new Product()
+                {
+                    // Скидка продукта
+                    DiscountProduct = i.DiscountProduct.Where(i => i.DateStart < DateTime.Now && i.DateEnd > DateTime.Now).ToList(),
+                    description = i.description,
+                    Id = i.Id,
+                    Name = i.Name,
+                    Poster = i.Poster,
+                    Price = i.Price,
+                    Amount = i.Amount,
+                    IdSubCategoryNavigation = new SubCategoryProduct() { Id = i.IdSubCategoryNavigation.Id, Name = i.IdSubCategoryNavigation.Name },
+
+
+                })
+                .ToListAsync();
+
+            // Теперь необходимо поменять порядками
+
+            RandFisher.Shuffle(randomProducts);
+
+            return randomProducts;
+        }
+
+
+        /// <summary>
         /// Выборка недавно добавленных продуктов
         /// </summary>
         /// <param name="count">Количество</param>
         /// <returns></returns>
         public async Task<List<Product>> GetNewsProduct(int count)
         {
+            int skip = 0;
+
+            if (context.Product.Count() > 5)
+            {
+                skip = context.Product.Count() - count;
+            }
 
             // Выборка
-            var newsProducts = await context.Product.Skip(context.Product.Count() - count).Take(count)
+            var newsProducts = await context.Product.Skip(skip).Take(count)
                 .Include("IdSubCategoryNavigation")
                 .OrderByDescending(i => i.Id)
                 .Select(i => new Product()
@@ -240,6 +316,7 @@ namespace ProductMarketServices.Products
                     Poster = i.Poster,
                     Price = i.Price,
                     Amount = i.Amount,
+                    description = i.description,
                     IdSubCategoryNavigation = new SubCategoryProduct() { Id = i.IdSubCategoryNavigation.Id, Name = i.IdSubCategoryNavigation.Name },
 
 
@@ -266,7 +343,7 @@ namespace ProductMarketServices.Products
                 {
                     // Скидка продукта
                     DiscountProduct = i.DiscountProduct.Where(i => i.DateStart < DateTime.Now && i.DateEnd > DateTime.Now).ToList(),
-
+                    description = i.description,
                     Id = i.Id,
                     Name = i.Name,
                     Poster = i.Poster,
@@ -307,6 +384,7 @@ namespace ProductMarketServices.Products
                     Poster = i.Poster,
                     Price = i.Price,
                     Amount = i.Amount,
+                    description = i.description,
                     IdSubCategoryNavigation = new SubCategoryProduct() { Id = i.IdSubCategoryNavigation.Id, Name = i.IdSubCategoryNavigation.Name },
 
 

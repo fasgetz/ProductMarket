@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using ProductMarketModels;
 using ProductMarketModels.MassTransit.Requests.Products;
 using ProductMarketServices.Products;
 using System;
@@ -19,7 +20,19 @@ namespace ServiceProductMarket.Consumers.Products
 
         public async Task Consume(ConsumeContext<GetRandomProductsRequest> context)
         {
-            var list = await service.GetRandomDiscountProducts(context.Message.countProducts);
+
+            List<Product> list = new List<Product>();
+
+            if (context.Message.discount == true)
+            {
+                list = await service.GetRandomDiscountProducts(context.Message.countProducts);
+            }
+            else
+            {
+                list = await service.GetRandomProdutsAll(context.Message.countProducts);
+            }
+
+            
 
             await context.RespondAsync<GetProductsRespond>(new GetProductsRespond(list));
         }

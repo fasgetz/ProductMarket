@@ -24,6 +24,11 @@ namespace ProductMarketModels.ViewModels.Admin.ProductsController
         [Display(Name = "Стоимость")]
         public int price { get; set; }
 
+        /// <summary>
+        /// Описание продукта
+        /// </summary>
+        public string description { get; set; }
+
         [Required(ErrorMessage = "Пожалуйста, введите количество товара")]
         [Range(1, double.MaxValue, ErrorMessage = "Введите количество товара в пределе диапазона 1 ... 1000000")]
         [Display(Name = "Количество")]

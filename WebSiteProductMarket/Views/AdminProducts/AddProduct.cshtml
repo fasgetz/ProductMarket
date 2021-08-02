@@ -56,12 +56,18 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label">Стоимость продукта ₽</label>
+            <label class="control-label">Стоимость продукта EUR</label>
             <input v-model.number:value="postBody.Price" type="number" name="price" class="form-control" />
         </div>
         <div class="form-group">
             <label class="control-label">Количество товаров</label>
             <input v-model.number:value="postBody.Amount" type="number" name="Amount" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Описание</label>
+            <div class="form-group">
+                <textarea maxlength="150" placeholder="Введите комментарий к оплате" v-model:value="postBody.description" class="form-control" rows="7"></textarea>
+            </div>
         </div>
         <div class="form-group text-center">
             <input v-on:click="addProduct" class="btn btn-primary" type="submit" />
@@ -91,7 +97,7 @@
                     Price: null,
                     idSubCategoryProduct: null,
                     Amount: null,
-
+                    description: null
                 },
                 FileName: 'Выберите файл',
                 file: null
@@ -105,6 +111,7 @@
                     formData.append('Name', this.postBody.Name);
                     formData.append('Price', this.postBody.Price);
                     formData.append('Amount', this.postBody.Amount);
+                    formData.append('description', this.postBody.description)
                     formData.append('idSubCategoryProduct', this.postBody.idSubCategoryProduct);
 
                     console.log('>> formData >> ', formData);

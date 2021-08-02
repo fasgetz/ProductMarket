@@ -9,6 +9,15 @@ namespace ProductMarketServices.Products
 {
     public interface IProductService
     {
+
+        /// <summary>
+        /// Выборка случайных продуктов из всей базы данных
+        /// </summary>
+        /// <param name="countTake"></param>
+        /// <returns></returns>
+        public Task<List<Product>> GetRandomProdutsAll(int countTake = 6);
+
+
         /// <summary>
         /// Выборка рандомных товаров по скидке
         /// </summary>

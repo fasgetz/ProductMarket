@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WebSiteProductMarket - @ViewData["Title"] </title>
+    <title>BUSINESS MANAGEMENT SOFTWARE - @ViewData["Title"] </title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/css/Accordion.css" rel="stylesheet" />
@@ -49,7 +49,7 @@
             <div class="container-fluid">
                 <nav class="navbar fixed-top navbar-expand-md navbar-light ">
                     <div class="container auth">
-                        <a class="navbar-brand" asp-action="Index" asp-controller="Home">ProductMarket</a>
+                        <a class="navbar-brand" asp-action="Index" asp-controller="Home">BusManSoft</a>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                                 aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
@@ -58,6 +58,9 @@
                             <ul class="navbar-nav flex-grow-1">
                                 <li class="nav-item">
                                     <a class="nav-link text-dark pl-2" asp-area="" asp-controller="Home" asp-action="Privacy">Контакты</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark pl-2" asp-area="" asp-controller="Oferta" asp-action="Oferta">Договор оферты</a>
                                 </li>
                             </ul>
                         </div>
@@ -98,7 +101,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="col-md">
+                    <div class="col-md p-0">
                         <form id="search-products-input" v-cloak asp-action="SearchName" asp-controller="Search" method="get">
                             <div>
                                 <div v class="search-block input-group mb-4 pl-3 pr-3">
@@ -252,7 +255,8 @@ Vue.component('category', {
                 // Функция поиска
                 searchText: function () {
                     axios
-                        .get('https://market-products.online:9500/elasticsearch?text=' + this.text)
+                    .get('http://market-products.online:9500/elasticsearch?text=' + this.text)
+                        /*.get('http://localhost:56561/elasticsearch?text=' + this.text)*/
                         .then(
                             response => {
                                 this.searchData = response.data

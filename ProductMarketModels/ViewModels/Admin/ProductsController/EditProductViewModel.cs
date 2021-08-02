@@ -20,6 +20,11 @@ namespace ProductMarketModels.ViewModels.Admin.ProductsController
         [Display(Name = "Название")]
         public string name { get; set; }
 
+        /// <summary>
+        /// Описание товара
+        /// </summary>
+        public string description { get; set; }
+
         public int CategoryId { get; set; }
 
         [Required(ErrorMessage = "Пожалуйста, выберите подкатегорию продукта")]
