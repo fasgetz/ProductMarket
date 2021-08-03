@@ -4,7 +4,7 @@
 // Write your JavaScript code.
 
 //urlApi = "https://market-products.online:44310/";
-urlApi = "http://market-products.online:44310/";
+urlApi = "https://market-products.online:44310/";
 //urlApi = "http://localhost:2922/";
 
 

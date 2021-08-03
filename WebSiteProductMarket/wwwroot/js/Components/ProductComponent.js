@@ -20,13 +20,13 @@ Vue.component('product', {
                             Категория: <span>{{item.idSubCategoryNavigation.name}}</span>
                         </a>
                     </div>
-                    <div class="Product__price">
+                    <div class="Product__price mt-3">
                         <div class="container-fluid">
                             <div v-if="item.discountProduct[0] == null" class="row">
-                                <div class="col p-0 text-center"><b><span>{{item.price}}</span></b> руб/шт</div>
+                                <div class="col p-0 text-center"><b><span>{{item.price}}</span></b> €/ед.</div>
                             </div>
                             <div v-else class="row">
-                                <div class="col-7 p-0"><span>{{(item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)).toFixed(2)}}</span> руб/шт</div>
+                                <div class="col-7 p-0"><span>{{(item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)).toFixed(2)}}</span> €/ед.</div>
                                 <div class="col p-0 oldPrice">{{item.price}} <b>€</b></div>
                             </div>
                         </div>

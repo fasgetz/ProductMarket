@@ -66,8 +66,7 @@ var basket = Vue.component('basket', {
                                 </ul>
                             </div>
                             <div class="col text-center payment-buttons-block" v-bind:class="[cbUsl == true && cbVozr == true ? '' : 'disabled-block']">
-                                <button v-on:click="GoPay" class="btn btn-warning">Оформить заказ</button>                                
-                                <button v-on:click="GoPay" class="btn btn-warning">Оформить заказ</button>
+
                                 
                                 <button v-on:click="PaymentPayPal" class="btn"><img class="img-payment" src="/Images/PaypalButton.png" alt="paypal"/></button>
                             </div>

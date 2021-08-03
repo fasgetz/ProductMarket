@@ -47,6 +47,7 @@
 
     .card-about-description {
         font-size: 20px;
+        height: auto;
     }
 }
 

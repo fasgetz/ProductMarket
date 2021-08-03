@@ -33,11 +33,20 @@ namespace ProductMarketServices.PayPal
             this.configSettings = configSettings;
 
             Dictionary<string, string> config = new Dictionary<string, string>();
+            config.Add("mode", configSettings.GetValue<string>("PayPalConfig:mode"));
             config.Add("clientId", configSettings.GetValue<string>("PayPalConfig:clientId"));
             config.Add("clientSecret", configSettings.GetValue<string>("PayPalConfig:clientSecret"));
+            //apiContext
+
+
+            //OAuthTokenCredential credential = new OAuthTokenCredential(config);
+            //credential.u
 
             accessToken = new OAuthTokenCredential(config).GetAccessToken();
-            apiContext = new APIContext(accessToken);
+            apiContext = new APIContext(accessToken)
+            {
+                Config = config
+            };
         }
 
 

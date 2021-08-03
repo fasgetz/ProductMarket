@@ -42,8 +42,17 @@ namespace ServiceProductMarket.Consumers.PayPal
                     // Товары в корзине
                     var itemsBasket = model.transactions.Select(i => i.item_list.items).FirstOrDefault().ToList();
 
-                    var totalPrice = itemsBasket.Sum(i => Convert.ToInt32(i.quantity) * Convert.ToDecimal(i.price.Replace('.', ',')));
+                    var totalPrice = itemsBasket.Sum(i => Convert.ToInt32(i.quantity) * Convert.ToDecimal(i.price));
 
+                    //if (!totalPrice.ToString().Contains('.'))
+                    //{
+                    //    string price = totalPrice.ToString();
+
+
+                    //    price = price.Substring(0, price.Length - 2) + "." + price.Substring(price.Length - 2, 2);
+
+                    //    totalPrice = Convert.ToDecimal(price);
+                    //}
 
                     // Формируем заказ
                     ProductMarketModels.Order order = new ProductMarketModels.Order()
@@ -56,7 +65,7 @@ namespace ServiceProductMarket.Consumers.PayPal
                         UserId = model.userName,
                         //Address = orderBasket.address,
                         Commentary = model.commentary,
-                        DateOrder = DateTime.Now,
+                        DateOrder = DateTime.Now.AddHours(3),
                         OrderStatus = new List<OrderStatus>() // Статус заказа
                         {
                             new OrderStatus()
@@ -65,7 +74,7 @@ namespace ServiceProductMarket.Consumers.PayPal
                                 Date = DateTime.Now
                             }
                         },
-                        ProductsInOrder = itemsBasket.Select(i => new ProductsInOrder() { IdProduct = Convert.ToInt32(i.sku), Count = (short)Convert.ToInt16(i.quantity), priceBuy = Convert.ToDecimal(i.price.Replace('.', ','))}).ToList()
+                        ProductsInOrder = itemsBasket.Select(i => new ProductsInOrder() { IdProduct = Convert.ToInt32(i.sku), Count = (short)Convert.ToInt16(i.quantity), priceBuy = Convert.ToDecimal(i.price)}).ToList()
                     };
 
                     var addedOrder = await basketService.AddOrder(order);

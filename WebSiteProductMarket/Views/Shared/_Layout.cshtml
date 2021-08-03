@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BUSINESS MANAGEMENT SOFTWARE - @ViewData["Title"] </title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link href="~/css/Accordion.css" rel="stylesheet" />
-    <link href="~/css/main.css" rel="stylesheet" />
+    <link href="~/css/main.css" asp-append-version="true" rel="stylesheet" />
     @RenderSection("Css", required: false)
 </head>
 <body>
@@ -56,6 +56,9 @@
                         </button>
                         <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
                             <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark pl-2" href="/search">Прайс лист</a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark pl-2" asp-area="" asp-controller="Home" asp-action="Privacy">Контакты</a>
                                 </li>
@@ -255,7 +258,7 @@ Vue.component('category', {
                 // Функция поиска
                 searchText: function () {
                     axios
-                    .get('http://market-products.online:9500/elasticsearch?text=' + this.text)
+                    .get('https://market-products.online:9500/elasticsearch?text=' + this.text)
                         /*.get('http://localhost:56561/elasticsearch?text=' + this.text)*/
                         .then(
                             response => {
