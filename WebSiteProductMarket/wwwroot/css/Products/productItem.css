@@ -63,6 +63,7 @@
 
 .Product__count {
     margin-top: 10px;
+    min-height: 120px;
 }
 
     .Product__count span, .Product__price span {

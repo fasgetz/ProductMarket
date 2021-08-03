@@ -27,12 +27,12 @@ Vue.component('product', {
                             </div>
                             <div v-else class="row">
                                 <div class="col-7 p-0"><span>{{(item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)).toFixed(2)}}</span> руб/шт</div>
-                                <div class="col p-0 oldPrice">{{item.price}} руб.</div>
+                                <div class="col p-0 oldPrice">{{item.price}} <b>€</b></div>
                             </div>
                         </div>
                     </div>
                     <div class="Product__economy">
-                        <p v-if="item.discountProduct[0] != null"><span class="Product__economy__procent">-{{item.discountProduct[0].procentDiscount}}%</span> <span class="Product__economy__info">Экономия {{(item.price / 100 * item.discountProduct[0].procentDiscount).toFixed(2)}} руб.</span></p>
+                        <p v-if="item.discountProduct[0] != null"><span class="Product__economy__procent">-{{item.discountProduct[0].procentDiscount}}%</span> <span class="Product__economy__info">Экономия {{(item.price / 100 * item.discountProduct[0].procentDiscount).toFixed(2)}} <b>€</b></span></p>
                     </div>
                     <div class="Product__basket">
                         <div class="container-fluid p-0">
@@ -55,7 +55,7 @@ Vue.component('product', {
                                     <p class="text-center">
                                         <span v-if="item.discountProduct[0] == null">{{count}}x{{item.price}} = {{item.price * count}} </span>
                                         <span v-else>{{count}}x{{item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)}} = {{((item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)) * count).toFixed(2)}} </span>
-                                        <span>руб.</span>
+                                        <span><b>€</b></span>
                                     </p>
                                 </div>
                             </div>
@@ -63,7 +63,7 @@ Vue.component('product', {
                                     <button v-on:click="GoPay" class="btn btn-success w-100">ОПЛАТИТЬ
                                         <span v-if="item.discountProduct[0] == null">{{count}}x{{item.price}} = {{item.price * count}} </span>
                                         <span v-else>{{count}}x{{item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)}} = {{((item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)) * count).toFixed(2)}} </span>
-                                        <span>руб.</span>
+                                        <span><b>€</b></span>
                                     </button>
                                     <button class="btn btn-danger w-100" v-on:click="cancel">ОТМЕНИТЬ</button>
                             </div>
