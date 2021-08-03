@@ -23,19 +23,27 @@ Vue.component('product', {
                     <div class="Product__price mt-3">
                         <div class="container-fluid">
                             <div v-if="item.discountProduct[0] == null" class="row">
-                                <div class="col p-0 text-center"><b><span>{{item.price}}</span></b> €/ед.</div>
+                                <div class="col p-0 text-center"><b><span>{{priceCurrency}}</span></b> {{currency}}/ед.</div>
                             </div>
                             <div v-else class="row">
-                                <div class="col-7 p-0"><span>{{(item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)).toFixed(2)}}</span> €/ед.</div>
-                                <div class="col p-0 oldPrice">{{item.price}} <b>€</b></div>
+                                <div class="col-7 p-0"><span>{{(priceCurrency - (priceCurrency / 100 * item.discountProduct[0].procentDiscount)).toFixed(2)}}</span> {{currency}}/ед.</div>
+                                <div class="col p-0 oldPrice">{{priceCurrency}} <b>{{currency}}</b></div>
                             </div>
                         </div>
                     </div>
                     <div class="Product__economy">
-                        <p v-if="item.discountProduct[0] != null"><span class="Product__economy__procent">-{{item.discountProduct[0].procentDiscount}}%</span> <span class="Product__economy__info">Экономия {{(item.price / 100 * item.discountProduct[0].procentDiscount).toFixed(2)}} <b>€</b></span></p>
+                        <p v-if="item.discountProduct[0] != null"><span class="Product__economy__procent">-{{item.discountProduct[0].procentDiscount}}%</span> <span class="Product__economy__info">Экономия {{(item.price / 100 * item.discountProduct[0].procentDiscount).toFixed(2)}} <b>{{currency}}</b></span></p>
                     </div>
                     <div class="Product__basket">
                         <div class="container-fluid p-0">
+                            <div class="mb-3">
+                                <select v-model="currency" class="browser-default custom-select">
+                                  <option value="EUR" selected>EUR</option>
+                                  <option value="USD">USD</option>
+                                  <option value="RUB">RUB</option>
+                                  <option value="BGN">BGN</option>
+                                </select>
+                            </div>
                             <div v-if="addToBasket == false">
                                 <div class="row">
                                     <div class="col p-0 basket__detail">
@@ -53,17 +61,17 @@ Vue.component('product', {
                                 </div>
                                 <div class="basket__totalSum">
                                     <p class="text-center">
-                                        <span v-if="item.discountProduct[0] == null">{{count}}x{{item.price}} = {{item.price * count}} </span>
-                                        <span v-else>{{count}}x{{item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)}} = {{((item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)) * count).toFixed(2)}} </span>
-                                        <span><b>€</b></span>
+                                        <span v-if="item.discountProduct[0] == null">{{count}}x{{priceCurrency}} = {{priceCurrency * count}} </span>
+                                        <span v-else>{{count}}x{{priceCurrency - (priceCurrency / 100 * item.discountProduct[0].procentDiscount)}} = {{((priceCurrency - (priceCurrency / 100 * item.discountProduct[0].procentDiscount)) * count).toFixed(2)}} </span>
+                                        <span><b>{{currency}}</b></span>
                                     </p>
                                 </div>
                             </div>
                             <div class="Product__basket__buttons" v-else>
                                     <button v-on:click="GoPay" class="btn btn-success w-100">ОПЛАТИТЬ
-                                        <span v-if="item.discountProduct[0] == null">{{count}}x{{item.price}} = {{item.price * count}} </span>
-                                        <span v-else>{{count}}x{{item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)}} = {{((item.price - (item.price / 100 * item.discountProduct[0].procentDiscount)) * count).toFixed(2)}} </span>
-                                        <span><b>€</b></span>
+                                        <span v-if="item.discountProduct[0] == null">{{count}}x{{priceCurrency}} = {{priceCurrency * count}} </span>
+                                        <span v-else>{{count}}x{{priceCurrency - (priceCurrency / 100 * item.discountProduct[0].procentDiscount)}} = {{((priceCurrency - (priceCurrency / 100 * item.discountProduct[0].procentDiscount)) * count).toFixed(2)}} </span>
+                                        <span><b>{{currency}}</b></span>
                                     </button>
                                     <button class="btn btn-danger w-100" v-on:click="cancel">ОТМЕНИТЬ</button>
                             </div>
@@ -76,7 +84,46 @@ Vue.component('product', {
             count: 1,
             item: this.data,
             auth: false,
-            addToBasket: false
+            addToBasket: false,
+            currency: "EUR"
+        }
+    },
+    computed: {
+        priceCurrency: function () {
+
+
+
+            if (this.currency == "EUR") {
+                return this.item.price
+            }
+            else if (this.currency == "USD") {
+                return this.item.price * 1.19
+            }
+            else if (this.currency == "RUB") {
+                return this.item.price * 87
+            }
+            else if (this.currency == "BGN") {
+                return this.item.price * 2
+            }
+
+
+            return 355;
+        },
+        totalSum: function () {
+
+            var discount = this.item.discountProduct[0] // Скидка
+            var totalPrice = 0
+
+            if (discount != null) {
+                totalPrice = ((this.item.price - (this.item.price / 100 * this.item.discountProduct[0].procentDiscount)) * this.count)
+            }
+            else {
+                //alert('nodis')
+                totalPrice = (this.item.price * this.count)
+            }
+
+
+            return totalPrice;
         }
     },
     mounted() {

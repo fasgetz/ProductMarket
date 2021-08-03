@@ -28,6 +28,11 @@
 
 .products-block h2 a:hover {
     text-decoration: none;
+    
 }
 
 
+.payment-card {
+    background: #f4f5f4;
+    border-radius: 15px 15px;
+}

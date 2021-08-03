@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <Folder Include="Models\ViewModels\Admin\" />
+    <Folder Include="wwwroot\Images\payments\" />
   </ItemGroup>
 
 </Project>
