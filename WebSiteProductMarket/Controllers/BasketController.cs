@@ -47,6 +47,63 @@ namespace WebSiteProductMarket.Controllers
 
 
 
+
+        /// <summary>
+        /// Форма оплаты
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> SuccessStripe(string session_id)
+        {
+            // Отправить на сервер апи со стороны этого сервера данные платежа и получить boolean успешной оплаты или нет
+            try
+            {
+                var handler = new HttpClientHandler();
+                handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+                handler.ServerCertificateCustomValidationCallback =
+                    (httpRequestMessage, cert, cetChain, policyErrors) =>
+                    {
+                        return true;
+                    };
+
+                // Отправляем проверить платеж
+                using (var MyClient = new HttpClient(handler))
+                {
+                    var payment = new
+                    {
+                        session_id = session_id
+                    };
+
+
+                    MyClient.BaseAddress = new Uri(config.GetValue<string>("apiUrl"));
+                    var data = Newtonsoft.Json.JsonConvert.SerializeObject(payment);
+                    var content = new StringContent(
+                        data, Encoding.UTF8, "application/json");
+
+                    var MyResponse = await MyClient.PostAsync("Basket/StripeExecute", content);
+
+                    //  Если успешно прошла оплата, то вернуть данные об этом
+                    if (MyResponse.StatusCode != System.Net.HttpStatusCode.OK)
+                    {
+                        return BadRequest("Ошибка на стороне Stripe");
+
+                    }
+
+                    // Очищаем кэш, т.к. оплата успешно произведена
+                    ClearBasket();
+
+                    ViewBag.paymentId = session_id;
+
+                    // Иначе оплата прошла успешно
+                    return View("Success");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Ошибка на стороне Stripe");
+            }
+
+        }
+
         /// <summary>
         /// Форма оплаты
         /// </summary>
@@ -112,9 +169,16 @@ namespace WebSiteProductMarket.Controllers
         /// Форма корзины
         /// </summary>
         /// <returns></returns>
-        public IActionResult Payment()
+        public IActionResult Payment(string currency = "EUR")
         {
-            return View();
+            var currencies = new List<string>() { "EUR", "USD", "BGN", "RUB" };
+
+            if (currencies.Contains(currency))
+            {
+                return View("Payment", currency);
+            }
+
+            return BadRequest("Выберите действующую валюту");
         }
         
         /// <summary>

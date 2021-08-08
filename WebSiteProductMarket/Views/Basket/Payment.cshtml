@@ -1,10 +1,13 @@
-﻿@{
+﻿@model string
+
+@{
     ViewData["Title"] = "Корзина товаров";
 }
 
 
+
 <div id="basket">
-    <basket-render></basket-render>    
+    <basket-render currency=@Model></basket-render>
 </div>
 
 @section Css {
@@ -13,8 +16,8 @@
 
 @section Scripts {
 
-    <script src="~/js/Components/Basket/ProductBasket.js"></script>
-    <script src="~/js/Components/Basket/BasketComponent.js"></script>
+    <script asp-append-version="true" src="~/js/Components/Basket/ProductBasket.js"></script>
+    <script asp-append-version="true" src="~/js/Components/Basket/BasketComponent.js"></script>
 
     <script>
         var discountProductApp = new Vue({

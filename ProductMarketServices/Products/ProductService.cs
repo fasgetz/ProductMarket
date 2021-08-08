@@ -182,6 +182,30 @@ namespace ProductMarketServices.Products
             context.SaveChanges();
         }
 
+        /// <summary>
+        /// Получить продукт по айди
+        /// </summary>
+        /// <param name="idProduct">Айди продукта</param>
+        /// <returns>Продукт</returns>
+        public async Task<Product> getProductId(int idProduct)
+        {
+            Product product = await context.Product.Select(i => new Product()
+            {
+                // Скидка продукта
+                DiscountProduct = i.DiscountProduct.Where(i => i.DateStart < DateTime.Now && i.DateEnd > DateTime.Now).ToList(),
+                description = i.description,
+                Id = i.Id,
+                Name = i.Name,
+                Poster = i.Poster,
+                Price = i.Price,
+                Amount = i.Amount,
+                IdSubCategoryNavigation = new SubCategoryProduct() { Id = i.IdSubCategoryNavigation.Id, Name = i.IdSubCategoryNavigation.Name },
+
+
+            }).FirstOrDefaultAsync(i => i.Id == idProduct);
+
+            return product;
+        }
 
         /// <summary>
         /// Метод на выборку из базы данных рандомных номеров продуктов которые сейчас по акции

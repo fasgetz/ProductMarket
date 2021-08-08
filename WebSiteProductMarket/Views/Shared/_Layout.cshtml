@@ -65,9 +65,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark pl-2" asp-area="" asp-controller="Oferta" asp-action="Oferta">Договор оферты</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark pl-2" asp-area="" asp-controller="Oferta" asp-action="Delivery">Доставка</a>
-                                </li>
+                                @*<li class="nav-item">
+                                        <a class="nav-link text-dark pl-2" asp-area="" asp-controller="Oferta" asp-action="Delivery">Доставка</a>
+                                    </li>*@
                             </ul>
                         </div>
                         <!-- Button trigger modal -->
@@ -82,6 +82,25 @@
                             <button type="button" id="loginButton" class="btn" data-toggle="modal" data-target="#exampleModalCenter">
                                 Войти
                             </button>
+
+                            @if (Context.Request.Path != "/Basket/Payment")
+                            {
+                                <div id="basketblock" style="width: 180px; height: 47.99px" class="container d-none d-lg-block ml-1 mr-1">
+                                    <a class="d-flex p-0 justify-content-center" asp-controller="Basket" asp-action="Payment">
+                                        <div class="row" style="height: 47px">
+                                            <div class="col-8 p-0 d-flex justify-content-center align-items-center">
+                                                <div>Корзина</div>
+                                            </div>
+                                            <div class="col-4 pt-2">
+                                                <div class="">
+                                                    <i class="fa fa-shopping-basket"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                            
                         }
                     </div>
                 </nav>
@@ -129,7 +148,6 @@
         </div>
     </section>
     <section class="myfooter">
-
     </section>
 
 
@@ -144,6 +162,27 @@
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="~/js/script.js"></script>
+
+    @if (!User.Identity.IsAuthenticated)
+    {
+        @*<script>
+            var app = new Vue({
+                el: '#basketblock',
+                data() {
+                    return {
+                        count: 18,
+                        sum: 1244
+                    };
+                },
+                mounted() {
+
+                },
+                methods: {
+
+                }
+            });
+        </script>*@
+    }
 
     <script>
         // Компонент категории
@@ -192,6 +231,7 @@ Vue.component('category', {
 })
 
     </script>
+
     <script>
         var app = new Vue({
             el: '#accordion',
@@ -261,7 +301,7 @@ Vue.component('category', {
                 // Функция поиска
                 searchText: function () {
                     axios
-                    .get('https://market-products.online:9500/elasticsearch?text=' + this.text)
+                        .get('https://market-products.online:9500/elasticsearch?text=' + this.text)
                         /*.get('http://localhost:56561/elasticsearch?text=' + this.text)*/
                         .then(
                             response => {

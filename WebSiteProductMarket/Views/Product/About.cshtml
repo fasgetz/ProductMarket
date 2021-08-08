@@ -1,0 +1,41 @@
+@model int
+
+
+
+@section Css {
+    <link href="~/css/Products/productItem.css" asp-append-version="true" rel="stylesheet" />
+}
+
+<div id="productsData" v-cloak class="section-products container-fluid">
+    <section>
+        <div class="products-block">
+            <div v-if="product != null" class="container-fluid">
+                <product :data="product"></product>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script asp-append-version="true" src="~/js/Components/ProductAbout.js"></script>
+
+    <script>
+        var newProducts = new Vue({
+            el: '#productsData',
+            data: () => ({
+                product: null
+            }),
+            mounted() {
+                axios.get((urlApi + 'api/product/GetProductId'), {
+                    params: {
+                        idProduct: '@Model'
+                    }
+                })
+                    .then(
+                        response => {
+                            this.product = response.data;
+                        });
+            }
+        });
+    </script>
+}

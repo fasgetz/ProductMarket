@@ -131,5 +131,22 @@ namespace ProductMarketApi.Controllers
 
             return response.Message.existProduct;
         }
+
+
+        /// <summary>
+        /// Поиск продукта по айди
+        /// </summary>
+        /// <param name="idProduct">Айди продукта</param>
+        /// <returns>Продукт, если продукт есть в базе данных</returns>
+        [HttpGet("GetProductId")]
+        public async Task<Product> productGetId(int idProduct)
+        {
+            var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
+            var client = mPublishEndpoint.CreateRequestClient<GetProductId>(serviceAddress);
+
+            var response = await client.GetResponse<Product>(new GetProductId() { idProduct = idProduct });
+
+            return response.Message;
+        }
     }
 }

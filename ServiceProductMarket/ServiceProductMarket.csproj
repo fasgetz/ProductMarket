@@ -27,4 +27,8 @@
     <ProjectReference Include="..\ProductMarketServices\ProductMarketServices.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Stripe\" />
+  </ItemGroup>
+
 </Project>

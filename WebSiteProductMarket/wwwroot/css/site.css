@@ -4,10 +4,32 @@ for details on configuring this project to bundle and minify static web assets. 
     display: none;
 }
 
+
+#basketblock a:hover {
+    text-decoration: none;
+}
+
+#basketblock {
+    border: 1px solid #d0d2d4;
+    border-radius: .25rem;
+}
+
+    #basketblock:hover {
+        background: #f3f4f7;
+    }
+
+#basketblock a {
+    color: black;
+}
+
+#basketblock i {
+    font-size: 32px;
+}
+
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
 }
 
 /* Provide sufficient contrast against white background */

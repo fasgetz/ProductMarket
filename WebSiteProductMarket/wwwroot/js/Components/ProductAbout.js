@@ -2,22 +2,22 @@
 Vue.component('product', {
     props: ['data'],
     template: `
-                <div class="col-md-6 col-lg-4 col-xl-2 Product"">
-                    <div class="Product__procent">
-                        <span v-if="item.discountProduct[0] != null">{{item.discountProduct[0].procentDiscount}}%</span>
+
+
+<div class="w-100 row Product">
+                <div class="col-12 col-xl-4 Product" style="margin-top: 0px !important;">
+                    <div class="Product__title text-center" style="font-size: 22px !important">
+                        {{item.name}}
                     </div>
                     <div class="Product__Poster text-center">
                         <img v-bind:src="getImage(item.poster)" />
-                    </div>
-                    <div class="Product__title text-center">
-                        <a :href="'/Product/About?id=' + item.id">{{item.name}}</a>
                     </div>
                     <div class="Product__count text-center p-3">
                         <span>{{item.description}}</span>
                     </div>
                     <div v-if="item.idSubCategoryNavigation != null" class="Product__category">
                         <a v-bind:href="'/category/search?category='+ item.idSubCategoryNavigation.id">
-                            <span>{{item.idSubCategoryNavigation.name}}</span>
+                            Категория: <span>{{item.idSubCategoryNavigation.name}}</span>
                         </a>
                     </div>
                     <div class="Product__price mt-3">
@@ -78,6 +78,83 @@ Vue.component('product', {
                         </div>
                     </div>
                 </div>
+                <div class="col-12 col-xl-8">
+                    <div class="container">
+                        <h3>Варианты покупки</h3>
+                        <p>Внимание! Вы можете активировать приобретенное ПО по серийному ключу, который предоставляется после покупки.
+                            Дополнительные языковые пакеты можно скачать опционально после установки программы на ПК.</p>
+                        <p>
+                            Языки интерфейса: Русский, Английский
+                        </p>
+                        <p>
+                            Операционные системы: Windows 10, Windows 8.1, macOS, Android, LinuxOS
+                        </p>
+                        <p>
+                            Способ доставки: электронная доставка
+                        </p>
+                    </div>
+                    <div class="container mt-3">
+                        <h3>Системные требования</h3>
+                        <p>Процессор: 32- или 64-разрядный процессор с тактовой частотой 1 ГГц или выше с набором инструкций SSE2.</p>
+                        <p>
+                            Операционная система: Windows 10, Windows 8.1 или 8, последние две версии macOS, Android Nougat 7.0﻿﻿
+                        </p>
+                        <p>
+                            Оперативная память: 1 ГБ (для 32-разрядных систем); 2 ГБ (для 64-разрядных систем)
+                        </p>
+                        <p>
+                            Свободное место на жестком диске: 3 ГБ
+Монитор: Для использования аппаратного ускорения требуется видеоадаптер, поддерживающий DirectX 10 и разрешение 1024 x 576
+                        </p>
+                        <p>
+Версия .NET: 3.5, 4.0 или 4.5
+                        </p>
+                        <p>
+Мультисенсорный ввод: Устройство с сенсорным экраном должно поддерживать все функции мультисенсорного ввода.
+                        </p>
+                        <p>
+Все функции и возможности также доступны при использовании клавиатуры, мыши или другого стандартного либо доступного устройства ввода. Обратите внимание, что новые функции сенсорного ввода оптимизированы для использования в ОС Windows 8.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12 mt-5">
+                    <div class="container mt-3">
+                        <h3 class="text-center">Отзывы продукции BusManSoft</h3>
+                        <div class="col-12 mt-3">
+                            <div class="container p-3" style="border: 1px solid rgb(208, 210, 212); border-radius: 25px;">
+                                <div class="row">
+                                    <div class="col-4 text-left">
+                                        <h5>Евгений Сидорчук</h5>
+                                    </div>
+                                    <div class="col-8 text-muted text-right">
+                                        24.05.2021
+                                    </div>
+                                </div>
+                                <div class="row mt-1" style="padding-left: 15px; padding-right: 15px">
+                                    <p> Начал пользоваться данным программным обеспечением на этапе демо версии. Всем доволен. Новые версии всегда имеют преимущества перед старыми, регулярные обновления продуктов добавляют удобство в их пользовании. Очень ускоряет работу возможность совместного редактирования документов, что в несколько раз увеличивает производительность.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <div class="container p-3" style="border: 1px solid rgb(208, 210, 212); border-radius: 25px;">
+                                <div class="row">
+                                    <div class="col-4 text-left">
+                                        <h5>Alexander Volkov</h5>
+                                    </div>
+                                    <div class="col-8 text-muted text-right">
+                                        19.07.2021
+                                    </div>
+                                </div>
+                                <div class="row mt-1" style="padding-left: 15px; padding-right: 15px">
+                                    <p> Увеличил производительность маленького собственного предприятия порядком на 40%, что также увеличило мою прибыль. Огромное спасибо ребята за низкие цены и за качественный продукт!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+</div>
+
 `,
     data: function () {
         return {
@@ -145,7 +222,7 @@ Vue.component('product', {
     },
     methods: {
         GoPay: function () {
-            location.href = "/Basket/Payment?currency=" + this.currency;
+            location.href = "/Basket/Payment";
         },
         HasItem: function () {
             return axios.get(('/Basket/haveItem'), {

@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using ProductMarketModels;
 using ProductMarketModels.MassTransit.Requests.Basket;
 using ProductMarketModels.MassTransit.Requests.Categories;
+using ProductMarketModels.MassTransit.Requests.Fondy;
 using ProductMarketModels.MassTransit.Requests.PayPal;
+using ProductMarketModels.MassTransit.Requests.Stripe;
 using ProductMarketModels.MassTransit.Responds.Basket;
 using ProductMarketModels.MassTransit.Responds.PayPal;
+using ProductMarketModels.MassTransit.Responds.Stripe;
 using ProductMarketModels.ViewModels.Basket;
 using System;
 using System.Collections.Generic;
@@ -55,6 +58,91 @@ namespace ProductMarketApi.Controllers
             var response = await client.GetResponse<getOrderRespond>(new orderBasketRequest() { basket = basket });
 
             return new JsonResult(response.Message.order);
+        }
+
+
+        /// <summary>
+        /// Подтверждение платежа Stripe
+        /// </summary>
+        /// <param name="payment">Данные платежа</param>
+        /// <returns>True, в случае успеха платежа</returns>
+        [HttpPost("StripeExecute")]
+        public async Task<IActionResult> executeStripe(ExecutePaymentStripeRequest payment)
+        {
+            var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
+            var client = mPublishEndpoint.CreateRequestClient<ExecutePaymentStripeRequest>(serviceAddress);
+
+            var response = await client.GetResponse<ExecutePaymentStripeRespond>(payment);
+
+
+            if (response.Message.succes == false)
+            {
+                return BadRequest("Оплата неуспешна");
+            }
+
+            return Ok(response.Message);
+        }
+
+        /// <summary>
+        /// Оплата через Stripe
+        /// </summary>
+        /// <param name="basket"></param>
+        /// <returns>Генерированная ссылка для оплаты Stripe</returns>
+        [HttpPost("PaymentStripe")]
+        [Authorize]
+        public async Task<IActionResult> paymentStripe(OrderBasket basket)
+        {
+            if (basket.basket.products.Count == 0)
+                return BadRequest("Корзина товаров пустая");
+
+            basket.userName = User.Claims.FirstOrDefault()?.Value;
+
+            var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
+            var client = mPublishEndpoint.CreateRequestClient<orderBasketRequestStripe>(serviceAddress);
+
+
+            var response = await client.GetResponse<GetUrlPayment>(new orderBasketRequestStripe() { basket = basket });
+            // После получения корзины необходимо сформировать платежную корзину в пайпел и вернуть ссылку клиенту для оплаты
+
+            if (string.IsNullOrEmpty(response.Message.url))
+            {
+                return BadRequest("Payment Stripe not created!");
+            }
+
+            return Ok(response.Message.url);
+        }
+
+
+
+
+
+        /// <summary>
+        /// Оплата через Fondy
+        /// </summary>
+        /// <param name="basket"></param>
+        /// <returns>Генерированная ссылка для оплаты PayPal</returns>
+        [HttpPost("PaymentFondy")]
+        [Authorize]
+        public async Task<IActionResult> paymentFondy(OrderBasket basket)
+        {
+            if (basket.basket.products.Count == 0)
+                return BadRequest("Корзина товаров пустая");
+
+            basket.userName = User.Claims.FirstOrDefault()?.Value;
+
+            var serviceAddress = new Uri("rabbitmq://localhost/ProductsQueue");
+            var client = mPublishEndpoint.CreateRequestClient<orderBasketRequestFondy>(serviceAddress);
+
+
+            var response = await client.GetResponse<GetUrlPayment>(new orderBasketRequestFondy() { basket = basket });
+            // После получения корзины необходимо сформировать платежную корзину в пайпел и вернуть ссылку клиенту для оплаты
+
+            if (string.IsNullOrEmpty(response.Message.url))
+            {
+                return BadRequest("Payment Fondy not created!");
+            }
+
+            return Ok(response.Message.url);
         }
 
         /// <summary>

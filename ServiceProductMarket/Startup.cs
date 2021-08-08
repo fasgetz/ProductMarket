@@ -20,14 +20,18 @@ using ProductMarketModels.MassTransit.Requests.Products;
 using ProductMarketServices.Basket;
 using ProductMarketServices.Categories;
 using ProductMarketServices.ElasticSearch;
+using ProductMarketServices.Fondy;
 using ProductMarketServices.PayPal;
 using ProductMarketServices.Products;
 using ProductMarketServices.ProductsDiscount;
+using ProductMarketServices.Stripe;
 using ServiceProductMarket.Consumers.Basket;
 using ServiceProductMarket.Consumers.Category;
 using ServiceProductMarket.Consumers.Discounts;
+using ServiceProductMarket.Consumers.Fondy;
 using ServiceProductMarket.Consumers.PayPal;
 using ServiceProductMarket.Consumers.Products;
+using ServiceProductMarket.Consumers.Stripe;
 
 namespace ServiceProductMarket
 {
@@ -60,6 +64,8 @@ namespace ServiceProductMarket
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IBasketService, BasketService>();
             services.AddTransient<IPayPalService, PayPalService>();
+            services.AddTransient<IFondyService, FondyService>();
+            services.AddTransient<IStripeService, StripeService>();
 
             services.AddMassTransit(x =>
             {
@@ -79,6 +85,13 @@ namespace ServiceProductMarket
                 x.AddConsumer<GetUrlPaymentConsumer>();
                 x.AddConsumer<ExecutePaymenConsumer>();
 
+                // Fondy
+                x.AddConsumer<GetUrlPaymentFondyConsumer>();
+                x.AddConsumer<ExecutePaymentStripeConsumer>();
+
+                // Stripe
+                x.AddConsumer<GetUrlPaymentStripeConsumer>();
+
                 // Products
                 x.AddConsumer<AddProductConsumer>();
                 x.AddConsumer<EditProductConsumer>();
@@ -87,6 +100,7 @@ namespace ServiceProductMarket
                 x.AddConsumer<GetNewsProductsConsumer>();
                 x.AddConsumer<ExistProductConsumer>();
                 x.AddConsumer<GetRandomProductsConsumer>();
+                x.AddConsumer<GetProductIdConsumer>();
 
                 // Categories
                 x.AddConsumer<GetProductsOnSubcategoryInCategoryConsumer>();
@@ -138,6 +152,13 @@ namespace ServiceProductMarket
                         e.Consumer<GetUrlPaymentConsumer>(context);
                         e.Consumer<ExecutePaymenConsumer>(context);
 
+                        // Fondy
+                        e.Consumer<GetUrlPaymentFondyConsumer>(context);
+
+                        // Stripe
+                        e.Consumer<GetUrlPaymentStripeConsumer>(context);
+                        e.Consumer<ExecutePaymentStripeConsumer>(context);
+
                         // Discount
                         e.Consumer<GetDiscountsProductConsumer>(context);
 
@@ -147,6 +168,7 @@ namespace ServiceProductMarket
                         e.Consumer<GetNewsProductsConsumer>(context);
                         e.Consumer<GetRandomProductsConsumer>(context);
                         e.Consumer<ExistProductConsumer>(context);
+                        e.Consumer<GetProductIdConsumer>(context);
 
                     });
 

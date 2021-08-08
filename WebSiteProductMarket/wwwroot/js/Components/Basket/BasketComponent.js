@@ -1,5 +1,6 @@
 
 var basket = Vue.component('basket', {
+    props: ['currency'],
     template: `
             <div v-bind:class="[loading == true ? 'disabled-block' : '']" v-if="productBasket.products.length != 0" class="basket-block container-fluid">
                 <div class="basket-block__header text-center">
@@ -40,18 +41,27 @@ var basket = Vue.component('basket', {
                                 Всего товаров: {{watchCount}}
                             </div>
                             <div class="basket-block__table-result__statistic__discount">
-                                Скидка: {{watchDiscount.toFixed(2)}} €
+                                Скидка: {{watchDiscount.toFixed(2)}} {{currencyVal}}
                             </div>
                             <div>
-                                Итого: {{watchTotalPrice.toFixed(2)}} €
+                                Итого: {{watchTotalPrice.toFixed(2)}} {{currencyVal}}
                             </div>
                         </div>
 
                     </div>
                     <div>
+
                             <h3 class="mt-3">Оформление заказа</h3>
                             <div class="form-group">
                                 <textarea maxlength="150" placeholder="Введите комментарий к оплате" v-model="commentary" class="form-control" rows="7"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <select v-model="currencyVal" class="browser-default custom-select">
+                                  <option value="EUR">EUR</option>
+                                  <option value="USD">USD</option>
+                                  <option value="RUB">RUB</option>
+                                  <option value="BGN">BGN</option>
+                                </select>
                             </div>
                             <div>
                                 <ul style="font-size: 16px">
@@ -67,7 +77,7 @@ var basket = Vue.component('basket', {
                             </div>
                             <div class="col text-center payment-buttons-block" v-bind:class="[cbUsl == true && cbVozr == true ? '' : 'disabled-block']">
 
-                                
+                                <button v-on:click="PaymentStripe" class="btn btn-success" style="width: 172.55px; height: 60px; font-size: 20px">Оплатить</button>
                                 <button v-on:click="PaymentPayPal" class="btn"><img class="img-payment" src="/Images/PaypalButton.png" alt="paypal"/></button>
                             </div>
                     </div>
@@ -91,7 +101,8 @@ var basket = Vue.component('basket', {
         cbUsl: null,
         cbVozr: null,
         commentary: null,
-        loading: false
+        loading: false,
+        currencyVal: null
     }),
     methods: {
 
@@ -101,6 +112,29 @@ var basket = Vue.component('basket', {
                 .then(
                     response => {
 
+                    });
+        },
+        addOrderStripe: function () {
+            this.loading = true
+
+            var data = {
+                basket: this.productBasket,
+                //address: this.address,
+                commentary: this.commentary
+            }
+
+            return axios.post((urlApi + 'api/basket/PaymentStripe'), data)
+                .then(
+                    response => {
+
+                        return response.data;
+
+                    }).catch(error => {
+
+                        //// Если ошибка 401, то пользователь не авторизован
+                        if (error.response.status == 401) {
+                            $('#loginButton').click();
+                        }
                     });
         },
         addOrderPost: function () {
@@ -124,23 +158,42 @@ var basket = Vue.component('basket', {
                         if (error.response.status == 401) {
                             $('#loginButton').click();
                         }
-                        //else {
-                        //    $("#form-pay").validate({
-                        //        rules: {
-                        //            address: {
-                        //                required: true,
-                        //                minlength: 10
-                        //            }
-                        //        },
-                        //        messages: {
-                        //            address: {
-                        //                required: "Поле обязательно для заполнения",
-                        //                minlength: jQuery.validator.format("Длина адреса доставки должна быть больше 10-ти символов")
-                        //            }
-                        //        }
-                        //    });
-                        //}
                     });
+        },
+        // Оплата Stripe
+        PaymentStripe: function () {
+            event.preventDefault();
+
+            axios.all([
+                this.GetCart()
+            ])
+                // Если успешно из кэша получили корзину, то необхоимо оплатить пайпел
+                .then(axios.spread((first_response) => {
+                    if (first_response == true) {
+
+                        axios.all([
+                            this.addOrderStripe()
+                        ])
+                            // Если успешно сгенерировали ссылку на пайпел, то необходимо перейти по адресу
+                            .then(axios.spread((two_response) => {
+                                if (two_response != null) {
+                                    // Очищаем кеш
+                                    //this.clearBasket();
+
+                                    // Присваиваем свойства
+                                    //this.productBasket = two_response;
+                                    //this.added = true;
+
+                                    //alert('переходим по адресу оплаты заказа')
+                                    window.location.href = two_response
+                                }
+                            }))
+
+                    }
+                }))
+
+
+
         },
         // Оплата пайпел
         PaymentPayPal: function () {
@@ -178,9 +231,6 @@ var basket = Vue.component('basket', {
 
         },
 
-/*        AuthUser: function () {
-            $('#loginButton').click();
-        },*/
         GoPay: function () {
             window.location.href = "/basket/pay"
         },
@@ -249,10 +299,27 @@ var basket = Vue.component('basket', {
                     this.totalPrice += this.productBasket.products[i].price * this.productBasket.products[i].count;
             }
 
+
+            // Теперь в зависимости от валюты необходимо посчитать соотношение
+            if (this.currencyVal == "EUR") {
+                return this.totalPrice - this.totalDiscount
+            }
+            else if (this.currencyVal == "USD") {
+                return (this.totalPrice - this.totalDiscount) * 1.19
+            }
+            else if (this.currencyVal == "BGN") {
+                return (this.totalPrice - this.totalDiscount) * 2
+            }
+            else if (this.currencyVal == "RUB") {
+                return (this.totalPrice - this.totalDiscount) * 87
+            }
+
             return this.totalPrice - this.totalDiscount;
         }
     },
     mounted() {
+
+        this.currencyVal = this.currency
 
         axios.all([
             this.GetCart()

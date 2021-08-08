@@ -11,6 +11,13 @@ namespace ProductMarketServices.Products
     {
 
         /// <summary>
+        /// Получить продукт по айди
+        /// </summary>
+        /// <param name="idProduct">Айди продукта</param>
+        /// <returns>Продукт</returns>
+        public Task<Product> getProductId(int idProduct);
+
+        /// <summary>
         /// Выборка случайных продуктов из всей базы данных
         /// </summary>
         /// <param name="countTake"></param>
