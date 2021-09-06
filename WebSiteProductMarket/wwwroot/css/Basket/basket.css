@@ -65,3 +65,13 @@
 .basket-block__go-back {
     margin-top: 20px;
 }
+
+
+@media screen and (max-width: 767.98px) {
+    .myspinner {
+        height: auto !important;
+        width: 100% !important;
+    }
+}
+
+

@@ -3,7 +3,15 @@ var basket = Vue.component('basket', {
     props: ['currency'],
     template: `
             <div v-bind:class="[loading == true ? 'disabled-block' : '']" v-if="productBasket.products.length != 0" class="basket-block container-fluid">
-                <div class="basket-block__header text-center">
+<div v-if="loading == true" class="myspinner justify-content-center align-items-center d-flex" style="position: fixed;
+  width: 80%;
+height: 80%;
+    z-index: 1">
+  <div class="spinner-border text-primary" style="width: 4rem; height: 4rem;" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+<div class="basket-block__header text-center">
                     <h1 class="basket-block__header-h1 mb-3">Корзина товаров</h1>
                 </div>
                 <div class="basket-block__table text-center">
