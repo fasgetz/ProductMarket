@@ -51,7 +51,7 @@ namespace ServiceProductMarket.Consumers.Stripe
             };
 
             // Необходимо запомнить в кэш номер платежа и продукты, чтобы в дальнейшем подтвердить
-            cache.Set(result.sessionId, model, new MemoryCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60) });
+            cache.Set(result.paymentIntentId, model, new MemoryCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60) });
 
 
             // Возвращаем ссылку на платежку Fondy

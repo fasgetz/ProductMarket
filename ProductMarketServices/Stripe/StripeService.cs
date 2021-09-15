@@ -35,16 +35,21 @@ namespace ProductMarketServices.Stripe
         /// <returns></returns>
         public ExecutePaymentStripeRespond SuccessPayment(string session_id)
         {
-            var sessionService = new SessionService();
-            Session service = sessionService.Get(session_id);
 
-            if (service != null)
+            PaymentIntentService paymentServiceIntent = new PaymentIntentService();
+
+            var payment = paymentServiceIntent.Get(session_id);
+
+            //var sessionService = new SessionService();
+            //Session service = sessionService.Get(session_id);
+
+            if (payment != null)
             {
                 ExecutePaymentStripeRespond respond = new ExecutePaymentStripeRespond()
                 {
                     session_id = session_id,
-                    idPayment = service.PaymentIntentId,
-                    succes = service.PaymentStatus == "paid" ? true : false
+                    idPayment = payment.Id,
+                    succes = payment.Status == "succeeded" ? true : false
                 };
 
 
@@ -92,7 +97,8 @@ namespace ProductMarketServices.Stripe
             StripeResultModel model = new StripeResultModel()
             {
                 sessionId = session.Id,
-                url = session.Url
+                url = session.Url,
+                paymentIntentId = session.PaymentIntentId
             };
 
             // null - если ошибка генерации ссылки

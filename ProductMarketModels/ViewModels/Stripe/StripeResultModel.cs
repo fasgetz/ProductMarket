@@ -18,5 +18,10 @@ namespace ProductMarketModels.ViewModels.Stripe
         /// Айди сессии
         /// </summary>
         public string sessionId { get; set; }
+
+        /// <summary>
+        /// Айди платежа
+        /// </summary>
+        public string paymentIntentId { get; set; }
     }
 }

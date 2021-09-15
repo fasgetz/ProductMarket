@@ -66,6 +66,8 @@ namespace ServiceProductMarket.Consumers.Stripe
                     };
 
                     var addedOrder = await basketService.AddOrder(order);
+
+                    // Нужно оповестить всех пользователей об успешной оплате заказа по емейлу
                 }
                 catch (Exception ex)
                 {

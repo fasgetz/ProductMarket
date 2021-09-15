@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Session;
 using Microsoft.Extensions.Configuration;
 using ProductMarketModels;
 using ProductMarketModels.ViewModels.Basket;
+using Stripe;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -48,6 +50,7 @@ namespace WebSiteProductMarket.Controllers
 
 
 
+
         /// <summary>
         /// Форма оплаты
         /// </summary>
@@ -57,45 +60,57 @@ namespace WebSiteProductMarket.Controllers
             // Отправить на сервер апи со стороны этого сервера данные платежа и получить boolean успешной оплаты или нет
             try
             {
-                var handler = new HttpClientHandler();
-                handler.ClientCertificateOptions = ClientCertificateOption.Manual;
-                handler.ServerCertificateCustomValidationCallback =
-                    (httpRequestMessage, cert, cetChain, policyErrors) =>
-                    {
-                        return true;
-                    };
-
-                // Отправляем проверить платеж
-                using (var MyClient = new HttpClient(handler))
-                {
-                    var payment = new
-                    {
-                        session_id = session_id
-                    };
 
 
-                    MyClient.BaseAddress = new Uri(config.GetValue<string>("apiUrl"));
-                    var data = Newtonsoft.Json.JsonConvert.SerializeObject(payment);
-                    var content = new StringContent(
-                        data, Encoding.UTF8, "application/json");
+                // Очищаем кэш, т.к. оплата успешно произведена
+                ClearBasket();
 
-                    var MyResponse = await MyClient.PostAsync("Basket/StripeExecute", content);
+                ViewBag.paymentId = session_id;
 
-                    //  Если успешно прошла оплата, то вернуть данные об этом
-                    if (MyResponse.StatusCode != System.Net.HttpStatusCode.OK)
-                    {
-                        return BadRequest("Ошибка на стороне Stripe");
+                // Иначе оплата прошла успешно
+                return View("Success");
 
-                    }
 
-                    // Очищаем кэш, т.к. оплата успешно произведена
-                    ClearBasket();
 
-                    ViewBag.paymentId = session_id;
+                //var handler = new HttpClientHandler();
+                //handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+                //handler.ServerCertificateCustomValidationCallback =
+                //    (httpRequestMessage, cert, cetChain, policyErrors) =>
+                //    {
+                //        return true;
+                //    };
 
-                    // Иначе оплата прошла успешно
-                    return View("Success");
-                }
+                //// Отправляем проверить платеж
+                //using (var MyClient = new HttpClient(handler))
+                //{
+                //    var payment = new
+                //    {
+                //        session_id = session_id
+                //    };
+
+
+                //    MyClient.BaseAddress = new Uri(config.GetValue<string>("apiUrl"));
+                //    var data = Newtonsoft.Json.JsonConvert.SerializeObject(payment);
+                //    var content = new StringContent(
+                //        data, Encoding.UTF8, "application/json");
+
+                //    var MyResponse = await MyClient.PostAsync("Basket/StripeExecute", content);
+
+                //    //  Если успешно прошла оплата, то вернуть данные об этом
+                //    if (MyResponse.StatusCode != System.Net.HttpStatusCode.OK)
+                //    {
+                //        return BadRequest("Ошибка на стороне Stripe");
+
+                //    }
+
+                //    // Очищаем кэш, т.к. оплата успешно произведена
+                //    ClearBasket();
+
+                //    ViewBag.paymentId = session_id;
+
+                //    // Иначе оплата прошла успешно
+                //    return View("Success");
+                //}
             }
             catch (Exception ex)
             {

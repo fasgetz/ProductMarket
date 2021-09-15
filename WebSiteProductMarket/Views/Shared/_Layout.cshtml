@@ -301,7 +301,7 @@ Vue.component('category', {
                 // Функция поиска
                 searchText: function () {
                     axios
-                        .get('https://market-products.online:9500/elasticsearch?text=' + this.text)
+                        .get('https://busmansoft.com:9500/elasticsearch?text=' + this.text)
                         /*.get('http://localhost:56561/elasticsearch?text=' + this.text)*/
                         .then(
                             response => {
