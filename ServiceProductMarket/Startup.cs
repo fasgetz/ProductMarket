@@ -14,12 +14,14 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Nest;
+using NETCore.MailKit.Core;
 using Newtonsoft.Json;
 using ProductMarketModels;
 using ProductMarketModels.MassTransit.Requests.Products;
 using ProductMarketServices.Basket;
 using ProductMarketServices.Categories;
 using ProductMarketServices.ElasticSearch;
+using ProductMarketServices.EmailServiceNew;
 using ProductMarketServices.Fondy;
 using ProductMarketServices.PayPal;
 using ProductMarketServices.Products;
@@ -66,6 +68,7 @@ namespace ServiceProductMarket
             services.AddTransient<IPayPalService, PayPalService>();
             services.AddTransient<IFondyService, FondyService>();
             services.AddTransient<IStripeService, StripeService>();
+            services.AddTransient<ProductMarketServices.EmailServiceNew.IEmalService, ProductMarketServices.EmailServiceNew.EmailService>();
 
             services.AddMassTransit(x =>
             {

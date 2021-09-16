@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="CloudlpspSDKNetStandard" Version="1.0.0" />
+    <PackageReference Include="MailKit" Version="2.15.0" />
     <PackageReference Include="PayPal.SDK.NETCore" Version="1.9.1.2" />
     <PackageReference Include="Stripe.net" Version="39.62.0" />
   </ItemGroup>

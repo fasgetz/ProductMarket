@@ -19,6 +19,7 @@
     <PackageReference Include="MassTransit.RabbitMQ" Version="7.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="NETCore.MailKit" Version="2.0.3" />
     <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
   </ItemGroup>
 
@@ -29,6 +30,7 @@
 
   <ItemGroup>
     <Folder Include="Models\Stripe\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

@@ -2,6 +2,7 @@
 using ProductMarketModels.MassTransit.Responds.Stripe;
 using ProductMarketModels.ViewModels.Basket;
 using ProductMarketModels.ViewModels.Stripe;
+using ProductMarketServices.EmailServiceNew;
 using Stripe;
 using Stripe.Checkout;
 using System;
@@ -14,8 +15,6 @@ namespace ProductMarketServices.Stripe
     public class StripeService : IStripeService
     {
         private readonly IConfiguration configSettings;
-
-
 
         public StripeService(IConfiguration configSettings)
         {
@@ -100,6 +99,9 @@ namespace ProductMarketServices.Stripe
                 url = session.Url,
                 paymentIntentId = session.PaymentIntentId
             };
+
+
+            
 
             // null - если ошибка генерации ссылки
             return model;
