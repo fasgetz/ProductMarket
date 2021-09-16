@@ -102,21 +102,21 @@ namespace WebSiteProductMarket.Controllers
                 // Если успешная регистрация
                 if (result.Succeeded)
                 {
-                    // Установка куки
-                    await _signInManager.SignInAsync(user, false);
+                    //// Установка куки
+                    //await _signInManager.SignInAsync(user, false);
 
-                    // Получить токен JWT
-                    var token = GenerateJwtToken(vm.Email).Result;
+                    //// Получить токен JWT
+                    //var token = GenerateJwtToken(vm.Email).Result;
 
-                    // Установить токен
-                    HttpContext.Response.Cookies.Append("token", token,
-                    new CookieOptions
-                    {
-                        MaxAge = TimeSpan.FromDays(30),
-                        Secure = false
-                    });
+                    //// Установить токен
+                    //HttpContext.Response.Cookies.Append("token", token,
+                    //new CookieOptions
+                    //{
+                    //    MaxAge = TimeSpan.FromDays(30),
+                    //    Secure = false
+                    //});
 
-                    string url = Request.Headers["Referer"].ToString();
+                    //string url = Request.Headers["Referer"].ToString();
                     //Your code to store data     
                     return PartialView("Controllers/Account/_AuthSuccessfully", url);
                 }
@@ -143,6 +143,22 @@ namespace WebSiteProductMarket.Controllers
 
             if (ModelState.IsValid)
             {
+
+                var user = await _userManager.FindByNameAsync(vm.Email);
+
+                if (user != null)
+                {
+                    // Проверяем подтвержден ли email
+                    if (!await _userManager.IsEmailConfirmedAsync(user))
+                    {
+                        ModelState.AddModelError(string.Empty, "email пользователя не подтвержден в системе - авторизация невозможна");
+
+                        return PartialView("Controllers/Account/Login", vm);
+                    }
+
+
+                }
+
                 // Авторизация
                 var result = await _signInManager.PasswordSignInAsync(vm.Email, vm.Password, vm.RememberMe, false);
 
