@@ -116,7 +116,7 @@ namespace WebSiteProductMarket.Controllers
                     //    Secure = false
                     //});
 
-                    //string url = Request.Headers["Referer"].ToString();
+                    string url = Request.Headers["Referer"].ToString();
                     //Your code to store data     
                     return PartialView("Controllers/Account/_AuthSuccessfully", url);
                 }
