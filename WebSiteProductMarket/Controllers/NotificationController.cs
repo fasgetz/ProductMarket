@@ -33,8 +33,19 @@ namespace WebSiteProductMarket.Controllers
             var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
             try
             {
-                var stripeEvent = EventUtility.ConstructEvent(json,
+
+                Event stripeEvent = null;
+
+                try
+                {
+                    stripeEvent = EventUtility.ConstructEvent(json,
                     Request.Headers["Stripe-Signature"], config.GetValue<string>("stripeEndpointSecretNotification"));
+                }
+                catch(Exception message)
+                {
+                    return Ok(message.Message);
+                }
+                
 
                 // Handle the event
                 if (stripeEvent.Type == Events.PaymentIntentAmountCapturableUpdated)
@@ -122,7 +133,7 @@ namespace WebSiteProductMarket.Controllers
             catch (StripeException e)
             {
                 System.IO.File.AppendAllText(@"file.txt", $"{DateTime.Now}) платеж ошибка {e.Message}" + Environment.NewLine);
-                return BadRequest();
+                return BadRequest("Тест еррор");
             }
         }
 
