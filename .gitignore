@@ -351,6 +351,5 @@ MigrationBackup/
 
 
 # json appsettings
-WebSiteProductMarket/appsettings.json
-ServiceProductMarket/appsettings.json
-ProductMarketApi/appsettings.json
+/appsettings.json
+appsettings.json
